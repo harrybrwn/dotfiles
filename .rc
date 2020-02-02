@@ -35,12 +35,14 @@ alias open='xdg-open'
 alias say="espeak"
 alias copy="xclip -selection clipboard"
 alias paste="xclip -o"
-alias notes="bash <(grep -Po '(?<=Exec=).*' $(grep -l 'Keep' ~/.local/share/applications/*))"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
 alias htmltopdf='wkhtmltopdf'
 alias githistory='gource -a 1 -c 4.0 -f .'
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
+if [ -d ~/.local/share/applications ]; then
+    alias notes="bash <(grep -Po '(?<=Exec=).*' $(grep -l 'Keep' ~/.local/share/applications/*))"
+if
 
 function mkdircd() {
     mkdir $1 && cd $1
@@ -75,7 +77,7 @@ function show-colors() {
     echo ''
 }
 
-if [ `type tmux` > /dev/null 2>&1 ]; then
+if [ `type tmux > /dev/null 2>&1` ]; then
     tmux ls &> /dev/null
     ok=$?
     if [[ $ok != 0 ]]; then

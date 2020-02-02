@@ -1,0 +1,68 @@
+"
+" My .vimrc
+"
+" github: https://github.com/harrybrwn
+"
+
+if has("syntax")
+  syntax on
+endif
+
+source ~/.vim/util.vim
+source ~/.vim/status.vim
+
+let g:git_branch = GitBranch()
+
+" Basic settings
+filetype plugin on
+set nocompatible
+set number   " 'set rnu' for relative line numbers
+set ruler
+set wrap      " wrap text that doesn't fit
+set linebreak " wrap by word instead of char
+
+" Tab completion
+set wildmenu      " just looks nice
+set wildmode=longest:full,full
+
+" Status Line
+set laststatus=2  " always show the status line
+set shortmess+=F  " remove filename in the command line bar
+
+" Tab settings
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set smartindent
+
+" Change the default location of .viminfo
+set viminfo+=n~/.vim/viminfo
+
+" Searching
+set hlsearch
+set incsearch
+
+
+au BufNewFile,BufReadPost let g:git_branch = GitBranch()
+
+
+" My file-type settings
+autocmd FileType rc set syn=sh " my 'run-commands' file
+autocmd BufNewFile,BufReadPost *.clang-format set syntax=yaml
+autocmd FileType make set noexpandtab
+
+" C
+autocmd FileType c setlocal smartindent
+
+" Vim Script
+au FileType vim set ts=2 sts=2 smartindent
+
+" yaml
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
+au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
+
+" My Notes
+au BufNewFile,BufReadPost *.note set filetype=note
+au FileType note setlocal syn=yaml ts=2 sts=2 sw=2 smartindent expandtab
+

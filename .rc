@@ -1,0 +1,86 @@
+#################################\
+# | |__   __ _ _ __ _ __ _   _    \
+# | '_ \ / _` | '__| '__| | | |    \
+# | | | | (_| | |  | |  | |_| |     \
+# |_| |_|\__,_|_|  |_|   \__, |      \
+#                        |___/        \
+#######################################\
+# github: https://github.com/harrybrwn
+# website: http://harrybrwn.com
+
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+. "$HOME/.local/profile.d/paths.sh"
+. "$HOME/.local/profile.d/vars.sh"
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls -hN --color=auto --group-directories-first'
+alias l="ls -lAh"
+alias la="ls -A"
+alias g=git
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+alias fsizes='du -sh $(ls -A) | sort -hr'
+alias nfiles='for f in $(ls -A); do echo "$f: $(find $f -type f | wc -l)"; done'
+alias dots='git --git-dir=$HOME/dots --work-tree=$HOME'
+alias today='date +%b-%d-%A'
+
+alias battery='cat /sys/class/power_supply/BAT1/capacity'
+alias settings='gnome-control-center'
+alias brightness='sudo /usr/lib/gnome-settings-daemon/gsd-backlight-helper'
+alias paths='sed "s/:/\n/g" <<< "$PATH"'
+alias open='xdg-open'
+alias say="espeak"
+alias copy="xclip -selection clipboard"
+alias paste="xclip -o"
+alias notes="bash <(grep -Po '(?<=Exec=).*' $(grep -l 'Keep' ~/.local/share/applications/*))"
+alias aspdf='libreoffice --headless --invisible --convert-to pdf'
+alias htmltopdf='wkhtmltopdf'
+alias githistory='gource -a 1 -c 4.0 -f .'
+alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
+alias screenrec='sh ~/tools/screencast.sh'
+
+function mkdircd() {
+    mkdir $1 && cd $1
+}
+
+function google() {
+	local q="$*"
+	if [ -z $q ]; then
+		xdg-open "https://www.google.com"
+	else
+		xdg-open "https://www.google.com/search?q=${q// /+}"
+	fi
+}
+
+function _calc() {
+	python -c "from math import *; print($*)"
+}
+
+function lines() {
+	find . -name "$1" | xargs wc -l | sort -k 1n
+    # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
+}
+
+function heroku_info() {
+    heroku app:info
+}
+
+function show-colors() {
+    for i in {0..255} ; do
+        printf "\x1b[38;5;${i}mcolour${i} "
+    done
+    echo ''
+}
+
+tmux ls &> /dev/null
+ok=$?
+if [[ $ok != 0 ]]; then
+    tmux new -s misc
+elif [[ -z "$TMUX" ]]; then
+    last_session=$(tmux ls -F '#S #{session_activity}' | sort -nk2 | head -n 1 | awk '{print $1;}')
+    tmux attach -t $last_session -c $HOME
+fi
+

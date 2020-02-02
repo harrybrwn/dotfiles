@@ -1,0 +1,66 @@
+{
+    "editor.minimap.enabled": true,
+    "editor.renderControlCharacters": false,
+    "editor.suggestSelection": "first",
+    "files.trimTrailingWhitespace": true,
+
+    "workbench.colorTheme": "Horizon",
+    "workbench.activityBar.visible": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorCustomizations": {
+        "editorLineNumber.foreground": "#d5d8da2f",
+
+        // "statusBar.background": "#e95378",   // pink
+        // "statusBar.background": "#42a5f5",   // blue
+        // "statusBar.background": "#5293e5",   // blue
+        // "statusBar.background": "#007ACC",   // default blue
+        // "statusBar.background": "#CF4F6Daa", // pink red
+        // "statusBar.background": "#34FEBB",   // green
+        // "statusBar.background": "#9f4bc4bb", // purple
+
+        // "statusBar.foreground": "#ffffffda", // white
+        // "statusBar.foreground": "#797b80",   // light grey
+        // "statusBar.foreground": "#000000",   // black
+        // "statusBar.foreground": "#1c1e26",   // grey
+    },
+    "window.zoomLevel": 0,
+    "window.menuBarVisibility": "hidden",
+
+    /* go */
+    "go.useLanguageServer": true,
+
+    "files.associations": {
+        "*.h": "c",
+        "TODO": "yaml",
+    },
+
+    /* Python */
+    "python.pythonPath": "/home/harry/.local/bin/python",
+    "python.jediEnabled": false,
+    "python.dataScience.sendSelectionToInteractiveWindow": false,
+
+    /* C/C++ */
+    "C_Cpp.updateChannel": "Insiders",
+    "C_Cpp.intelliSenseCachePath": "~/.cache/vscode",
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+        "editor.fontLigatures": true,
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "java.configuration.checkProjectSettingsExclusions": false,
+    "java.errors.incompleteClasspath.severity": "ignore",
+
+    /* Build-it Terminal */
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "terminal.integrated.fontFamily": "'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+
+    /* Misc. */
+    "breadcrumbs.enabled": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+}

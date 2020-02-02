@@ -11,8 +11,8 @@
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
-. "$HOME/.local/profile.d/paths.sh"
-. "$HOME/.local/profile.d/vars.sh"
+[ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
+[ -f "$HOME/.local/profile.d/vars.sh"] && . "$HOME/.local/profile.d/vars.sh"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -75,6 +75,7 @@ function show-colors() {
     echo ''
 }
 
+if [ type tmux > /dev/null 2>&1]; then
 tmux ls &> /dev/null
 ok=$?
 if [[ $ok != 0 ]]; then

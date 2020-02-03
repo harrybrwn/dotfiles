@@ -43,6 +43,9 @@ set viminfo+=n~/.vim/viminfo
 set hlsearch
 set incsearch
 
+" Colors
+set t_Co=256
+
 
 au BufNewFile,BufReadPost let g:git_branch = GitBranch()
 

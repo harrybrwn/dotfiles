@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/harry/.oh-my-zsh"
+export ZSH="/home/harry/.config/zsh/oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -97,3 +97,7 @@ st*)
     source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     ;;
 esac
+
+# source <(gopass completion zsh)
+source <(gopass completion zsh | head -n -1 | tail -n +2)
+compdef _gopass gopass

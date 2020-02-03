@@ -126,3 +126,4 @@ function get_current_git_head() {
     echo ${ref#refs/heads/}
 }
 
+source <(gopass completion bash)

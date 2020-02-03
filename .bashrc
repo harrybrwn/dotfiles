@@ -126,4 +126,6 @@ function get_current_git_head() {
     echo ${ref#refs/heads/}
 }
 
-source <(gopass completion bash)
+if command -v gopass > /dev/null 2>&1; then
+    source <(gopass completion bash)
+fi

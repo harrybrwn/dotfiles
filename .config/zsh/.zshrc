@@ -98,6 +98,7 @@ st*)
     ;;
 esac
 
-# source <(gopass completion zsh)
-source <(gopass completion zsh | head -n -1 | tail -n +2)
-compdef _gopass gopass
+if command -v gopass > /dev/null 2>&1; then
+    source <(gopass completion zsh | head -n -1 | tail -n +2)
+    compdef _gopass gopass
+fi

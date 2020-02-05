@@ -27,6 +27,7 @@ alias nfiles='for f in $(ls -A); do echo "$f: $(find $f -type f | wc -l)"; done'
 alias dots='git --git-dir=$HOME/.config/dots --work-tree=$HOME'
 alias today='date +%b-%d-%A'
 
+alias wifi="nmcli --colors yes device wifi list"
 alias battery='cat /sys/class/power_supply/BAT1/capacity'
 alias settings='gnome-control-center'
 alias brightness='sudo /usr/lib/gnome-settings-daemon/gsd-backlight-helper'
@@ -49,12 +50,27 @@ function mkdircd() {
     mkdir $1 && cd $1
 }
 
-function google() {
+net() {
+    # lspci -vv -s $(lspci | grep -i wireless | awk '{print $1}')
+    # iwconfig $(iw dev | awk '/Interface /{print $2}')
+    watch -n1 --color nmcli --colors yes device wifi list
+}
+
+google() {
 	local q="$*"
-	if [ -z $q ]; then
-		xdg-open "https://www.google.com"
+
+	if [ -z "$q" ]; then
+		x-www-browser "https://www.google.com"
 	else
-		xdg-open "https://www.google.com/search?q=${q// /+}"
+        local query=""
+        for w in $(echo "$q"); do
+            if [ -n "$query" ]; then
+                query="$query+$w"
+            else
+                query="$w"
+            fi
+        done
+		x-www-browser "https://www.google.com/search?q=$query"
 	fi
 }
 
@@ -78,13 +94,7 @@ function show-colors() {
     echo ''
 }
 
-if [ ! $(type tmux > /dev/null 2>&1) ]; then
-    tmux ls &> /dev/null
-    ok=$?
-    if [[ $ok != 0 ]]; then
-        tmux new -s misc
-    elif [[ -z "$TMUX" ]]; then
-        last_session=$(tmux ls -F '#S #{session_activity}' | sort -nk2 | head -n 1 | awk '{print $1;}')
-        tmux attach -t $last_session -c $HOME
-    fi
+if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
+    tmux attach -t misc || tmux new -s misc -c ~ -n yeet
 fi
+

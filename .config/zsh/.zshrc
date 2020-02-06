@@ -10,9 +10,10 @@ export ZSH="/home/harry/.config/zsh/oh-my-zsh"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="agnoster"
 #ZSH_THEME="gentoo"
 #ZSH_THEME="lukerandall"
+# ZSH_THEME="agnoster"
+ZSH_THEME="harry"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -83,6 +84,9 @@ _comp_options+=(globdots)
 # My shit
 . ~/.rc
 
+# Custom Color for harry theme
+PROMPT_DIR_COLOR=magenta
+
 
 # For st
 function zle-line-init () { echoti smkx }
@@ -98,6 +102,7 @@ st*)
     ;;
 esac
 
+# Setup gopass completion
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion zsh | head -n -1 | tail -n +2)
     compdef _gopass gopass

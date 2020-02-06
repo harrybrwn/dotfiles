@@ -28,6 +28,7 @@ Mode - vim is mode based, and you can only write in insert mode or select in vis
 | P       | paste before curser
 | u       | __u__ndo        |
 | ctrl+r  | __r__edo        |
+| .       | do the previous command again |
 
 ## Movment
 ```text

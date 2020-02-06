@@ -95,6 +95,11 @@ function show-colors() {
 }
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
-    tmux attach -t misc || tmux new -s misc -c ~ -n yeet
+    if tmux ls > /dev/null 2>&1; then
+        if [ $(tmux display -p '#{session_attached}') -eq 0 ]; then
+            tmux attach -t $(tmux ls -F '#{session_name}' | head -n 1)
+        fi
+    else
+        tmux new -s misc -c ~/
+    fi
 fi
-

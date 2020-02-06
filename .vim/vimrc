@@ -5,13 +5,12 @@
 "
 
 if has("syntax")
-  syntax on
+    syntax on
+    syntax enable
 endif
 
-source ~/.vim/util.vim
+" source ~/.vim/util.vim
 source ~/.vim/status.vim
-
-let g:git_branch = GitBranch()
 
 " Basic settings
 filetype plugin on
@@ -20,6 +19,7 @@ set number   " 'set rnu' for relative line numbers
 set ruler
 set wrap      " wrap text that doesn't fit
 set linebreak " wrap by word instead of char
+set term=screen-256color " for better color compatability with tmux
 
 " Tab completion
 set wildmenu      " just looks nice
@@ -46,9 +46,22 @@ set incsearch
 " Colors
 set t_Co=256
 
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'airblade/vim-gitgutter'
+
+call vundle#end()
+filetype plugin indent on
+
+" Git Gutter
+highlight SignColumn ctermbg=none
+highlight GitGutterAdd    ctermfg=2 ctermbg=none
+highlight GitGutterChange ctermfg=3 ctermbg=none
+highlight GitGutterDelete ctermfg=1 ctermbg=none
 
 au BufNewFile,BufReadPost let g:git_branch = GitBranch()
-
 
 " My file-type settings
 autocmd FileType rc set syn=sh " my 'run-commands' file

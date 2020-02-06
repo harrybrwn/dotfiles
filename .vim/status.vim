@@ -2,9 +2,19 @@
 " hi User3 ctermbg=none ctermfg=darkcyan guibg=blue  guifg=green
 " hi User1 ctermbg=darkgray ctermfg=cyan guibg=grey guifg=white
 
-hi User1 ctermbg=darkblue ctermfg=black guibg=grey guifg=white
-hi User2 ctermbg=none ctermfg=darkblue guibg=green guifg=red
-hi User3 ctermbg=none ctermfg=grey guibg=blue  guifg=green
+source ~/.vim/util.vim
+
+" Note:
+" `darkblue` is nice in solarized dark
+" `magenta` is what what my tmux theme has been in the past
+
+hi User1 ctermbg=magenta ctermfg=black
+hi User2 ctermbg=none ctermfg=magenta
+hi User3 ctermbg=none ctermfg=grey
+
+let g:git_branch = GitBranch()
+au BufNewFile,BufReadPost let g:git_branch = GitBranch() " update on edit
+
 
 function! UseGitBranch()
   if strlen(g:git_branch) > 0

@@ -92,15 +92,22 @@ h   l
 ## Misc
 | command  | description |
 | -------  | ----------- |
-| :![cmd]  | run a shell command
-| :!echo % | this will echo the current file
+| :![cmd]  | run a shell command|
+| :!echo % | this will echo the current file|
 
-## Scripting
+# Scripting
 #### Define a new colon command
 ```vimscript
 command! -nargs=* Wrap set wrap linebreak nolist
 ```
 This command definition will call the three commands `:set wrap`, `:set linebreak`, and `:set nolist` when the command `:Wrap` is used.
+
+### AutoCommands
+`au` or `autocmd` is sort of like adding an event listener
+
+```vim
+au [AutoCmdName] [filetype] [command]
+```
 
 ## Interesting Plugins
 ### Goyo

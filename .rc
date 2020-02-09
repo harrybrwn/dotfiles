@@ -27,7 +27,8 @@ alias nfiles='for f in $(ls -A); do echo "$f: $(find $f -type f | wc -l)"; done'
 alias dots='git --git-dir=$HOME/.config/dots --work-tree=$HOME'
 alias today='date +%b-%d-%A'
 
-alias wifi="nmcli --colors yes device wifi list"
+# alias wifi="nmcli --colors yes device wifi list"
+alias wifi=wavemon
 alias battery='cat /sys/class/power_supply/BAT1/capacity'
 alias settings='gnome-control-center'
 alias brightness='sudo /usr/lib/gnome-settings-daemon/gsd-backlight-helper'
@@ -93,6 +94,8 @@ function show-colors() {
     done
     echo ''
 }
+
+# return
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
     if tmux ls > /dev/null 2>&1; then

@@ -6,20 +6,18 @@
 
 if has("syntax")
     syntax on
-    syntax enable
 endif
 
-" source ~/.vim/util.vim
-source ~/.vim/status.vim
-
 " Basic settings
-filetype plugin on
+filetype indent on
 set nocompatible
 set number   " 'set rnu' for relative line numbers
 set ruler
 set wrap      " wrap text that doesn't fit
 set linebreak " wrap by word instead of char
-set term=screen-256color " for better color compatability with tmux
+" set term=screen-256color " for better color compatability with tmux
+set spelllang=en_us
+set number relativenumber
 
 " Tab completion
 set wildmenu      " just looks nice
@@ -43,17 +41,42 @@ set viminfo+=n~/.vim/viminfo
 set hlsearch
 set incsearch
 
-" Colors
-set t_Co=256
-
+" PluginManagment
+"
+" :PluginList         - list all plugins
+" :PluginUpdate       - update plugins
+" :PluginInstall      - install plugins
+" :PluginSearch foo   - search for 'foo'
+" :PluginClean        - clean out unused plugins
+"
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'airblade/vim-gitgutter'
-
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'junegunn/goyo.vim'
+Plugin 'reedes/vim-colors-pencil'
+Plugin 'arcticicestudio/nord-vim'
+Plugin 'dracula/vim', { 'name': 'dracula' }
 call vundle#end()
 filetype plugin indent on
+
+" Colors
+set t_Co=256
+set background=dark
+au ColorScheme * highlight Normal ctermbg=none
+colo dracula
+" hi LineNr ctermfg=245
+hi CursorLineNR ctermfg=magenta
+hi SpellBad cterm=underline ctermbg=none ctermfg=none
+
+" Key Maps
+let mapleader=","
+let g:comment_char = ''
+nmap <silent><Leader>/ :call Comment(g:comment_char)<CR>
+nnoremap <Bar> $
+nmap <C-i> i<Space><Esc>r
+nmap <silent><Leader>g :let g:git_branch = GitBranch()<CR>
 
 " Git Gutter
 highlight SignColumn ctermbg=none
@@ -61,18 +84,15 @@ highlight GitGutterAdd    ctermfg=2 ctermbg=none
 highlight GitGutterChange ctermfg=3 ctermbg=none
 highlight GitGutterDelete ctermfg=1 ctermbg=none
 
-au BufNewFile,BufReadPost let g:git_branch = GitBranch()
+" Git Branch update rules
+" au BufNewFile,BufReadPost,BufWritePost,InsertEnter,InsertLeave,CursorHold * let g:git_branch = GitBranch()
+
+source ~/.vim/status.vim
 
 " My file-type settings
-autocmd FileType rc set syn=sh " my 'run-commands' file
 autocmd BufNewFile,BufReadPost *.clang-format set syntax=yaml
 autocmd FileType make set noexpandtab
-
-" C
-autocmd FileType c setlocal smartindent
-
-" Vim Script
-au FileType vim set ts=2 sts=2 smartindent
+autocmd FileType make let g:comment_char = '@#'
 
 " yaml
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml

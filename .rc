@@ -11,6 +11,10 @@
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+# Enable colors for less and man pages
+export LESS="--RAW-CONTROL-CHARS"
+[ -f ~/.LESS_TERMCAP ] && . ~/.LESS_TERMCAP
+
 [ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
 [ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
 
@@ -23,19 +27,15 @@ alias la="ls -A"
 alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
-alias nfiles='for f in $(ls -A); do echo "$f: $(find $f -type f | wc -l)"; done'
 alias dots='git --git-dir=$HOME/.config/dots --work-tree=$HOME'
-alias today='date +%b-%d-%A'
-
+   
 # alias wifi="nmcli --colors yes device wifi list"
 alias wifi=wavemon
-alias battery='cat /sys/class/power_supply/BAT1/capacity'
 alias settings='gnome-control-center'
-alias brightness='sudo /usr/lib/gnome-settings-daemon/gsd-backlight-helper'
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
 alias open='xdg-open'
 alias say="espeak"
-alias copy="xclip -selection clipboard"
+alias copy="xclip -i"
 alias paste="xclip -o"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
 alias htmltopdf='wkhtmltopdf'
@@ -45,6 +45,8 @@ alias screenrec='sh ~/tools/screencast.sh'
 
 if [ -d ~/.local/share/applications ]; then
     alias notes="bash <(grep -Po '(?<=Exec=).*' $(grep -l 'Keep' ~/.local/share/applications/*))"
+else
+    alias notes='echo "google keep not installed"'
 fi
 
 function mkdircd() {
@@ -75,17 +77,9 @@ google() {
 	fi
 }
 
-function _calc() {
-	python -c "from math import *; print($*)"
-}
-
-function lines() {
+lines() {
 	find . -name "$1" | xargs wc -l | sort -k 1n
     # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
-}
-
-function heroku_info() {
-    heroku app:info
 }
 
 function show-colors() {
@@ -95,7 +89,7 @@ function show-colors() {
     echo ''
 }
 
-# return
+[ `hostname` != 'harry-yogo920' ] && return # only run tmux on my machine
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
     if tmux ls > /dev/null 2>&1; then
@@ -103,6 +97,6 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
             tmux attach -t $(tmux ls -F '#{session_name}' | head -n 1)
         fi
     else
-        tmux new -s misc -c ~/
+        tmux new -d -s misc -c ~/
     fi
 fi

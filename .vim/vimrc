@@ -12,12 +12,12 @@ endif
 filetype indent on
 set nocompatible
 set number   " 'set rnu' for relative line numbers
+" set relativenumber
 set ruler
 set wrap      " wrap text that doesn't fit
 set linebreak " wrap by word instead of char
 " set term=screen-256color " for better color compatability with tmux
 set spelllang=en_us
-set number relativenumber
 
 " Tab completion
 set wildmenu      " just looks nice
@@ -75,17 +75,15 @@ let mapleader=","
 let g:comment_char = ''
 nmap <silent><Leader>/ :call Comment(g:comment_char)<CR>
 nnoremap <Bar> $
+vmap <Bar> $
 nmap <C-i> i<Space><Esc>r
 nmap <silent><Leader>g :let g:git_branch = GitBranch()<CR>
 
 " Git Gutter
-highlight SignColumn ctermbg=none
+highlight SignColumn      ctermbg=none
 highlight GitGutterAdd    ctermfg=2 ctermbg=none
 highlight GitGutterChange ctermfg=3 ctermbg=none
 highlight GitGutterDelete ctermfg=1 ctermbg=none
-
-" Git Branch update rules
-" au BufNewFile,BufReadPost,BufWritePost,InsertEnter,InsertLeave,CursorHold * let g:git_branch = GitBranch()
 
 source ~/.vim/status.vim
 

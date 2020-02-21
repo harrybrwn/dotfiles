@@ -11,13 +11,12 @@ endif
 " Basic settings
 filetype indent on
 set nocompatible
-set number   " 'set rnu' for relative line numbers
-" set relativenumber
+set number   " 'set rnu' or 'set relativenumber' for relative line numbers
 set ruler
 set wrap      " wrap text that doesn't fit
 set linebreak " wrap by word instead of char
-" set term=screen-256color " for better color compatability with tmux
 set spelllang=en_us
+set bs=2 " make backspace work in Insert mode
 
 " Tab completion
 set wildmenu      " just looks nice
@@ -25,7 +24,7 @@ set wildmode=longest:full,full
 
 " Status Line
 set laststatus=2  " always show the status line
-set shortmess+=F  " remove filename in the command line bar
+set shortmess=filnxtToOFWatc
 
 " Tab settings
 set tabstop=4
@@ -34,20 +33,23 @@ set shiftwidth=4
 set softtabstop=4
 set smartindent
 
-" Change the default location of .viminfo
-set viminfo+=n~/.vim/viminfo
+" History and Persistant Data
+set viminfo=%,'100,<100,s100,h,n~/.vim/viminfo
+set history=500
+set undolevels=1500
 
 " Searching
 set hlsearch
 set incsearch
 
-" PluginManagment
+
+" Plugin Managment
 "
-" :PluginList         - list all plugins
-" :PluginUpdate       - update plugins
-" :PluginInstall      - install plugins
-" :PluginSearch foo   - search for 'foo'
-" :PluginClean        - clean out unused plugins
+"    :PluginList         - list all plugins
+"    :PluginUpdate       - update plugins
+"    :PluginInstall      - install plugins
+"    :PluginSearch foo   - search for 'foo'
+"    :PluginClean        - clean out unused plugins
 "
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -58,26 +60,53 @@ Plugin 'junegunn/goyo.vim'
 Plugin 'reedes/vim-colors-pencil'
 Plugin 'arcticicestudio/nord-vim'
 Plugin 'dracula/vim', { 'name': 'dracula' }
+Plugin 'junegunn/vim-easy-align'
 call vundle#end()
 filetype plugin indent on
+
 
 " Colors
 set t_Co=256
 set background=dark
 au ColorScheme * highlight Normal ctermbg=none
 colo dracula
-" hi LineNr ctermfg=245
 hi CursorLineNR ctermfg=magenta
 hi SpellBad cterm=underline ctermbg=none ctermfg=none
+
+
+" Whitespace Detection
+highlight ExtraWhitespace ctermbg=1 ctermfg=white
+match ExtraWhitespace /\s\+$/
+au BufWinEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhitespace /\s\+$/
+au BufWinLeave * call clearmatches()
+
 
 " Key Maps
 let mapleader=","
 let g:comment_char = ''
 nmap <silent><Leader>/ :call Comment(g:comment_char)<CR>
-nnoremap <Bar> $
-vmap <Bar> $
-nmap <C-i> i<Space><Esc>r
-nmap <silent><Leader>g :let g:git_branch = GitBranch()<CR>
+" nnoremap <Bar> $
+" vmap <Bar> $
+nmap <Leader>g call UpdateGitBranch()<CR>
+inoremap <C-j> <Esc>
+vnoremap <C-j> <Esc>
+cnoremap <C-j> <C-C>
+nnoremap <C-j> <Esc>
+inoremap jk <Esc>
+
+" Window Resizing
+nnoremap <C-w><Up>     <C-w>-
+nnoremap <C-w><C-Up>   <C-w>-
+nnoremap <C-w><Down>   <C-w>+
+nnoremap <C-w><C-Down> <C-w>+
+
+nnoremap <C-w><Left>    <C-w><
+nnoremap <C-w><C-Left>  <C-w><
+nnoremap <C-w><Right>   <C-w>>
+nnoremap <C-w><C-Right> <C-w>>
+
 
 " Git Gutter
 highlight SignColumn      ctermbg=none
@@ -85,7 +114,10 @@ highlight GitGutterAdd    ctermfg=2 ctermbg=none
 highlight GitGutterChange ctermfg=3 ctermbg=none
 highlight GitGutterDelete ctermfg=1 ctermbg=none
 
+
+" Status Line
 source ~/.vim/status.vim
+set stl=%!MyStatusLine()
 
 " My file-type settings
 autocmd BufNewFile,BufReadPost *.clang-format set syntax=yaml

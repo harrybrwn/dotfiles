@@ -1,49 +1,93 @@
-" hi User2 ctermbg=none ctermfg=darkcyan guibg=green guifg=red
-" hi User3 ctermbg=none ctermfg=darkcyan guibg=blue  guifg=green
-" hi User1 ctermbg=darkgray ctermfg=cyan guibg=grey guifg=white
-
-source ~/.vim/util.vim
+" My Status Line
 
 " TODO:
 " generate color scheme based on tmux config
+
+source ~/.vim/util.vim
 
 " Note:
 " `darkblue` is nice in solarized dark
 " `magenta` is what what my tmux theme has been in the past
 
-hi User1 ctermbg=magenta ctermfg=black
-hi User2 ctermbg=none ctermfg=magenta
-hi User3 ctermbg=none ctermfg=grey
+" Colors in Statusline:
+" User1 -> %1*
+" User2 -> %2*
+" User3 -> %3*
+hi StatusAccent cterm=none ctermbg=magenta ctermfg=black
+hi StatusBg     cterm=none ctermbg=none    ctermfg=magenta
 
-let g:git_branch = GitBranch()
+let s:agnoster_char = ''
 
-au BufNewFile,
- \ BufReadPost,
- \ BufWritePost,
- \ InsertEnter,
- \ InsertLeave,
- \ CursorHold,
- \ CursorHoldI
- \ * let g:git_branch = GitBranch()
+augroup GitBranchUpdate
+  " We dont want to update the git branch in the status line
+  " every time the status line refreshes so these auto commands
+  " update the branch variable when it is important.
 
-function! UseGitBranch()
-  if strlen(g:git_branch) > 0
-      return '   ' . g:git_branch . ' '
+  " au!
+  " au BufNewFile,BufWritePost,BufReadPost      * call UpdateGitBranch()
+  " au InsertEnter,InsertLeave,InsertChange     * call UpdateGitBranch()
+  " au CmdlineChanged,CmdlineEnter,CmdlineLeave * call UpdateGitBranch()
+  " au CursorHold,CursorHoldI  * call UpdateGitBranch()
+  " au WinEnter,WinLeave       * call UpdateGitBranch()
+  " au CmdwinEnter,CmdwinLeave * call UpdateGitBranch()
+augroup END
+
+
+fun! UpdateGitBranch()
+    let s:git_branch = system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfun
+
+
+fun! UseGitBranch()
+  if exists('s:git_branch') && len(s:git_branch) > 0
+      return '   ' . s:git_branch . ' '
   else
       return ''
-endfunction
+endfun
 
-set statusline=%1*          " User1 highlighting
-set statusline+=%{UseGitBranch()}
-set statusline+=[+%n]
-set statusline+=\ %f         " file name
-set statusline+=%h%m%r\      " file status flags
-set statusline+=%2*          " User2 highlighting
-set statusline+=            " like agnoster from zsh
-set statusline+=%#Constant#  " same color as editor background
-set statusline+=%=           " go to other side
-set statusline+=%2*          " User3 highlighting
-set statusline+=%y           " filetype
-set statusline+=\ \[%{&encoding}\]\ %p%%\ %l:%c
-set statusline+=%*  " reset statusline highlighting
+
+fun! GetLineInfo()
+  let l:pos = line('$')
+
+  let l:md = mode()
+  if l:md == 'v' || l:md == 'V'
+      let l:lines = abs(line('v') - line('.')) + 1
+      let l:pos .= ' Lines ' . l:lines . ', Chrs ' . wordcount()['visual_chars']
+  else
+      let l:pos .= ' ln ' . line('.') . ', Col ' . col('.')
+  endif
+
+  return l:pos
+endfun
+
+
+fun! FileStatus()
+    " %f: filename
+    " %h: [Help] if in vim help
+    " %m: [+] if file is modified
+    " %r: [RO] if file is Read Only
+    return '%f %m%h%r'
+endfun
+
+
+fun! MyStatusLine()
+    let l:line = '%#StatusAccent#%{UseGitBranch()}'
+
+    " if there is more than one buffer, show how many
+    if len(getbufinfo({'buflisted':1})) > 1
+        let l:line .= '[+%n]'
+    endif
+
+    let l:line .= ' '
+    let l:line .= FileStatus()
+    let l:line .= '%#StatusBg#' . s:agnoster_char
+
+    " let l:line .= '  '
+    " let l:line .= 'hello %2*'
+
+    let l:line .= '%=%#LineNr#'
+    let l:line .= '%{GetLineInfo()}  '
+    let l:line .= '%#Constant#%y [%{&encoding}]%*'
+    return l:line
+endfun
 

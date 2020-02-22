@@ -48,11 +48,12 @@ export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export LESSHISTFILE=-
 export LESS_TERMCAP_mp=$(tput bold; tput setaf 4)
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 5) # headers and flags
 export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # yellow on blue
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 0) # status bar
 export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7) # white
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7) # names of other programs
+# unset LESS_TERMCAP_us
 export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
 export LESS_TERMCAP_mr=$(tput rev)
 export LESS_TERMCAP_mh=$(tput dim)
@@ -65,4 +66,3 @@ if [ -f ~/.local/profile.d/keys.sh ]; then
     . ~/.local/profile.d/keys.sh
 fi
 
-ucmerced_ssh="engapps00.ucmerced.edu"

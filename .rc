@@ -28,7 +28,8 @@ alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
 alias dots='git --git-dir=$HOME/.config/dots --work-tree=$HOME'
-   
+alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
+
 # alias wifi="nmcli --colors yes device wifi list"
 alias wifi=wavemon
 alias settings='gnome-control-center'

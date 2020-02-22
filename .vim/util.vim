@@ -25,3 +25,5 @@ function! Comment(cmnt_str)
 
   call cursor(prev[1], l:col)
 endfunction
+
+" vnoremap <Leader>l :call Comment(g:comment_char)<cr>

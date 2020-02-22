@@ -39,6 +39,7 @@ set history=500
 set undolevels=1500
 
 " Searching
+set path+=** " recursive file search
 set hlsearch
 set incsearch
 
@@ -61,6 +62,8 @@ Plugin 'reedes/vim-colors-pencil'
 Plugin 'arcticicestudio/nord-vim'
 Plugin 'dracula/vim', { 'name': 'dracula' }
 Plugin 'junegunn/vim-easy-align'
+" Plugin 'tpope/vim-commentary'
+Plugin 'preservim/nerdcommenter'
 call vundle#end()
 filetype plugin indent on
 
@@ -69,7 +72,8 @@ filetype plugin indent on
 set t_Co=256
 set background=dark
 au ColorScheme * highlight Normal ctermbg=none
-colo dracula
+silent! colorscheme delek
+silent! colorscheme dracula " allow failures (set delek as default)
 hi CursorLineNR ctermfg=magenta
 hi SpellBad cterm=underline ctermbg=none ctermfg=none
 
@@ -87,8 +91,6 @@ au BufWinLeave * call clearmatches()
 let mapleader=","
 let g:comment_char = ''
 nmap <silent><Leader>/ :call Comment(g:comment_char)<CR>
-" nnoremap <Bar> $
-" vmap <Bar> $
 nmap <Leader>g call UpdateGitBranch()<CR>
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
@@ -114,6 +116,9 @@ highlight GitGutterAdd    ctermfg=2 ctermbg=none
 highlight GitGutterChange ctermfg=3 ctermbg=none
 highlight GitGutterDelete ctermfg=1 ctermbg=none
 
+" Nerd Commenter
+let g:NERDSpaceDelims = 1
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
 
 " Status Line
 source ~/.vim/status.vim
@@ -131,4 +136,9 @@ au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
 " My Notes
 au BufNewFile,BufReadPost *.note set filetype=note
 au FileType note setlocal syn=yaml ts=2 sts=2 sw=2 smartindent expandtab
+au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
+function Linecomment()
+    execute "normal ^i/*\<ESC>$a*/\<ESC>"
+endfunction
+command Linecomment call Linecomment()

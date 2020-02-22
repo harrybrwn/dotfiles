@@ -52,20 +52,23 @@ set incsearch
 "    :PluginSearch foo   - search for 'foo'
 "    :PluginClean        - clean out unused plugins
 "
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'junegunn/goyo.vim'
-Plugin 'reedes/vim-colors-pencil'
-Plugin 'arcticicestudio/nord-vim'
-Plugin 'dracula/vim', { 'name': 'dracula' }
-Plugin 'junegunn/vim-easy-align'
-" Plugin 'tpope/vim-commentary'
-Plugin 'preservim/nerdcommenter'
-call vundle#end()
-filetype plugin indent on
+if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
+  set rtp+=~/.vim/bundle/Vundle.vim
+  filetype off
+  call vundle#begin()
+  Plugin 'VundleVim/Vundle.vim'
+  Plugin 'airblade/vim-gitgutter'
+  Plugin 'altercation/vim-colors-solarized'
+  Plugin 'junegunn/goyo.vim'
+  Plugin 'reedes/vim-colors-pencil'
+  Plugin 'arcticicestudio/nord-vim'
+  Plugin 'dracula/vim', { 'name': 'dracula' }
+  Plugin 'junegunn/vim-easy-align'
+  " Plugin 'tpope/vim-commentary'
+  Plugin 'preservim/nerdcommenter'
+  call vundle#end()
+  filetype plugin indent on
+endif
 
 
 " Colors

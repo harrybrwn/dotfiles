@@ -10,7 +10,39 @@
 #   $ make install
 #
 
+# Issues:
+#   - No Terminal Library: install ncurses-dev
+#       - function is in the build script to install from source
+
 set -e
+
+BUILD_DIR="$HOME/.local/vim"
+[ ! -f $BUILD_DIR ] && mkdir -p $BUILD_DIR
+
+install_ncurses() {
+    mkdir $BUILD_DIR/ncurses-vim-build
+    cd $BUILD_DIR/ncurses-vim-build
+    wget 'https://ftp.gnu.org/gnu/ncurses/ncurses-6.2.tar.gz'
+    tar -xf ncurses-6.2.tar.gz
+    rm ncurses-6.2.tar.gz
+    cd ncurses-6.2
+    ./configure
+    make
+    make install
+    cd -2
+    rm -r $BUILD_DIR/ncurses-vim-build
+}
+
+# Notes:
+# Dependancies:
+#    gcc -std=gnu99 -Iproto -MM <filename> | sed 's/ \\//g' | tr -d '\n'
+
+if [ -n "$@" ]; then
+    echo "$@"
+    "$@"
+    return
+fi
+echo 'hello'
 
 make clean distclean
 

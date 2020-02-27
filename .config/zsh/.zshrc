@@ -73,7 +73,11 @@ ZSH_THEME="harry"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+
+#plugins=(git man-theme)
+#plugins=(git)
+
+plugins=(man-theme vundle golang)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -83,6 +87,9 @@ _comp_options+=(globdots)
 
 # My shit
 . ~/.rc
+
+# tetris
+autoload -Uz tetriscurses
 
 # Custom Color for harry theme
 PROMPT_DIR_COLOR=magenta

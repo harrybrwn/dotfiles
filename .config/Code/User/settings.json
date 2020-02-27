@@ -63,4 +63,5 @@
     "breadcrumbs.enabled": false,
     "explorer.confirmDragAndDrop": false,
     "explorer.confirmDelete": false,
+    "todo-tree.tree.showScanModeButton": false,
 }

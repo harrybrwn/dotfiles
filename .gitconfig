@@ -9,10 +9,11 @@
     stat  = !git --no-pager diff --stat
     cho   = checkout
     amend = commit --amend --no-edit
+    ls = ls-files
 
 [core]
     editor = 'vim'
-	excludesFile = /home/harry/.config/.gitignore
+    excludesFile = /home/harry/.config/.gitignore
 
 [credential]
     helper = cache --timeout=7200

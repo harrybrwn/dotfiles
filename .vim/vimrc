@@ -24,13 +24,13 @@ set wildmode=longest:full,full
 
 " Status Line
 set laststatus=2  " always show the status line
-set shortmess=filnxtToOFWatc
+set shortmess=filnxtToOFWatc " this if for the bar below the statusline
 
 " Tab settings
 set tabstop=4
-set expandtab
 set shiftwidth=4
 set softtabstop=4
+set expandtab
 set smartindent
 
 " History and Persistant Data
@@ -113,15 +113,16 @@ nnoremap <C-w><Right>   <C-w>>
 nnoremap <C-w><C-Right> <C-w>>
 
 
-" Git Gutter
-highlight SignColumn      ctermbg=none
-highlight GitGutterAdd    ctermfg=2 ctermbg=none
-highlight GitGutterChange ctermfg=3 ctermbg=none
-highlight GitGutterDelete ctermfg=1 ctermbg=none
+if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
+  " Git Gutter
+  highlight SignColumn      ctermbg=none
+  highlight GitGutterAdd    ctermfg=2 ctermbg=none
+  highlight GitGutterChange ctermfg=3 ctermbg=none
+  highlight GitGutterDelete ctermfg=1 ctermbg=none
 
-" Nerd Commenter
-let g:NERDSpaceDelims = 1
-let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+  " Nerd Commenter
+  let g:NERDSpaceDelims = 1
+endif
 
 " Status Line
 source ~/.vim/status.vim
@@ -137,11 +138,11 @@ au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
 
 " My Notes
-au BufNewFile,BufReadPost *.note set filetype=note
-au FileType note setlocal syn=yaml ts=2 sts=2 sw=2 smartindent expandtab
 au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
-function Linecomment()
-    execute "normal ^i/*\<ESC>$a*/\<ESC>"
-endfunction
-command Linecomment call Linecomment()
+" My local vimconfig plugin
+source ~/.vim/vimconfig.vim
+
+" My markdown keymaps:
+au Syntax markdown source ~/.vim/misc/markdown-keymaps.vim
+

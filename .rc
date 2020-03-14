@@ -28,14 +28,13 @@ alias la="ls -A"
 alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
-# alias dots='git --git-dir=$HOME/.config/.dots --work-tree=$HOME'
+#alias dots='git --git-dir=$HOME/.config/.dots --work-tree=$HOME'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 
 # alias wifi="nmcli --colors yes device wifi list"
 alias wifi=wavemon
 alias settings='gnome-control-center'
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
-alias open='xdg-open'
 alias say="espeak"
 alias copy="xclip -i"
 alias paste="xclip -o"
@@ -45,13 +44,17 @@ alias githistory='gource -a 1 -c 4.0 -f .'
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
 
-if [ -d ~/.local/share/applications ]; then
-    alias notes="bash <(grep -Po '(?<=Exec=).*' $(grep -l 'Keep' ~/.local/share/applications/*))"
+desktop_file=`grep -l 'Keep' ~/.local/share/applications/*`
+if [ -d ~/.config/google-chrome/Default/Extensions/hmjkmjkepdijhoojdojkdfohbdgmmhki ]; then
+    alias notes='/opt/google/chrome/google-chrome --profile-directory=Default --app-id=hmjkmjkepdijhoojdojkdfohbdgmmhki'
+elif [ -d ~/.local/share/applications ] && [ -n $desktop_file ]; then
+    alias notes="bash <(grep -Po '(?<=Exec=).*' $desktop_file)"
 else
     alias notes='echo "google keep not installed"'
 fi
+unset desktop_file
 
-function mkdircd() {
+mkdircd() {
     mkdir $1 && cd $1
 }
 
@@ -59,6 +62,14 @@ net() {
     # lspci -vv -s $(lspci | grep -i wireless | awk '{print $1}')
     # iwconfig $(iw dev | awk '/Interface /{print $2}')
     watch -n1 --color nmcli --colors yes device wifi list
+}
+
+open() {
+    if [[ $1 == *.md ]]; then
+        x-www-browser $*  # I have a browser extention that renders markdown
+    else
+        xdg-open $*
+    fi
 }
 
 google() {
@@ -84,7 +95,7 @@ lines() {
     # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
 }
 
-function show-colors() {
+show-colors() {
     for i in {0..255} ; do
         printf "\x1b[38;5;${i}mcolour${i} "
     done

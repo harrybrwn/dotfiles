@@ -15,7 +15,6 @@ from dispatch.types import Env
 
 REPO_NAME = 'repo'
 CONFIG_DIR = 'dots'
-REMOTE = os.path.expandvars(f"$XDG_CONFIG_HOME/{CONFIG_DIR}/{REPO_NAME}")
 
 
 def get_default_repo() -> str:

@@ -47,9 +47,9 @@ export ADB_VENDOR_KEYS="$XDG_CONFIG_HOME/android"
 export GNULIB_SRCDIR="$HOME/dev/linux/gnulib"
 
 # less
-# export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
-# export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
-# export LESSHISTFILE=-
+export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
+export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
+export LESSHISTFILE=-
 # export LESS_TERMCAP_mp=$(tput bold; tput setaf 4)
 # export LESS_TERMCAP_md=$(tput bold; tput setaf 5) # headers and flags
 # export LESS_TERMCAP_me=$(tput sgr0)

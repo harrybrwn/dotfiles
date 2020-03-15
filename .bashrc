@@ -129,3 +129,6 @@ function get_current_git_head() {
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion bash)
 fi
+if command -v apizza > /dev/null 2>&1; then
+    source <(apizza completion bash)
+fi

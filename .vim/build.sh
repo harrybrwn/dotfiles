@@ -17,36 +17,35 @@
 set -e
 
 BUILD_DIR="$HOME/.local/vim"
+NCURSES_VERSION='6.2'
 [ ! -f $BUILD_DIR ] && mkdir -p $BUILD_DIR
 
 install_ncurses() {
+    local prefix=$1
     local origin="$(pwd)"
     mkdir $BUILD_DIR/ncurses-vim-build
     cd $BUILD_DIR/ncurses-vim-build
-    wget 'https://ftp.gnu.org/gnu/ncurses/ncurses-6.2.tar.gz'
-    tar -xf ncurses-6.2.tar.gz
-    rm ncurses-6.2.tar.gz
-    cd ncurses-6.2
-    ./configure --prefix=/usr/local
+    wget "https://ftp.gnu.org/gnu/ncurses/ncurses-$NCURSES_VERSION.tar.gz"
+    tar -xf ncurses-$NCURSES_VERSION.tar.gz
+    rm ncurses-$NCURSES_VERSION.tar.gz
+    cd ncurses-$NCURSES_VERSION
+    ./configure --prefix=$prefix
     make
     make install
     cd $origin
     # rm -r $BUILD_DIR/ncurses-vim-build
 }
 
+install_ncurses_local() {
+    install_ncurses $HOME/.local/vim
+}
+
+# install_ncurses_local
+# exit
+
 # Notes:
 # Dependancies:
 #    gcc -std=gnu99 -Iproto -MM <filename> | sed 's/ \\//g' | tr -d '\n'
-
-
-if [ ! -f /usr/include/ncurses.h ] && [ ! -f $BUILD_DIR/include/ncurses.h ]; then
-    install_ncurses
-fi
-
-if [ "$1" = "install_ncurses" ]; then
-    install_ncurses
-    return
-fi
 
 make clean distclean
 
@@ -55,6 +54,6 @@ ldflags='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -Wl,--as-needed'
 
 features='--disable-gui --disable-gpm --with-x=no --disable-sysmouse --disable-netbeans'
 
-CFLAGS=$cflags LDFLAGS=$ldflags ./configure $features
-make -j 4
+CFLAGS=$cflags LDFLAGS=$ldflags ./configure --prefix=$HOME/.local --includedir=$BUILD_DIR/include --libdir=$BUILD_DIR/lib $features
+make -j 8
 

@@ -44,7 +44,7 @@ alias githistory='gource -a 1 -c 4.0 -f .'
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
 
-desktop_file=`grep -l 'Keep' ~/.local/share/applications/*`
+desktop_file=`grep -l 'Keep' ~/.local/share/applications/* > /dev/null`
 if [ -d ~/.config/google-chrome/Default/Extensions/hmjkmjkepdijhoojdojkdfohbdgmmhki ]; then
     alias notes='/opt/google/chrome/google-chrome --profile-directory=Default --app-id=hmjkmjkepdijhoojdojkdfohbdgmmhki'
 elif [ -d ~/.local/share/applications ] && [ -n $desktop_file ]; then

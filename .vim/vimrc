@@ -141,7 +141,7 @@ au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
 au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
 " My local vimconfig plugin
-source ~/.vim/vimconfig.vim
+"source ~/.vim/vimconfig.vim
 
 " My markdown keymaps:
 au Syntax markdown source ~/.vim/misc/markdown-keymaps.vim

@@ -109,8 +109,16 @@ st*)
     ;;
 esac
 
+source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # Setup gopass completion
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion zsh | head -n -1 | tail -n +2)
     compdef _gopass gopass
+fi
+
+# apizza completion
+if command -v apizza > /dev/null 2>&1; then
+    source <(apizza completion zsh)
+    compdef _apizza apizza
 fi

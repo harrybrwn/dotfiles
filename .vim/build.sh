@@ -16,7 +16,7 @@
 
 set -e
 
-BUILD_DIR="$HOME/.local/vim"
+BUILD_DIR="$HOME/.local/rpi/vim"
 NCURSES_VERSION='6.2'
 [ ! -f $BUILD_DIR ] && mkdir -p $BUILD_DIR
 
@@ -40,7 +40,7 @@ install_ncurses_local() {
     install_ncurses $HOME/.local/vim
 }
 
-# install_ncurses_local
+install_ncurses_local
 # exit
 
 # Notes:

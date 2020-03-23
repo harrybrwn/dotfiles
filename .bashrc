@@ -56,7 +56,7 @@ fi
 
 if [[ "$color_prompt" = yes ]]; then
     git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
-    PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[37m\]\$\[\033[00m\] "
+    PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[34m\]\$\[\033[00m\] "
 else
     git_branch=
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w \$ '

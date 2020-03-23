@@ -8,6 +8,9 @@
 # github: https://github.com/harrybrwn
 # website: http://harrybrwn.com
 
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
@@ -17,9 +20,6 @@ export LESS="--RAW-CONTROL-CHARS"
 [ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
 [ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
 # stty -ixon # disable ctrl-s
 
 alias ls='ls -hN --color=auto --group-directories-first'
@@ -28,7 +28,6 @@ alias la="ls -A"
 alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
-#alias dots='git --git-dir=$HOME/.config/.dots --work-tree=$HOME'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 
 # alias wifi="nmcli --colors yes device wifi list"
@@ -44,15 +43,15 @@ alias githistory='gource -a 1 -c 4.0 -f .'
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
 
-desktop_file=`grep -l 'Keep' ~/.local/share/applications/* > /dev/null`
 if [ -d ~/.config/google-chrome/Default/Extensions/hmjkmjkepdijhoojdojkdfohbdgmmhki ]; then
     alias notes='/opt/google/chrome/google-chrome --profile-directory=Default --app-id=hmjkmjkepdijhoojdojkdfohbdgmmhki'
-elif [ -d ~/.local/share/applications ] && [ -n $desktop_file ]; then
+elif [ -d ~/.local/share/applications ]; then
+    desktop_file=`grep -l 'Keep' ~/.local/share/applications/* 2>&1 /dev/null`
     alias notes="bash <(grep -Po '(?<=Exec=).*' $desktop_file)"
+    unset desktop_file
 else
     alias notes='echo "google keep not installed"'
 fi
-unset desktop_file
 
 mkdircd() {
     mkdir $1 && cd $1
@@ -104,7 +103,7 @@ show-colors() {
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
     [ `hostname` != 'harry-yogo920' ] && return # only run tmux on my machine
-    alias ta='tmux attach'
+    alias ta='tmux attach && unalias ta'
     if tmux ls > /dev/null 2>&1; then
         if [ $(tmux display -p '#{session_attached}') -eq 0 ]; then
             # Uncomment to automatically attatch tmux if session exists

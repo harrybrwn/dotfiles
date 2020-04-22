@@ -1,0 +1,58 @@
+[user]
+    email = harrybrown98@gmail.com
+    name = Harry Brown
+
+[core]
+    editor = 'vim'
+    excludesFile = ~/.config/git/gitignore
+    pager = less
+
+[include]
+    path = aliases
+
+[credential]
+    helper = cache --timeout=7200
+
+[commit]
+    #template =
+
+[diff]
+    noprefix = true
+    context = 3 # number of lines shown around each change
+
+[format]
+    #pretty = 'tformat:%C(auto)%h%Creset %Cblue(%cd)%Creset%C(auto)%d%Creset %s %C(magenta)[%cn]%Creset'
+
+[log]
+    decorate = true
+
+[web]
+    browser = brave-browser
+
+[color]
+    ui = auto
+[color "diff"]
+    meta = yellow bold
+    meta = white bold
+    frag = cyan bold
+    plain = white dim
+    new = green bold
+    old = red bold
+
+[alias]
+    cho   = checkout
+    br    = branch
+    ls    = ls-files
+    amend = commit --amend --no-edit
+    stat  = !git --no-pager diff --stat
+    ignored = !sh -c 'git check-ignore `find .`'
+
+    graph = log --all --graph --abbrev-commit --decorate --oneline
+    logs  = log --all --graph --abbrev-commit --decorate \
+        --date='format:%a %b %d %l:%M:%S %P %Y' \
+        --pretty='tformat:%C(auto)%h%Creset %Cblue(%cd)%Creset%C(auto)%d%Creset %s %C(magenta)[%cn]%Creset'
+    head  = !git --no-pager log --all --graph \
+        --date='format:%m-%d-%y' \
+        --pretty='tformat:%C(auto)%h%Creset %Cblue(%cd)%Creset%C(auto)%d%Creset %s' \
+        -n 25
+    top   = !git --no-pager log --all --graph --abbrev-commit --decorate --oneline -n

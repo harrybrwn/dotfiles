@@ -11,12 +11,14 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export EDITOR=vim
 export VISUAL=vim
-export EDITOR="$VISUAL"
 
 # Enable colors for less and man pages
 export LESS="--RAW-CONTROL-CHARS"
 
+export GO_VERSION="go1.14.1"
+export GOPATH="$HOME/dev/go"
 [ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
 [ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
 
@@ -26,15 +28,17 @@ alias ls='ls -hN --color=auto --group-directories-first'
 alias l="ls -lAh"
 alias la="ls -A"
 alias g=git
+alias ...='../..'
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
+alias ap=apizza
 
 # alias wifi="nmcli --colors yes device wifi list"
 alias wifi=wavemon
-alias settings='gnome-control-center'
+alias settings=gnome-control-center
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
-alias say="espeak"
+alias say=espeak
 alias copy="xclip -i"
 alias paste="xclip -o"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
@@ -94,6 +98,10 @@ lines() {
     # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
 }
 
+whi() {
+    readlink -f $(which $1)
+}
+
 show-colors() {
     for i in {0..255} ; do
         printf "\x1b[38;5;${i}mcolour${i} "
@@ -114,3 +122,18 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
         tmux new -d -s misc -c ~/
     fi
 fi
+
+# [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"
+
+[[ -f "$HOME/school/tanya/get-alias.sh" ]] && source "$HOME/school/tanya/get-alias.sh"
+
+xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
+    1.3 0.0 0.0 \
+    0.0 1.3 0.0 \
+    0.0 0.0 0.7
+xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
+xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 147 \
+    1.0 0.0 0.0 \
+    0.0 1.0 0.0 \
+    0.0 0.0 1.0
+

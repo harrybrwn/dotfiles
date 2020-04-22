@@ -133,7 +133,7 @@ CONFIG_LS_ROOT_ALIAS = '!git ls-files'
 LS_ROOT = 'ls-files-root'
 
 
-@command
+@command(hidden={'git_command'})
 class dots:
     '''Manage your dot files in peace.
     '''
@@ -282,6 +282,9 @@ class dots:
             return int(pull != 0 or push != 0)
         else:
             return err('no remote repo to sync')
+
+    def git_command(self):
+        print(' '.join(self._git()._command_args()))
 
     @subcommand(hidden=True)
     def test(self, *args):

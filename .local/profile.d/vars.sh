@@ -2,6 +2,7 @@
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
+#export XDG_RUNTIME_DIR=
 
 # Python stuff
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
@@ -39,17 +40,23 @@ export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
 export XSERVERRC="$XDG_CONFIG_HOME"/X11/xserverrc
 
+# Wine
+export WINEPREFIX="$XDG_CONFIG_HOME/wine"
+
 # adb
 export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
 export ADB_VENDOR_KEYS="$XDG_CONFIG_HOME/android"
 
 # Custom GNU Builds
-export GNULIB_SRCDIR="$HOME/dev/linux/gnulib"
+#export GNULIB_SRCDIR="$HOME/dev/linux/gnulib"
+
+# R
+export R_LIBS_USER="$HOME/.config/R/x86_64-pc-linux-gnu-library/3.4"
 
 # less
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
-export LESSHISTFILE=-
+#export LESSHISTFILE='-'
 # export LESS_TERMCAP_mp=$(tput bold; tput setaf 4)
 # export LESS_TERMCAP_md=$(tput bold; tput setaf 5) # headers and flags
 # export LESS_TERMCAP_me=$(tput sgr0)

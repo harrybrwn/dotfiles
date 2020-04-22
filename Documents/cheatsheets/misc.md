@@ -8,3 +8,4 @@ Linux
 | ---  | ----             |
 | cd   | change directory |
 
+grep for crlf line endings: `grep -IUlr $'\r' **/*`

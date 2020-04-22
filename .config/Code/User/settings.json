@@ -9,7 +9,6 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorCustomizations": {
         "editorLineNumber.foreground": "#d5d8da2f",
-
         // "statusBar.background": "#e95378",   // pink
         // "statusBar.background": "#42a5f5",   // blue
         // "statusBar.background": "#5293e5",   // blue
@@ -24,7 +23,7 @@
         // "statusBar.foreground": "#1c1e26",   // grey
     },
     "window.zoomLevel": 0,
-    "window.menuBarVisibility": "hidden",
+    "window.menuBarVisibility":"toggle",
 
     /* go */
     "go.useLanguageServer": true,
@@ -32,6 +31,8 @@
     "files.associations": {
         "*.h": "c",
         "TODO": "yaml",
+        "vimrc": "viml",
+        "*.vim": "viml",
     },
 
     /* Python */
@@ -55,6 +56,10 @@
     "java.configuration.checkProjectSettingsExclusions": false,
     "java.errors.incompleteClasspath.severity": "ignore",
 
+    /* Vim Mode ext. */
+    "vim.vimrc.path": "/home/harry/.vim/vimrc",
+    "vim.cursorStylePerMode.insert": "block",
+
     /* Build-it Terminal */
     "terminal.integrated.shell.linux": "/bin/bash",
     "terminal.integrated.fontFamily": "'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
@@ -64,4 +69,8 @@
     "explorer.confirmDragAndDrop": false,
     "explorer.confirmDelete": false,
     "todo-tree.tree.showScanModeButton": false,
+
+    "cSpell.words": [
+        "monospace",
+    ],
 }

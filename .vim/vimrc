@@ -66,6 +66,7 @@ if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   Plugin 'junegunn/vim-easy-align'
   " Plugin 'tpope/vim-commentary'
   Plugin 'preservim/nerdcommenter'
+  Plugin 'fatih/vim-go'
   call vundle#end()
   filetype plugin indent on
 endif
@@ -111,6 +112,7 @@ nnoremap <C-w><Left>    <C-w><
 nnoremap <C-w><C-Left>  <C-w><
 nnoremap <C-w><Right>   <C-w>>
 nnoremap <C-w><C-Right> <C-w>>
+nnoremap <Leader>f :15 Vex<Cr>
 
 
 if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
@@ -145,4 +147,34 @@ au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
 " My markdown keymaps:
 au Syntax markdown source ~/.vim/misc/markdown-keymaps.vim
+
+" NetRW
+let g:netrw_banner = 0       " hide top banner
+let g:netrw_browse_split = 2 " open files in new window
+let g:netrw_winsize = 15     " same as ':15 Vexplore'
+let g:netrw_liststyle = 3    " tree
+let g:netrw_altv = 1
+augroup Drawer
+  au!
+  " au VimEnter * :Vexplore | wincmd l
+augroup end
+
+" Go
+let g:go_fmt_command = "goimports"
+let g:go_highlight_variable_assignments = 0
+let g:go_highlight_variable_declarations = 0
+
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_function_parameters = 1
+
+let g:go_highlight_types = 0
+let g:go_highlight_structs = 0
+let g:go_highlight_fields = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_format_strings = 1
+
+let g:go_highlight_diagnostic_errors = 1
+let g:go_highlight_diagnostic_warnings = 1
 

@@ -100,20 +100,28 @@ inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
 cnoremap <C-j> <C-C>
 nnoremap <C-j> <Esc>
-inoremap jk <Esc>
 
 " Window Resizing
 nnoremap <C-w><Up>     <C-w>-
 nnoremap <C-w><C-Up>   <C-w>-
 nnoremap <C-w><Down>   <C-w>+
 nnoremap <C-w><C-Down> <C-w>+
+nnoremap <C-PageUp>   <C-w>-
+nnoremap <C-PageDown> <C-w>+
+nnoremap <C-Home>     <C-w><
+nnoremap <C-End>      <C-w>>
 
 nnoremap <C-w><Left>    <C-w><
 nnoremap <C-w><C-Left>  <C-w><
 nnoremap <C-w><Right>   <C-w>>
 nnoremap <C-w><C-Right> <C-w>>
-nnoremap <Leader>f :15 Vex<Cr>
+nnoremap <silent><Leader>f :call ToggleFileDrawer()<Cr>
+nnoremap <silent><Leader>F :Lex!<Cr>
+nnoremap <C-t> :tabnew<Cr>
+nnoremap <C-n> :rightb vnew<Cr>
 
+command -nargs=* -complete=file Tnew :tabnew <args>
+command -nargs=* -complete=file NEW :tabnew <args>
 
 if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   " Git Gutter
@@ -149,32 +157,38 @@ au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 au Syntax markdown source ~/.vim/misc/markdown-keymaps.vim
 
 " NetRW
+" set noequalalways
 let g:netrw_banner = 0       " hide top banner
 let g:netrw_browse_split = 2 " open files in new window
-let g:netrw_winsize = 15     " same as ':15 Vexplore'
+let g:netrw_winsize = 10
 let g:netrw_liststyle = 3    " tree
 let g:netrw_altv = 1
-augroup Drawer
+let g:netrw_sizestyle = "H"
+fun! ToggleFileDrawer()
+  :Lex
+endfun
+augroup FileDrawer
   au!
   " au VimEnter * :Vexplore | wincmd l
 augroup end
 
 " Go
-let g:go_fmt_command = "goimports"
-let g:go_highlight_variable_assignments = 0
-let g:go_highlight_variable_declarations = 0
+if isdirectory(expand('~/.vim/bundle/vim-go'))
+  let g:go_fmt_command = "goimports"
+  let g:go_highlight_variable_assignments = 0
+  let g:go_highlight_variable_declarations = 0
 
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_function_parameters = 1
+  let g:go_highlight_functions = 1
+  let g:go_highlight_function_calls = 1
+  let g:go_highlight_function_parameters = 1
 
-let g:go_highlight_types = 0
-let g:go_highlight_structs = 0
-let g:go_highlight_fields = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_format_strings = 1
+  let g:go_highlight_types = 0
+  let g:go_highlight_structs = 0
+  let g:go_highlight_fields = 1
+  let g:go_highlight_extra_types = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_format_strings = 1
 
-let g:go_highlight_diagnostic_errors = 1
-let g:go_highlight_diagnostic_warnings = 1
-
+  let g:go_highlight_diagnostic_errors = 1
+  let g:go_highlight_diagnostic_warnings = 1
+endif

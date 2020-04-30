@@ -28,11 +28,11 @@ alias ls='ls -hN --color=auto --group-directories-first'
 alias l="ls -lAh"
 alias la="ls -A"
 alias g=git
-alias ...='../..'
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 alias ap=apizza
+alias pas=gopass
 
 # alias wifi="nmcli --colors yes device wifi list"
 alias wifi=wavemon
@@ -109,6 +109,18 @@ show-colors() {
     echo ''
 }
 
+reset-mouse-speed() {
+    xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
+        1.0 0.0 0.0 \
+        0.0 1.0 0.0 \
+        0.0 0.0 1.0
+    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
+    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
+        1.0 0.0 0.0 \
+        0.0 1.0 0.0 \
+        0.0 0.0 1.0
+}
+
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
     [ `hostname` != 'harry-yogo920' ] && return # only run tmux on my machine
     alias ta='tmux attach && unalias ta'
@@ -128,9 +140,9 @@ fi
 [[ -f "$HOME/school/tanya/get-alias.sh" ]] && source "$HOME/school/tanya/get-alias.sh"
 
 xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
-    1.3 0.0 0.0 \
-    0.0 1.3 0.0 \
-    0.0 0.0 0.7
+    1.1 0.0 0.0 \
+    0.0 1.1 0.0 \
+    0.0 0.0 0.8
 xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
 xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 147 \
     1.0 0.0 0.0 \

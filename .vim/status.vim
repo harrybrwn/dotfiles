@@ -17,6 +17,7 @@ hi StatusAccent cterm=none ctermbg=magenta ctermfg=black
 hi StatusBg     cterm=none ctermbg=none    ctermfg=magenta
 
 let s:agnoster_char = ''
+let s:gitbranch_char = ''
 
 augroup GitBranchUpdate
   " We dont want to update the git branch in the status line
@@ -40,7 +41,7 @@ endfun
 
 fun! UseGitBranch()
   if exists('s:git_branch') && len(s:git_branch) > 0
-      return '   ' . s:git_branch . ' '
+      return '   ' . s:gitbranch_char . ' ' . s:git_branch . ' '
   else
       return ''
 endfun

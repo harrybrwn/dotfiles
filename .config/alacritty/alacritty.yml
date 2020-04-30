@@ -19,7 +19,7 @@ window:
   # - Windowed (default)
   startup_mode: Fullscreen
 
-background_opacity: 0.90
+background_opacity: 0.8
 
 scrolling:
   # set to 0 to disable scrolling
@@ -45,14 +45,11 @@ draw_bold_text_with_bright_colors: true
 key_bindings:
   - { key: C,      mods: Control|Shift, action: Copy       }
   - { key: V,      mods: Control|Shift, action: Paste      }
-  - { key: T,      mods: Control,       action: SpawnNewInstance }
   - { key: Q,      mods: Control,       action: Quit             }
   - { key: Minus,  mods: Control,       action: DecreaseFontSize }
   - { key: Equals, mods: Control,       action: IncreaseFontSize }
   - { key: Key0,   mods: Control,       action: ResetFontSize    }
-  - { key: Down,   mods: Control,       action: ToggleFullscreen }
-  #- { key: K,      mods: Control|Alt,   chars:  "\x1b[?25l" }
-  #- { key: J,      mods: Control|Alt,   chars:  "\x1b[?25h" }
+  - { key: F1,                          action: ToggleFullscreen }
 
 schemes:
   dracula: &dracula

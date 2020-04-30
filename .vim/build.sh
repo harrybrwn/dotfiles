@@ -51,6 +51,10 @@ prefix="$package_dir/usr/local"
 cflags='-O3 -fno-strength-reduce -Wall -fstack-protector-strong -Wformat -Werror=format-security -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
 ldflags='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -Wl,--as-needed'
 
+# lemme just login to root real quick
+echo 'running sudo:'
+sudo ls > /dev/null
+
 make clean distclean
 
 CFLAGS=$cflags LDFLAGS=$ldflags ./configure \
@@ -61,7 +65,6 @@ CFLAGS=$cflags LDFLAGS=$ldflags ./configure \
     --disable-sysmouse  \
     --disable-netbeans  \
     --disable-xsmp      \
-    --disable-channel   \
     --disable-autoservername \
     --disable-selinux   \
     --disable-smack     \
@@ -73,6 +76,10 @@ CFLAGS=$cflags LDFLAGS=$ldflags ./configure \
 # TODO: make this a little more dynamic and less hard-coded
 make -j 8 VIMRCLOC=/usr/local/share/vim/vim82
 make install
+
+if dpkg -l | grep 'vim-custom'; then
+    sudo apt-get remove vim-custom -y
+fi
 
 [ ! -d "$package_dir/DEBIAN" ] && mkdir -p "$package_dir/DEBIAN"
 

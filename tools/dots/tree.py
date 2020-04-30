@@ -32,12 +32,17 @@ class Tree:
             dir = self.dirs
             name = self.name
         elif isinstance(dir, str):
-            path = dir
-            dir = self.dirs
+            if dir == '.':
+                path = os.getcwd()
+                dir = os.listdir(os.getcwd())
+            else:
+                path = dir
+                dir = self.dirs
             parts = path.split(os.path.sep)
             for p in parts:
                 dir = dir[p]
             name = parts[-1]
+            print(dir, path)
         else:
             name = None
 

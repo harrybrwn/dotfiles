@@ -71,6 +71,22 @@ if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   filetype plugin indent on
 endif
 
+fun PluginExists(name)
+  return isdirectory(expand('~/.vim/bundle/' . a:name))
+endfun
+
+fun LoadAll()
+  for p in split(globpath('~/.vim/auto/', '*.vim'), '\n')
+    exe 'source ' . p
+  endfor
+endfun
+
+"au VimEnter * :call LoadAll()
+"au VimEnter * :call map(split(globpath('~/.vim/auto/', '*.vim'), '\n'), "'echo ' . v:val")
+"au VimEnter * :call map(split(globpath('~/.vim/auto/', '*.vim'), '\n'), "'source ' . v:val")
+au VimEnter * source ~/.vim/auto/status.vim
+au VimEnter * source ~/.vim/auto/markdown-keymaps.vim
+
 
 " Colors
 set t_Co=256
@@ -115,15 +131,14 @@ nnoremap <C-w><Left>    <C-w><
 nnoremap <C-w><C-Left>  <C-w><
 nnoremap <C-w><Right>   <C-w>>
 nnoremap <C-w><C-Right> <C-w>>
-nnoremap <silent><Leader>f :call ToggleFileDrawer()<Cr>
+nnoremap <silent><Leader>f :Lex<Cr>
 nnoremap <silent><Leader>F :Lex!<Cr>
 nnoremap <C-t> :tabnew<Cr>
 nnoremap <C-n> :rightb vnew<Cr>
 
-command -nargs=* -complete=file Tnew :tabnew <args>
-command -nargs=* -complete=file NEW :tabnew <args>
 
-if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
+" if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
+if PluginExists('Vundle.vim')
   " Git Gutter
   highlight SignColumn      ctermbg=none
   highlight GitGutterAdd    ctermfg=2 ctermbg=none
@@ -131,11 +146,10 @@ if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   highlight GitGutterDelete ctermfg=1 ctermbg=none
 
   " Nerd Commenter
-  let g:NERDSpaceDelims = 1
+  "let g:NERDSpaceDelims = 1
 endif
 
 " Status Line
-source ~/.vim/status.vim
 set stl=%!MyStatusLine()
 
 " My file-type settings
@@ -150,30 +164,22 @@ au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
 " My Notes
 au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
-" My local vimconfig plugin
-"source ~/.vim/vimconfig.vim
-
-" My markdown keymaps:
-au Syntax markdown source ~/.vim/misc/markdown-keymaps.vim
+" LaTex
+au BufNewFile *.tex 0r ~/.vim/templates/template.tex
 
 " NetRW
-" set noequalalways
+"set noequalalways
 let g:netrw_banner = 0       " hide top banner
 let g:netrw_browse_split = 2 " open files in new window
 let g:netrw_winsize = 10
 let g:netrw_liststyle = 3    " tree
 let g:netrw_altv = 1
 let g:netrw_sizestyle = "H"
-fun! ToggleFileDrawer()
-  :Lex
-endfun
-augroup FileDrawer
-  au!
-  " au VimEnter * :Vexplore | wincmd l
-augroup end
 
 " Go
-if isdirectory(expand('~/.vim/bundle/vim-go'))
+" :GoInstallBinaries
+" :GoUpdateBinaries
+if PluginExists('vim-go') && 0
   let g:go_fmt_command = "goimports"
   let g:go_highlight_variable_assignments = 0
   let g:go_highlight_variable_declarations = 0

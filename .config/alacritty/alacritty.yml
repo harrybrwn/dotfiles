@@ -19,7 +19,7 @@ window:
   # - Windowed (default)
   startup_mode: Windowed
 
-background_opacity: 0.9
+background_opacity: 1.0
 
 scrolling:
   # set to 0 to disable scrolling
@@ -42,6 +42,9 @@ shell:
 # From 0.0 to 1.0
 draw_bold_text_with_bright_colors: true
 
+mouse:
+  hide_when_typing: true
+
 key_bindings:
   - { key: C,      mods: Control|Shift, action: Copy             }
   - { key: V,      mods: Control|Shift, action: Paste            }
@@ -50,6 +53,7 @@ key_bindings:
   - { key: Equals, mods: Control,       action: IncreaseFontSize }
   - { key: Key0,   mods: Control,       action: ResetFontSize    }
   - { key: F11,                         action: ToggleFullscreen }
+  #- { key: F10,                         command: {program: "sh", args: [] } }
   - { key: Key1, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.1"] }}
   - { key: Key2, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.2"] }}
   - { key: Key3, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.3"] }}
@@ -72,16 +76,17 @@ key_bindings:
 
 schemes:
   dracula: &dracula
-    primary:
+    primary <<: &dracula_primary
       background: '0x282a36'
       foreground: '0x94a3a3'
-    normal:
+    normal: &dracula_normal
       black:   '0x44475a'
       red:     '0xff5555'
       green:   '0x50fa7b'
       yellow:  '0xf1fa8c'
       blue:    '0xcaa9fa'
-      magenta: '0xff79c6'
+      #magenta: '0xff79c6'
+      magenta: '0xbd93f9'
       cyan:    '0x8be9fd'
       white:   '0xbfbfbf'
     bright:
@@ -90,49 +95,34 @@ schemes:
       green:   '0x5af78e'
       yellow:  '0xf4f99d'
       blue:    '0xcaa9fa'
-      # magenta: '0xff92d0'
+      magenta: '0xff92d0'
+      #magenta: '0xbd93f9'
+      cyan:    '0x9aedfe'
+      white:   '0xe6e6e6'
+
+  custom: &custom # secretly dracula
+    primary:
+      background: '0x282a36'
+      foreground: '0x94a3a3'
+    normal:
+      black:   '0x44475a'
+      red:     '0xff5555'
+      #green:   '0x50fa7b'
+      green:   '0x50fa7b'
+      yellow:  '0xffb86c'
+      #blue:    '0xcaa9fa'
+      blue:    '0x8be9fd'
+      magenta: '0xbd93f9'
+      cyan:    '0x8be9fd'
+      white:   '0xbfbfbf'
+    bright:
+      black:   '0x575b70'
+      red:     '0xff5555'
+      green:   '0x5af78e'
+      yellow:  '0xffb86c'
+      blue:    '0x8be9fd'
       magenta: '0xbd93f9'
       cyan:    '0x9aedfe'
       white:   '0xe6e6e6'
 
-  afterglow: &afterglow
-    primary:
-      background: '0x2c2c2c'
-      foreground: '0xd6d6d6'
-      dim_foreground:    '0xdbdbdb'
-      bright_foreground: '0xd9d9d9'
-      dim_background:    '0x202020' # not sure
-      bright_background: '0x3a3a3a' # not sure
-    cursor:
-      text:   '0x2c2c2c'
-      cursor: '0xd9d9d9'
-    normal:
-      black:   '0x1c1c1c'
-      red:     '0xbc5653'
-      green:   '0x909d63'
-      yellow:  '0xebc17a'
-      blue:    '0x7eaac7'
-      magenta: '0xaa6292'
-      cyan:    '0x86d3ce'
-      white:   '0xcacaca'
-    bright:
-      black:   '0x636363'
-      red:     '0xbc5653'
-      green:   '0x909d63'
-      yellow:  '0xebc17a'
-      blue:    '0x7eaac7'
-      magenta: '0xaa6292'
-      cyan:    '0x86d3ce'
-      white:   '0xf7f7f7'
-    dim:
-      black:   '0x232323'
-      red:     '0x74423f'
-      green:   '0x5e6547'
-      yellow:  '0x8b7653'
-      blue:    '0x556b79'
-      magenta: '0x6e4962'
-      cyan:    '0x5c8482'
-      white:   '0x828282'
-
-colors: *dracula
-#colors: *afterglow
+colors: *custom

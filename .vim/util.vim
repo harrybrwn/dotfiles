@@ -28,4 +28,3 @@ endfunction
 
 vnoremap <Leader>/ :call Comment(g:comment_char)<cr>
 
-

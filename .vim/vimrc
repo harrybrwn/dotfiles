@@ -62,7 +62,6 @@ if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   Plugin 'junegunn/goyo.vim'
   Plugin 'reedes/vim-colors-pencil'
   Plugin 'arcticicestudio/nord-vim'
-  Plugin 'dracula/vim', { 'name': 'dracula' }
   Plugin 'junegunn/vim-easy-align'
   " Plugin 'tpope/vim-commentary'
   Plugin 'preservim/nerdcommenter'
@@ -75,27 +74,26 @@ fun PluginExists(name)
   return isdirectory(expand('~/.vim/bundle/' . a:name))
 endfun
 
-fun LoadAll()
+fun! LoadAll()
   for p in split(globpath('~/.vim/auto/', '*.vim'), '\n')
     exe 'source ' . p
   endfor
 endfun
 
-"au VimEnter * :call LoadAll()
-"au VimEnter * :call map(split(globpath('~/.vim/auto/', '*.vim'), '\n'), "'echo ' . v:val")
-"au VimEnter * :call map(split(globpath('~/.vim/auto/', '*.vim'), '\n'), "'source ' . v:val")
-au VimEnter * source ~/.vim/auto/status.vim
-au VimEnter * source ~/.vim/auto/markdown-keymaps.vim
+au VimEnter * :call LoadAll()
 
+packadd! dracula
+"packadd misc
 
 " Colors
 set t_Co=256
 set background=dark
 au ColorScheme * highlight Normal ctermbg=none
-silent! colorscheme delek
-silent! colorscheme dracula " allow failures (set delek as default)
-hi CursorLineNR ctermfg=magenta
-hi SpellBad cterm=underline ctermbg=none ctermfg=none
+silent! colorscheme delek " set delek as a fallback
+silent! colorscheme dracula " if dracula doesn't exist, errors are silenced
+
+"hi CursorLineNR ctermfg=magenta
+"hi SpellBad cterm=underline ctermbg=none ctermfg=none
 
 
 " Whitespace Detection
@@ -137,7 +135,6 @@ nnoremap <C-t> :tabnew<Cr>
 nnoremap <C-n> :rightb vnew<Cr>
 
 
-" if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
 if PluginExists('Vundle.vim')
   " Git Gutter
   highlight SignColumn      ctermbg=none
@@ -179,7 +176,7 @@ let g:netrw_sizestyle = "H"
 " Go
 " :GoInstallBinaries
 " :GoUpdateBinaries
-if PluginExists('vim-go') && 0
+if PluginExists('vim-go')
   let g:go_fmt_command = "goimports"
   let g:go_highlight_variable_assignments = 0
   let g:go_highlight_variable_declarations = 0

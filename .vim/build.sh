@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 # This is the script I use for configuring my
 # custom vim build
@@ -6,7 +6,7 @@
 # Usage:
 #   $ git clone https://github.com/vim/vim
 #   $ cd vim
-#   $ sh ~/.vim/build.sh
+#   $ sh ~/.vim/build.sh install
 #
 
 # Issues:
@@ -18,6 +18,19 @@ set -e
 BUILD_DIR="$HOME/.local/rpi/vim"
 NCURSES_VERSION='6.2'
 [ ! -f $BUILD_DIR ] && mkdir -p $BUILD_DIR
+
+DEFAULT_BUILD_NAME="vim-custom"
+
+get_package_dir() {
+    local build_name
+    if [ -z "$1" ]; then
+        build_name="$DEFAULT_BUILD_NAME"
+    else
+        build_name="$1"
+    fi
+
+    echo "$HOME/.vim/build/$build_name"
+}
 
 install_ncurses() {
     local prefix=$1
@@ -39,51 +52,108 @@ install_ncurses_local() {
     install_ncurses $HOME/.local/vim
 }
 
+get_debian_package() {
+    local name=$1
+    if [ -z "$name" ]; then
+        exit 1
+    fi
+
+    local origin="$(pwd)"
+    mkdir $name && cd $name
+    apt-get download $name
+
+    local archive=$name*
+    if [ -z "$archive" ]; then
+        echo 'no archive'
+        exit 1
+    fi
+    ar x $archive
+    rm $archive
+
+    mkdir data control
+    tar -xf data.tar.xz -C ./data
+    tar -xf control.tar.xz -C ./control
+    rm data.tar.xz control.tar.xz
+
+    cd $origin
+}
+
+get_packages() {
+    sudo add-apt-repository ppa:jonathonf/vim --yes
+    sudo apt-get update
+    local data_dir="$(get_package_dir)/../data"
+    [ -d $data_dir ] && rm -r $data_dir
+    mkdir $data_dir
+
+    for pkg in $*; do
+        [ -d "$pkg" ] && echo "'$pkg' already exists" && exit 1
+        mkdir $pkg && cd $pkg
+        apt-get download $pkg
+
+        local archive=$pkg*
+        if [ -z "$archive" ]; then
+            echo 'no archive'
+            exit 1
+        fi
+        ar x $archive
+        rm $archive
+
+        tar -xf data.tar.xz -C "$data_dir"
+        cd ..
+        rm -r $pkg
+    done
+}
+
 
 # Notes:
 # Dependancies:
 #    gcc -std=gnu99 -Iproto -MM <filename> | sed 's/ \\//g' | tr -d '\n'
 
-build_name="vim-custom"
+install() {
+    local build_name="$DEFAULT_BUILD_NAME"
+    local package_dir="$(get_package_dir $build_name)"
+    local prefix="$package_dir/usr/local"
 
-package_dir="$HOME/.vim/build/$build_name"
-prefix="$package_dir/usr/local"
-cflags='-O3 -fno-strength-reduce -Wall -fstack-protector-strong -Wformat -Werror=format-security -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
-ldflags='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -Wl,--as-needed'
+    local cflags='-O3 -fno-strength-reduce -Wall -fstack-protector-strong -Wformat -Werror=format-security -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
+    local ldflags='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -Wl,--as-needed'
 
-# lemme just login to root real quick
-echo 'running sudo:'
-sudo ls > /dev/null
+    # lemme just login to root real quick
+    echo 'running sudo:'
+    sudo ls > /dev/null
 
-make clean distclean
+    make clean distclean
 
-CFLAGS=$cflags LDFLAGS=$ldflags ./configure \
-    --disable-rightleft \
-    --disable-gui       \
-    --disable-gpm       \
-    --with-x=no         \
-    --disable-sysmouse  \
-    --disable-netbeans  \
-    --disable-xsmp      \
-    --disable-autoservername \
-    --disable-selinux   \
-    --disable-smack     \
-    --disable-darwin    \
-    --disable-xim       \
-    --prefix=$prefix    \
-    --with-global-runtime='/usr/local/share/vim/vim82,/usr/local/share/vim'
+    if ! dpkg -l | grep "$buid_name" > /dev/null; then
+        echo 'removing vim-custom'
+        sudo apt-get remove vim-custom -y
+    fi
 
-# TODO: make this a little more dynamic and less hard-coded
-make -j 8 VIMRCLOC=/usr/local/share/vim/vim82
-make install
+    CFLAGS=$cflags LDFLAGS=$ldflags ./configure \
+        --disable-rightleft \
+        --disable-gui       \
+        --disable-gpm       \
+        --with-x=no         \
+        --disable-sysmouse  \
+        --disable-netbeans  \
+        --disable-xsmp      \
+        --disable-autoservername \
+        --disable-selinux   \
+        --disable-smack     \
+        --disable-darwin    \
+        --disable-xim       \
+        --prefix=$prefix    \
+        --with-global-runtime='/usr/local/share/vim/vim82,/usr/local/share/vim'
 
-if dpkg -l | grep 'vim-custom'; then
-    sudo apt-get remove vim-custom -y
-fi
+    # TODO: make this a little more dynamic and less hard-coded
+    make -j 8 VIMRCLOC=/usr/local/share/vim/vim82
+    make install
 
-[ ! -d "$package_dir/DEBIAN" ] && mkdir -p "$package_dir/DEBIAN"
+    get_packages 'vim-common' 'vim-runtime' 'vim'
+    cp -r "$package_dir/../data/usr/share/applications" "$package_dir/usr/local/applications"
+    cp -r "$package_dir/../data/etc" "$package_dir"
 
-cat > "$package_dir/DEBIAN/control" <<- EOF
+    [ ! -d "$package_dir/DEBIAN" ] && mkdir -p "$package_dir/DEBIAN"
+    cat > "$package_dir/DEBIAN/control" <<- EOF
 Package: $build_name
 Version: 1.0
 Section: custom
@@ -93,8 +163,14 @@ Maintainer: $(git config --global --get user.name) <$(git config --global --get 
 Description: This is my custom vim build. It may not work on all operating systems.
 
 EOF
+    dpkg-deb -b $package_dir
 
-dpkg-deb -b $package_dir
+    echo "sudo apt-get install -f $package_dir.deb"
+    sudo apt-get install -f $package_dir.deb
+}
 
-echo "sudo apt-get install -f $package_dir.deb"
-sudo apt-get install -f $package_dir.deb
+if [ -z "$*" ]; then
+    exit 1
+fi
+
+"$@"

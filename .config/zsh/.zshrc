@@ -122,3 +122,9 @@ if command -v apizza > /dev/null 2>&1; then
     source <(apizza completion zsh)
     compdef _apizza apizza
 fi
+
+# github cli completion
+if command -v gh > /dev/null 2>&1; then
+    source <(gh completion -s zsh)
+    compdef _gh gh
+fi

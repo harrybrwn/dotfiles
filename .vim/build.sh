@@ -55,7 +55,7 @@ install_ncurses_local() {
 get_debian_package() {
     local name=$1
     if [ -z "$name" ]; then
-        exit 1
+        return 1
     fi
 
     local origin="$(pwd)"
@@ -65,7 +65,7 @@ get_debian_package() {
     local archive=$name*
     if [ -z "$archive" ]; then
         echo 'no archive'
-        exit 1
+        return 1
     fi
     ar x $archive
     rm $archive
@@ -86,14 +86,14 @@ get_packages() {
     mkdir $data_dir
 
     for pkg in $*; do
-        [ -d "$pkg" ] && echo "'$pkg' already exists" && exit 1
+        [ -d "$pkg" ] && echo "'$pkg' already exists" && return 1
         mkdir $pkg && cd $pkg
         apt-get download $pkg
 
         local archive=$pkg*
         if [ -z "$archive" ]; then
             echo 'no archive'
-            exit 1
+            return 1
         fi
         ar x $archive
         rm $archive

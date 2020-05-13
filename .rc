@@ -24,15 +24,24 @@ export GOPATH="$HOME/dev/go"
 
 # stty -ixon # disable ctrl-s
 
-alias ls='ls -hN --color=auto --group-directories-first'
-alias l="ls -lAh"
-alias la="ls -A"
+if command -v exa > /dev/null 2>&1; then
+    alias ls='exa --group-directories-first'
+    alias l='ls -la --git'
+    alias la='ls -a'
+else
+    alias ls='ls -hN --color=auto --group-directories-first'
+    alias l="ls -lAh"
+    alias la="ls -A"
+fi
 alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(ls -A) | sort -hr'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
+alias gohtml='echo "" > gocoverage.txt && go test ./... -v -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 
 alias ap=apizza
+#alias apizza-docker='docker run --rm -v $HOME:/root -it apizza:latest'
+alias apizza-docker='docker run --rm -it apizza:latest'
 alias pas=gopass
 alias wifi=wavemon
 alias howto=how2
@@ -67,6 +76,24 @@ net() {
     # lspci -vv -s $(lspci | grep -i wireless | awk '{print $1}')
     # iwconfig $(iw dev | awk '/Interface /{print $2}')
     watch -n1 --color nmcli --colors yes device wifi list
+}
+
+# Because i'm scared
+rm() {
+    for f in "$*"; do
+        if
+            [ $f = $HOME ] ||
+            [ $f = '~' ] ||
+            [ "$f" = "/" ] ||
+            [ "$f" = "/home" ] ||
+            [ "$f" = "/home/" ] ||
+            [ "$f" = "$HOME/dev" ]
+        then
+            echo 'do not remove the home directory!!'
+            return 1
+        fi
+    done
+    /bin/rm $*
 }
 
 open() {

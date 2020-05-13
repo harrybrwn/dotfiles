@@ -83,21 +83,18 @@ endfun
 au VimEnter * :call LoadAll()
 
 packadd! dracula
-"packadd misc
 
 " Colors
 set t_Co=256
 set background=dark
 au ColorScheme * highlight Normal ctermbg=none
-silent! colorscheme delek " set delek as a fallback
-silent! colorscheme dracula " if dracula doesn't exist, errors are silenced
-
-"hi CursorLineNR ctermfg=magenta
-"hi SpellBad cterm=underline ctermbg=none ctermfg=none
+colorscheme delek " set delek as a fallback
+silent! colo molokai
+hi CursorLineNR ctermfg=magenta
 
 
 " Whitespace Detection
-highlight ExtraWhitespace ctermbg=1 ctermfg=white
+hi ExtraWhitespace ctermbg=1 ctermfg=white
 match ExtraWhitespace /\s\+$/
 au BufWinEnter * match ExtraWhitespace /\s\+$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
@@ -109,6 +106,8 @@ au BufWinLeave * call clearmatches()
 let mapleader=","
 let g:comment_char = ''
 nmap <silent><Leader>/ :call Comment(g:comment_char)<CR>
+"nnoremap <Leader>/ NERDCommenterToggle
+"nnoremap <Leader>/ <Leader>c<Space>
 nmap <Leader>g call UpdateGitBranch()<CR>
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
@@ -135,15 +134,17 @@ nnoremap <C-t> :tabnew<Cr>
 nnoremap <C-n> :rightb vnew<Cr>
 
 
-if PluginExists('Vundle.vim')
-  " Git Gutter
+" Git Gutter
+if PluginExists('vim-gitgutter')
   highlight SignColumn      ctermbg=none
   highlight GitGutterAdd    ctermfg=2 ctermbg=none
   highlight GitGutterChange ctermfg=3 ctermbg=none
   highlight GitGutterDelete ctermfg=1 ctermbg=none
+endif
 
-  " Nerd Commenter
-  "let g:NERDSpaceDelims = 1
+" Nerd Commenter
+if PluginExists('nerdcommenter')
+  let g:NERDSpaceDelims = 1
 endif
 
 " Status Line
@@ -163,6 +164,7 @@ au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
 " LaTex
 au BufNewFile *.tex 0r ~/.vim/templates/template.tex
+au FileType tex g:comment_char = '%'
 
 " NetRW
 "set noequalalways

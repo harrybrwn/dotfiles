@@ -66,6 +66,7 @@ if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   " Plugin 'tpope/vim-commentary'
   Plugin 'preservim/nerdcommenter'
   Plugin 'fatih/vim-go'
+  Plugin 'severin-lemaignan/vim-minimap'
   call vundle#end()
   filetype plugin indent on
 endif
@@ -196,4 +197,8 @@ if PluginExists('vim-go')
 
   let g:go_highlight_diagnostic_errors = 1
   let g:go_highlight_diagnostic_warnings = 1
+endif
+
+if PluginExists('vim-minmap')
+  " let g:minimap_toggle='<leader>m'
 endif

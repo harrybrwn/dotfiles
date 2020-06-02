@@ -35,9 +35,9 @@ else
 fi
 alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-alias fsizes='du -sh $(ls -A) | sort -hr'
+alias fsizes='du -sh $(/bin/ls -A) | sort -hr'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
-alias gohtml='echo "" > gocoverage.txt && go test ./... -v -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
+alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -race -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 
 alias ap=apizza
 #alias apizza-docker='docker run --rm -v $HOME:/root -it apizza:latest'

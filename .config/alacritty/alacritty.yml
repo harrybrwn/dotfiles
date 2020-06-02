@@ -19,7 +19,7 @@ window:
   # - Windowed (default)
   startup_mode: Windowed
 
-background_opacity: 0.9
+background_opacity: 1.0
 
 scrolling:
   # set to 0 to disable scrolling
@@ -54,7 +54,7 @@ key_bindings:
   - { key: Key0,   mods: Control,       action: ResetFontSize    }
   - { key: F11,                         action: ToggleFullscreen }
   #- { key: F10,                         command: {program: "sh", args: [] } }
-  - { key: Key1, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.1"] }}
+  - { key: Key1, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.0"] }}
   - { key: Key2, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.2"] }}
   - { key: Key3, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.3"] }}
   - { key: Key4, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.4"] }}

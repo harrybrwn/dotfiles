@@ -132,6 +132,9 @@ fi
 if command -v apizza > /dev/null 2>&1; then
     source <(apizza completion bash)
 fi
+if command -v edu > /dev/null 2>&1; then
+    source <(edu completion bash)
+fi
 
 
 [[ -s "/home/harry/.config/gvm/scripts/gvm" ]] && source "/home/harry/.config/gvm/scripts/gvm"

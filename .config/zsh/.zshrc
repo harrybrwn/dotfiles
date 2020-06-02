@@ -128,3 +128,8 @@ if command -v gh > /dev/null 2>&1; then
     source <(gh completion -s zsh)
     compdef _gh gh
 fi
+
+if command -v edu > /dev/null 2>&1; then
+    source <(edu completion zsh)
+    compdef _edu edu
+fi

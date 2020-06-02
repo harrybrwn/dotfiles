@@ -165,8 +165,8 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
     fi
 fi
 
-if ! echo $PATH | tr ':' '\n' | grep "$HOME/.local/bin"; then
-    PATH="$HOME/.local/bin:$PATH"
+if ! echo $PATH | tr ':' '\n' | grep "$HOME/.local/bin" > /dev/null; then
+    export PATH="$HOME/.local/bin:$PATH"
 fi
 
 # [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"

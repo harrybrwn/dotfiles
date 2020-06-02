@@ -165,6 +165,10 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
     fi
 fi
 
+if ! echo $PATH | tr ':' '\n' | grep "$HOME/.local/bin"; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
 # [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"
 [[ -f "$HOME/school/tanya/get-alias.sh" ]] && source "$HOME/school/tanya/get-alias.sh"
 

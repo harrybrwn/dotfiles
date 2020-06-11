@@ -33,16 +33,16 @@ else
     alias l="ls -lAh"
     alias la="ls -A"
 fi
+
 alias g=git
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias fsizes='du -sh $(/bin/ls -A) | sort -hr'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
-alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -race -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
+# alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -race -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
+alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 
-alias ap=apizza
-#alias apizza-docker='docker run --rm -v $HOME:/root -it apizza:latest'
-alias apizza-docker='docker run --rm -it apizza:latest'
-alias pas=gopass
+alias ap=apizza apizza-docker='docker run --rm -it apizza:latest'
+alias pass=gopass pas=gopass
 alias wifi=wavemon
 alias howto=how2
 alias say=espeak
@@ -50,8 +50,7 @@ alias say=espeak
 # alias wifi="nmcli --colors yes device wifi list"
 alias settings=gnome-control-center
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
-alias copy="xclip -i"
-alias paste="xclip -o"
+alias copy="xclip -i" paste="xclip -o"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
 alias htmltopdf='wkhtmltopdf'
 alias githistory='gource -a 1 -c 4.0 -f .'
@@ -152,7 +151,7 @@ reset-mouse-speed() {
 }
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
-    [ `hostname` != 'harry-yogo920' ] && return # only run tmux on my machine
+    [ `hostname` != 'harry-yoga920' ] && return # only run tmux on my machine
     alias ta='tmux attach && unalias ta'
     if tmux ls > /dev/null 2>&1; then
         if [ $(tmux display -p '#{session_attached}') -eq 0 ]; then

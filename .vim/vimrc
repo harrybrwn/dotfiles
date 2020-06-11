@@ -17,6 +17,12 @@ set wrap      " wrap text that doesn't fit
 set linebreak " wrap by word instead of char
 set spelllang=en_us
 set bs=2 " make backspace work in Insert mode
+set undodir=~/.vim/undo
+set undofile
+set updatetime=3000 " default: 4000
+
+set colorcolumn=80
+hi ColorColumn ctermbg=0
 
 " Tab completion
 set wildmenu      " just looks nice
@@ -41,38 +47,28 @@ set undolevels=1500
 " Searching
 set path+=** " recursive file search
 set hlsearch
-set incsearch
+set incsearch " get partial results while searching
 
-
-" Plugin Managment
-"
-"    :PluginList         - list all plugins
-"    :PluginUpdate       - update plugins
-"    :PluginInstall      - install plugins
-"    :PluginSearch foo   - search for 'foo'
-"    :PluginClean        - clean out unused plugins
-"
-if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
-  set rtp+=~/.vim/bundle/Vundle.vim
-  filetype off
-  call vundle#begin()
-  Plugin 'VundleVim/Vundle.vim'
-  Plugin 'airblade/vim-gitgutter'
-  Plugin 'altercation/vim-colors-solarized'
-  Plugin 'junegunn/goyo.vim'
-  Plugin 'reedes/vim-colors-pencil'
-  Plugin 'arcticicestudio/nord-vim'
-  Plugin 'junegunn/vim-easy-align'
-  " Plugin 'tpope/vim-commentary'
-  Plugin 'preservim/nerdcommenter'
-  Plugin 'fatih/vim-go'
-  Plugin 'severin-lemaignan/vim-minimap'
-  call vundle#end()
-  filetype plugin indent on
+" Plugins
+"   :PlugInstall - install plugins
+"   :PlugClean   - clean unused plugins
+"   :PlugUpdate  - update plugins
+if filereadable(expand('~/.vim/autoload/plug.vim'))
+  call plug#begin('~/.vim/plugins')
+  Plug 'airblade/vim-gitgutter'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'junegunn/goyo.vim'
+  Plug 'reedes/vim-colors-pencil'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'junegunn/vim-easy-align'
+  " Plug 'tpope/vim-commentary'
+  Plug 'preservim/nerdcommenter'
+  Plug 'fatih/vim-go'
+  call plug#end()
 endif
 
 fun PluginExists(name)
-  return isdirectory(expand('~/.vim/bundle/' . a:name))
+  return isdirectory(expand('~/.vim/plugins/' . a:name))
 endfun
 
 fun! LoadAll()
@@ -87,10 +83,10 @@ packadd! dracula
 
 " Colors
 set t_Co=256
-set background=dark
 au ColorScheme * highlight Normal ctermbg=none
 colorscheme delek " set delek as a fallback
 silent! colo molokai
+set background=dark
 hi CursorLineNR ctermfg=magenta
 
 
@@ -160,7 +156,6 @@ autocmd FileType make let g:comment_char = '@#'
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
 
-" My Notes
 au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
 " LaTex
@@ -171,7 +166,7 @@ au FileType tex g:comment_char = '%'
 "set noequalalways
 let g:netrw_banner = 0       " hide top banner
 let g:netrw_browse_split = 2 " open files in new window
-let g:netrw_winsize = 10
+let g:netrw_winsize = 20
 let g:netrw_liststyle = 3    " tree
 let g:netrw_altv = 1
 let g:netrw_sizestyle = "H"
@@ -197,8 +192,6 @@ if PluginExists('vim-go')
 
   let g:go_highlight_diagnostic_errors = 1
   let g:go_highlight_diagnostic_warnings = 1
-endif
 
-if PluginExists('vim-minmap')
-  " let g:minimap_toggle='<leader>m'
+  nmap <C-g> :GoDef<Cr>
 endif

@@ -19,34 +19,6 @@ hi StatusBg     cterm=none ctermbg=none    ctermfg=magenta
 let s:agnoster_char = ''
 let s:gitbranch_char = ''
 
-augroup GitBranchUpdate
-  " We dont want to update the git branch in the status line
-  " every time the status line refreshes so these auto commands
-  " update the branch variable when it is important.
-
-  " au!
-  " au BufNewFile,BufWritePost,BufReadPost      * call UpdateGitBranch()
-  " au InsertEnter,InsertLeave,InsertChange     * call UpdateGitBranch()
-  " au CmdlineChanged,CmdlineEnter,CmdlineLeave * call UpdateGitBranch()
-  " au CursorHold,CursorHoldI  * call UpdateGitBranch()
-  " au WinEnter,WinLeave       * call UpdateGitBranch()
-  " au CmdwinEnter,CmdwinLeave * call UpdateGitBranch()
-augroup END
-
-
-fun! UpdateGitBranch()
-    let s:git_branch = system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfun
-
-
-fun! UseGitBranch()
-  if exists('s:git_branch') && len(s:git_branch) > 0
-      return '   ' . s:gitbranch_char . ' ' . s:git_branch . ' '
-  else
-      return ''
-endfun
-
-
 fun! GetLineInfo()
   let l:pos = line('$')
 
@@ -61,6 +33,12 @@ fun! GetLineInfo()
   return l:pos
 endfun
 
+fun! UseGitBranch()
+  if exists('s:git_branch') && len(s:git_branch) > 0
+      return '   ' . s:gitbranch_char . ' ' . s:git_branch . ' '
+  else
+      return ''
+endfun
 
 fun! FileStatus()
     " %f: filename
@@ -69,7 +47,6 @@ fun! FileStatus()
     " %r: [RO] if file is Read Only
     return '%f %m%h%r'
 endfun
-
 
 fun! MyStatusLine()
     let l:line = '%#StatusAccent#%{UseGitBranch()}'
@@ -82,10 +59,6 @@ fun! MyStatusLine()
     let l:line .= ' '
     let l:line .= FileStatus()
     let l:line .= '%#StatusBg#' . s:agnoster_char
-
-    " let l:line .= '  '
-    " let l:line .= 'hello %2*'
-
     let l:line .= '%=%#LineNr#'
     let l:line .= '%{GetLineInfo()}  '
     let l:line .= '%#Constant#%y [%{&encoding}]%*'

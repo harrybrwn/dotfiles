@@ -22,7 +22,7 @@
         // "statusBar.foreground": "#000000",   // black
         // "statusBar.foreground": "#1c1e26",   // grey
     },
-    "window.zoomLevel": 0,
+    "window.zoomLevel": -1,
     "window.menuBarVisibility":"toggle",
 
     /* go */

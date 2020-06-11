@@ -76,3 +76,6 @@ if [ -f ~/.local/profile.d/keys.sh ]; then
     . ~/.local/profile.d/keys.sh
 fi
 
+if command -v gopass > /dev/null 2>&1; then
+    export PASSWORD_STORE_DIR="$HOME/.config/passwords"
+fi

@@ -4,13 +4,15 @@
 
 [core]
     editor = 'vim'
-    excludesFile = ~/.config/git/gitignore
+    excludesFile = ~/.config/git/gitignore # global gitignore
     pager = less
 
 [include]
+    # include another file in git config
     path = aliases
 
 [credential]
+    # set a timeout for remembering passwords
     helper = cache --timeout=7200
 
 [commit]
@@ -27,6 +29,7 @@
     decorate = true
 
 [web]
+    # set the browser executable
     browser = brave-browser
 
 [color]
@@ -44,9 +47,10 @@
     br    = branch
     ls    = ls-files
     amend = commit --amend --no-edit
-    stat  = !git --no-pager diff --stat
-    ignored = !sh -c 'git check-ignore `find .`'
-    #commit-count = !sh -c 'git --no-pager log --oneline --all | wc -l'
+
+    stat         = !git --no-pager diff --stat
+    ignored      = !sh -c 'git check-ignore `find .`'
+    commit-count = !sh -c 'git --no-pager log --oneline | wc -l'
 
     graph = log --all --graph --abbrev-commit --decorate --oneline
     logs  = log --all --graph --abbrev-commit --decorate \

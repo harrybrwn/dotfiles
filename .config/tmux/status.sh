@@ -97,8 +97,10 @@ battery() {
 
 mem() {
     if [ "$1" = "-h" ]; then
-        local used=$(free | awk '/Mem:/{print $3+$5}' | numfmt --to=iec --from-unit=1024)
-        local out="$used/$(free -h | awk '/Mem:/{print $2}')"
+        # local total=$(free | awk '/Mem:/{print $3+$5}' | numfmt --to=iec --from-unit=1024)
+        # local out="$total/$(free -h | awk '/Mem:/{print $2}')"
+        local out="$(free -h | awk '/Mem:/{print $3+$5}')/$(free -h | awk '/Mem:/{print $2}')"
+        if [ "$out" = "/" ]; then out=""; fi
     else
         local out=$(free | awk '/Mem:/{printf "%.1f%%\n",  100*(($3+$5)/$2)}')
     fi

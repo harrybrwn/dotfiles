@@ -30,6 +30,7 @@ set wildmode=longest:full,full
 
 " Status Line
 set laststatus=2  " always show the status line
+set noshowmode
 set shortmess=filnxtToOFWatc " this if for the bar below the statusline
 
 " Tab settings
@@ -49,6 +50,8 @@ set path+=** " recursive file search
 set hlsearch
 set incsearch " get partial results while searching
 
+set t_Co=256
+
 " Plugins
 "   :PlugInstall - install plugins
 "   :PlugClean   - clean unused plugins
@@ -61,9 +64,11 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   Plug 'reedes/vim-colors-pencil'
   Plug 'arcticicestudio/nord-vim'
   Plug 'junegunn/vim-easy-align'
-  " Plug 'tpope/vim-commentary'
   Plug 'preservim/nerdcommenter'
   Plug 'fatih/vim-go'
+
+  Plug 'patstockwell/vim-monokai-tasty'
+  Plug 'itchyny/lightline.vim'
   call plug#end()
 endif
 
@@ -82,10 +87,10 @@ au VimEnter * :call LoadAll()
 packadd! dracula
 
 " Colors
-set t_Co=256
 au ColorScheme * highlight Normal ctermbg=none
 colorscheme delek " set delek as a fallback
 silent! colo molokai
+" silent! colo vim-monokai-tasty
 set background=dark
 hi CursorLineNR ctermfg=magenta
 
@@ -102,9 +107,7 @@ au BufWinLeave * call clearmatches()
 " Key Maps
 let mapleader=","
 let g:comment_char = ''
-nmap <silent><Leader>/ :call Comment(g:comment_char)<CR>
-"nnoremap <Leader>/ NERDCommenterToggle
-"nnoremap <Leader>/ <Leader>c<Space>
+nmap <Leader>/ <plug>NERDCommenterToggle
 nmap <Leader>g call UpdateGitBranch()<CR>
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
@@ -116,10 +119,10 @@ nnoremap <C-w><Up>     <C-w>-
 nnoremap <C-w><C-Up>   <C-w>-
 nnoremap <C-w><Down>   <C-w>+
 nnoremap <C-w><C-Down> <C-w>+
-nnoremap <C-PageUp>   <C-w>-
-nnoremap <C-PageDown> <C-w>+
-nnoremap <C-Home>     <C-w><
-nnoremap <C-End>      <C-w>>
+nnoremap <C-PageUp>   2<C-w>-
+nnoremap <C-PageDown> 2<C-w>+
+nnoremap <C-Home>     2<C-w><
+nnoremap <C-End>      2<C-w>>
 
 nnoremap <C-w><Left>    <C-w><
 nnoremap <C-w><C-Left>  <C-w><
@@ -145,7 +148,14 @@ if PluginExists('nerdcommenter')
 endif
 
 " Status Line
-set stl=%!MyStatusLine()
+if !PluginExists('lightline')
+  set stl=%!MyStatusLine()
+endif
+
+let g:lightline = {
+    \ 'colorscheme': 'one',
+  \ }
+
 
 " My file-type settings
 autocmd BufNewFile,BufReadPost *.clang-format set syntax=yaml
@@ -160,7 +170,6 @@ au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
 " LaTex
 au BufNewFile *.tex 0r ~/.vim/templates/template.tex
-au FileType tex g:comment_char = '%'
 
 " NetRW
 "set noequalalways

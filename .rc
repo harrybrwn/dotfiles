@@ -171,7 +171,7 @@ fi
 # [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"
 [[ -f "$HOME/school/tanya/get-alias.sh" ]] && source "$HOME/school/tanya/get-alias.sh"
 
-if command -v xinput 2>&1 /dev/null; then
+if command -v xinput > /dev/null 2>&1; then
     xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
     xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
         1.1 0.0 0.0 \

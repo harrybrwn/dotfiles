@@ -92,7 +92,11 @@ battery() {
         out="$out$bat_symb "
     fi
 
-    echo "$out$(_bat_get_bar $percent) $percent%#[fg=colour249]"
+    if [ -z "$percent" ]; then
+        echo ''
+    else
+        echo "$out$(_bat_get_bar $percent) $percent%#[fg=colour249]"
+    fi
 }
 
 mem() {

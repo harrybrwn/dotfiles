@@ -21,6 +21,9 @@ export GO_VERSION="go1.14.1"
 export GOPATH="$HOME/dev/go"
 [ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
 [ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
+#if [ -d "$HOME/.local/bin" ]; then
+#PATH="$HOME/.local/bin:$PATH"
+#fi
 
 # stty -ixon # disable ctrl-s
 
@@ -165,7 +168,8 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
 fi
 
 if ! echo $PATH | tr ':' '\n' | grep "$HOME/.local/bin" > /dev/null; then
-    export PATH="$HOME/.local/bin:$PATH"
+    # echo 'no .local/bin in path'
+    PATH="$HOME/.local/bin:$PATH"
 fi
 
 # [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"

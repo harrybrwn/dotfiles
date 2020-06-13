@@ -58,47 +58,6 @@ _percent_hex_range() {
     fi
 }
 
-_bat_get_bar() {
-    local percent=$1
-    if [ $percent -lt 5 ]; then
-        local bar=''
-    elif [ $percent -lt 10 ]; then
-        local bar='▁'
-    elif [ $percent -lt 20 ]; then
-        local bar='▂'
-    elif [ $percent -lt 40 ]; then
-        local bar='▃'
-    elif [ $percent -lt 60 ]; then
-        local bar='▄'
-    elif [ $percent -lt 80 ]; then
-        local bar='▅'
-    else
-        local bar='▇'
-    fi
-    echo "#[bg=colour240]$bar#[bg=$BG]"
-}
-
-battery() {
-    local bat=$(upower -e | grep -E 'battery|DisplayDevice' | head -n1)
-    local percent=$(upower -i $bat | awk '/percentage:/{print $2}' | tr -d '%')
-    local state=$(upower -i $bat | awk '/state:/{print $2}')
-
-    if $COLOR; then
-        local out="#[fg=$(_percent_hex_range $percent)]"
-    else
-        local out="#[fg=$IMPORTANT]"
-    fi
-    if [ $state = "charging" ]; then
-        out="$out$bat_symb "
-    fi
-
-    if [ -z "$percent" ]; then
-        echo ''
-    else
-        echo "$out$(_bat_get_bar $percent) $percent%#[fg=colour249]"
-    fi
-}
-
 mem() {
     if [ "$1" = "-h" ]; then
         # local total=$(free | awk '/Mem:/{print $3+$5}' | numfmt --to=iec --from-unit=1024)
@@ -132,8 +91,10 @@ time_status() {
     echo "#[bg=colour240,fg=$IMPORTANT] %l:%M %P #[bg=default]"
 }
 
+self=$(dirname `readlink -f "$0"`)
+
 apply() {
-    local sep="#[fg=default]$BAR#[fg=default]"
+    local sep="#[fg=colour240]$BAR#[fg=default]"
     local if_width_lt_110='#(test ! #{window_width} -lt 110; echo $?)'
     local CPU="$(cpu)"
     local MEM="$(mem -h)"
@@ -148,7 +109,6 @@ apply() {
     if [ ! -z "$WIFI" ]; then
         stats="$stats $WIFI $sep"
     fi
-    # local comp_stats="$(cpu) $sep $(mem -h) $sep $(wifi -a) $sep"
     tmux \
         set -g status-right-length 110 \; \
         set -g status-left-length 50 \; \
@@ -158,7 +118,7 @@ apply() {
         set -g status-left "#[bg=magenta,fg=colour0]#{?client_prefix,#[bg=$IMPORTANT]#[italics] #S ,[#S]}#[bg=$BG,fg=colour12] " \; \
         setw -g window-status-format '#[bg=colour0,fg=$dull]#[fg=colour7] #W ' \; \
         setw -g window-status-current-format '#[bg=colour240,fg=colour250,nobold,italics] #W ' \; \
-        set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) $(battery)"
+        set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) #($self/theme/battery.sh)"
 }
 
 "$@"

@@ -50,7 +50,6 @@ set path+=** " recursive file search
 set hlsearch
 set incsearch " get partial results while searching
 
-set t_Co=256
 
 " Plugins
 "   :PlugInstall - install plugins
@@ -66,9 +65,8 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   Plug 'junegunn/vim-easy-align'
   Plug 'preservim/nerdcommenter'
   Plug 'fatih/vim-go'
-
-  Plug 'patstockwell/vim-monokai-tasty'
-  Plug 'itchyny/lightline.vim'
+  " Plug 'itchyny/lightline.vim'
+  Plug 'vim-airline/vim-airline'
   call plug#end()
 endif
 
@@ -152,9 +150,8 @@ if !PluginExists('lightline')
   set stl=%!MyStatusLine()
 endif
 
-let g:lightline = {
-    \ 'colorscheme': 'one',
-  \ }
+" let g:lightline = {'colorscheme': 'Tomorrow_Night'}
+let g:lightline = {'colorscheme': 'deus'}
 
 
 " My file-type settings

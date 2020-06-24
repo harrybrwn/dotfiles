@@ -116,20 +116,23 @@ if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion zsh | head -n -1 | tail -n +2)
     compdef _gopass gopass
 fi
-
 # apizza completion
 if command -v apizza > /dev/null 2>&1; then
     source <(apizza completion zsh)
     compdef _apizza apizza
 fi
-
 # github cli completion
 if command -v gh > /dev/null 2>&1; then
     source <(gh completion -s zsh)
     compdef _gh gh
 fi
-
+# edu completion
 if command -v edu > /dev/null 2>&1; then
     source <(edu completion zsh)
     compdef _edu edu
+fi
+# yt completion
+if command -v yt > /dev/null 2>&1; then
+    source <(yt completion zsh)
+    compdef _yt yt
 fi

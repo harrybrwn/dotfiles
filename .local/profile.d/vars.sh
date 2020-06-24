@@ -51,7 +51,16 @@ export ADB_VENDOR_KEYS="$XDG_CONFIG_HOME/android"
 #export GNULIB_SRCDIR="$HOME/dev/linux/gnulib"
 
 # R
-export R_LIBS_USER="$HOME/.config/R/x86_64-pc-linux-gnu-library/3.4"
+rversion=$(R --version | head -n1 | awk '{print $3}')
+case $rversion in
+    4.0.*)
+        export R_LIBS_USER="$HOME/.config/R/x86_64-pc-linux-gnu-library/4.0"
+        ;;
+    3.4.*)
+        export R_LIBS_USER="$HOME/.config/R/x86_64-pc-linux-gnu-library/3.4"
+        ;;
+esac
+unset rversion
 
 # less
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"

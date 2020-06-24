@@ -80,7 +80,7 @@ temp() {
 }
 
 cpu() {
-    echo "#[fg=$DULL]cpu: #[fg=$IMPORTANT]$($HOME/.config/tmux/cpu.py) $(temp)"
+    echo "#[fg=$DULL]cpu: #[fg=$IMPORTANT]#($HOME/.config/tmux/cpu.py) $(temp)"
 }
 
 date_status() {
@@ -96,7 +96,7 @@ self=$(dirname `readlink -f "$0"`)
 apply() {
     local sep="#[fg=colour240]$BAR#[fg=default]"
     local if_width_lt_110='#(test ! #{window_width} -lt 110; echo $?)'
-    local CPU="$(cpu)"
+    local CPU="#[fg=$DULL]cpu: #[fg=$IMPORTANT]#($HOME/.config/tmux/cpu.py) $(temp)"
     local MEM="$(mem -h)"
     local WIFI="$(wifi -a)"
     local stats=""

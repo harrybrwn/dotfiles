@@ -21,8 +21,8 @@ set undodir=~/.vim/undo
 set undofile
 set updatetime=3000 " default: 4000
 
-set colorcolumn=80
-hi ColorColumn ctermbg=0
+" set colorcolumn=80
+" hi ColorColumn ctermbg=0
 
 " Tab completion
 set wildmenu      " just looks nice
@@ -65,8 +65,8 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   Plug 'junegunn/vim-easy-align'
   Plug 'preservim/nerdcommenter'
   Plug 'fatih/vim-go'
-  " Plug 'itchyny/lightline.vim'
-  Plug 'vim-airline/vim-airline'
+  Plug 'itchyny/lightline.vim'
+  " Plug 'vim-airline/vim-airline'
   call plug#end()
 endif
 
@@ -151,7 +151,9 @@ if !PluginExists('lightline')
 endif
 
 " let g:lightline = {'colorscheme': 'Tomorrow_Night'}
-let g:lightline = {'colorscheme': 'deus'}
+" let g:lightline = {'colorscheme': 'dracula'}
+let g:lightline = {'colorscheme': 'darcula'}
+" let g:lightline = {'colorscheme': 'deus'}
 
 
 " My file-type settings
@@ -167,6 +169,9 @@ au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
 
 " LaTex
 au BufNewFile *.tex 0r ~/.vim/templates/template.tex
+
+" C++
+au FileType cpp inoremap {<Cr> {<Cr>}<Esc>O
 
 " NetRW
 "set noequalalways
@@ -200,4 +205,7 @@ if PluginExists('vim-go')
   let g:go_highlight_diagnostic_warnings = 1
 
   nmap <C-g> :GoDef<Cr>
+  " au FileType go inoremap { {<Cr>}<Esc>O
+  " au FileType go inoremap { {}<Esc>i
+  au FileType go inoremap {<Cr> {<Cr>}<Esc>O
 endif

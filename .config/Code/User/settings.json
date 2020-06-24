@@ -22,7 +22,7 @@
         // "statusBar.foreground": "#000000",   // black
         // "statusBar.foreground": "#1c1e26",   // grey
     },
-    "window.zoomLevel": -1,
+    "window.zoomLevel": 0,
     "window.menuBarVisibility":"toggle",
 
     /* go */
@@ -59,6 +59,12 @@
     /* Vim Mode ext. */
     "vim.vimrc.path": "/home/harry/.vim/vimrc",
     "vim.cursorStylePerMode.insert": "block",
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["<C-j>"],
+            "after": ["<Esc>"]
+        },
+    ],
 
     /* Build-it Terminal */
     "terminal.integrated.shell.linux": "/bin/bash",
@@ -72,5 +78,8 @@
 
     "cSpell.words": [
         "monospace",
+    ],
+    "cSpell.userWords": [
+        "systemd"
     ],
 }

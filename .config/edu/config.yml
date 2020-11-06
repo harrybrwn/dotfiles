@@ -1,0 +1,80 @@
+host: catcourses.ucmerced.edu
+basedir: $HOME/school
+
+registration:
+  term: 'spring'
+  year: 2021
+
+notifications: true
+
+watch:
+  duration: '1h'
+  crns:
+    - 30313 # circuit theory lecture
+    - 37572 # circuit theory lecture
+  term: 'fall'
+  year: 2020
+  files: false # update files from canvas
+  sms_notify: false # text me when classes are open
+  sms_recipient: '5108124066'
+
+replacements:
+  - pattern: "[fFsSuU]{1,2}[0-9]{2}-([a-zA-Z]{1,5}) (0)?([0-9]+[A-Z]?) .*?/"
+    replacement: "$1$3/"
+    lower: true
+  - pattern: \+
+    replacement: " "
+  - pattern: \.text$
+    replacement: ".txt"
+  - pattern: 'Lectures'
+    replacement: 'lectures'
+  - pattern: 'Labs'
+    replacement: 'labs'
+
+# TODO: If the replacement engine sees an object
+# that has an empty replacement then it should
+# check if lower is true and lowercase it if so.
+course-replacements:
+  'CSE 150 01':
+    - pattern: 'Lecture slides'
+      replacement: 'lecture-slides'
+      lower: true
+    - pattern: 'Projects'
+      replacement: 'projects'
+    - pattern: 'project resource'
+      replacement: 'project_resources'
+  'CSE 120 01': []
+  'CSE 160 01':
+    - { pattern: 'Project - Test Topologies', replacement: 'test_topologies' }
+    - { pattern: 'Projects/TinyOS Documentation', replacement: 'Projects/docs' }
+    - { pattern: 'TinyOS -- (.*$)',      replacement: '$1' }
+    - { pattern: 'Project (\d) - (.*$)', replacement: '$1/$2' }
+    - { pattern: Miscellany, replacement: misc }
+    - { pattern: Homeworks,  replacement: homework }
+    - { pattern: Projects,   replacement: projects }
+    - { pattern: Papers,     replacement: papers }
+  'CSE 111 01':
+    - pattern: 'Lab-(\d+)'
+      replacement: "lab$1"
+  'CSE 100 10':
+    - pattern: "[Ll]abs"
+      replacement: "labs"
+  'CSE 031 01':
+    - pattern: "[Ll]ab #"
+      replacement: "lab"
+    - pattern: Video Lectures
+      replacement: vid_lectures
+    - pattern: " "
+      replacement: "_"
+    - pattern: "(.*)"
+      replacement: $1
+      lower: true
+  'COGS 125 01/CSE 175 01':
+    - pattern: "cogs125/CSE 175 01"
+      replacement: "cogs125-cse175"
+  'GASP 030C 01':
+    - pattern: 'F18-GASP 030C 01'
+      replacement: 'gasp30c'
+  'MATH 032 01':
+    - pattern: ' '
+      replacement: '_'

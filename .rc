@@ -14,14 +14,17 @@
 export EDITOR=vim
 export VISUAL=vim
 
+IGNOREOF=10
+set -o ignoreeof
+
 # Enable colors for less and man pages
 export LESS="--RAW-CONTROL-CHARS"
 
-export GO_VERSION="go1.14.1"
+export GO_VERSION="go1.15"
 export GOPATH="$HOME/dev/go"
 [ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
 [ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
-if [ -d "$HOME/.local/bin" ]; then
+if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
@@ -37,38 +40,31 @@ else
     alias la="ls -A"
 fi
 
-alias g=git
-alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-alias fsizes='du -sh $(/bin/ls -A) | sort -hr'
+# Development aliases
+alias g=git m=make mi='make install'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
-# alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -race -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
+alias re='perl -pe'
 alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
-
+alias gotest='gotest -v -cover -race'
+# My Tool aliases
 alias ap=apizza apizza-docker='docker run --rm -it apizza:latest'
 alias pass=gopass pas=gopass
-alias wifi=wavemon
-alias howto=how2
-alias say=espeak
+alias wifi=wavemon howto=how2 say=espeak
+alias arduino=arduino-cli
+alias btc=bitcoin-cli
 
-# alias wifi="nmcli --colors yes device wifi list"
+alias fsizes='du -sh * | sort -hr'
 alias settings=gnome-control-center
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
 alias copy="xclip -i" paste="xclip -o"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
 alias htmltopdf='wkhtmltopdf'
 alias githistory='gource -a 1 -c 4.0 -f .'
+# alias wifi="nmcli --colors yes device wifi list"
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
-
-if [ -d ~/.config/google-chrome/Default/Extensions/hmjkmjkepdijhoojdojkdfohbdgmmhki ]; then
-    alias notes='/opt/google/chrome/google-chrome --profile-directory=Default --app-id=hmjkmjkepdijhoojdojkdfohbdgmmhki'
-elif [ -d ~/.local/share/applications ]; then
-    desktop_file=`grep -l 'Keep' ~/.local/share/applications/* 2>&1 /dev/null`
-    alias notes="bash <(grep -Po '(?<=Exec=).*' $desktop_file)"
-    unset desktop_file
-else
-    alias notes='echo "google keep not installed"'
-fi
+# Dumb aliases
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 
 mkdircd() {
     mkdir $1 && cd $1
@@ -98,6 +94,7 @@ rm() {
     /bin/rm $*
 }
 
+alias o=open
 open() {
     if [[ $1 == *.md ]]; then
         x-www-browser $*  # I have a browser extention that renders markdown
@@ -108,7 +105,6 @@ open() {
 
 google() {
 	local q="$*"
-
 	if [ -z "$q" ]; then
 		x-www-browser "https://www.google.com"
 	else
@@ -182,7 +178,7 @@ if command -v xinput > /dev/null 2>&1; then
         0.0 1.1 0.0 \
         0.0 0.0 0.8 > /dev/null 2>&1
     xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 147 \
+    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
         1.0 0.0 0.0 \
         0.0 1.0 0.0 \
         0.0 0.0 1.0

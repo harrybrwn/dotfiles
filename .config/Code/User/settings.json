@@ -2,6 +2,7 @@
     "editor.minimap.enabled": true,
     "editor.renderControlCharacters": false,
     "editor.suggestSelection": "first",
+    "editor.tabSize": 4,
     "files.trimTrailingWhitespace": true,
 
     "workbench.colorTheme": "Horizon",
@@ -22,20 +23,21 @@
         // "statusBar.foreground": "#000000",   // black
         // "statusBar.foreground": "#1c1e26",   // grey
     },
-    "window.zoomLevel": 0,
+    "window.zoomLevel": -1,
     "window.menuBarVisibility":"toggle",
-
-    /* go */
-    "go.useLanguageServer": true,
 
     "files.associations": {
         "*.h": "c",
-        "TODO": "yaml",
+        // "TODO": "yaml",
         "vimrc": "viml",
         "*.vim": "viml",
     },
 
+    /* go */
+    "go.useLanguageServer": true,
+
     /* Python */
+    "python.languageServer": "Pylance",
     "python.pythonPath": "/home/harry/.local/bin/python",
     "python.jediEnabled": false,
     "python.dataScience.sendSelectionToInteractiveWindow": false,
@@ -52,12 +54,49 @@
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
 
+    /* js/ts */
+    "[jsx-tags]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+    },
+
+    /* Latex */
+    // "latex-workshop.view.pdf.ref.viewer": "auto",
+
+    /* Java */
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "java.configuration.checkProjectSettingsExclusions": false,
     "java.errors.incompleteClasspath.severity": "ignore",
+    "[java]":{
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.formatOnSave": false,
+        "files.trimTrailingWhitespace": false,
+    },
 
     /* Vim Mode ext. */
     "vim.vimrc.path": "/home/harry/.vim/vimrc",
+    "vim.useSystemClipboard": true,
     "vim.cursorStylePerMode.insert": "block",
     "vim.insertModeKeyBindings": [
         {
@@ -65,8 +104,18 @@
             "after": ["<Esc>"]
         },
     ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["<C-c>"],
+            "after": ["\"", "+", "y"]
+        },
+        // {
+        //     "before": ["<C-v>"],
+        //     "after":  ["\"", "+", "p"]
+        // }
+    ],
 
-    /* Build-it Terminal */
+    /* Built-it Terminal */
     "terminal.integrated.shell.linux": "/bin/bash",
     "terminal.integrated.fontFamily": "'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
 
@@ -80,6 +129,59 @@
         "monospace",
     ],
     "cSpell.userWords": [
+        "Merkle",
+        "Popd",
+        "Pushd",
+        "UTXO",
+        "merkleroot",
+        "protobuf",
+        "protoc",
         "systemd"
     ],
+
+    // DART SETTINGS:
+    //
+    // Causes the debug view to automatically appear when a breakpoint is hit. This
+	// setting is global and not configurable per-language.
+	"debug.openDebug": "openOnDebugBreak",
+	"[dart]": {
+		// Automatically format code on save and during typing of certain characters
+		// (like `;` and `}`).
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+
+		// Draw a guide line at 80 characters, where Dart's formatting will wrap code.
+		"editor.rulers": [80],
+
+		// Disables built-in highlighting of words that match your selection. Without
+		// this, all instances of the selected text will be highlighted, interfering
+		// with Dart's ability to highlight only exact references to the selected variable.
+		"editor.selectionHighlight": false,
+
+		// By default, VS Code prevents code completion from popping open when in
+		// "snippet mode" (editing placeholders in inserted code). Setting this option
+		// to `false` stops that and allows completion to open as normal, as if you
+		// weren't in a snippet placeholder.
+		"editor.suggest.snippetsPreventQuickSuggestions": false,
+
+		// By default, VS Code will pre-select the most recently used item from code
+		// completion. This is usually not the most relevant item.
+		//
+		// "first" will always select top item
+		// "recentlyUsedByPrefix" will filter the recently used items based on the
+		//     text immediately preceeding where completion was invoked.
+		"editor.suggestSelection": "first",
+
+		// Allows pressing <TAB> to complete snippets such as `for` even when the
+		// completion list is not visible.
+		"editor.tabCompletion": "onlySnippets",
+
+		// By default, VS Code will populate code completion with words found in the
+		// current file when a language service does not provide its own completions.
+		// This results in code completion suggesting words when editing comments and
+		// strings. This setting will prevent that.
+		"editor.wordBasedSuggestions": false,
+    },
+    "latex-workshop.view.pdf.viewer": "tab",
+    "cSpell.enabled": true
 }

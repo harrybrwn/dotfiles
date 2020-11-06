@@ -27,3 +27,7 @@ GoPass
 ```
 gopass mounts add <name> <path>
 ```
+
+Vim
+===
+See [vim.md](./vim.md)

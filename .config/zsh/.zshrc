@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/harry/.config/zsh/oh-my-zsh"
+export ZSH="$HOME/.config/zsh/oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -10,10 +10,11 @@ export ZSH="/home/harry/.config/zsh/oh-my-zsh"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
 #ZSH_THEME="robbyrussell"
-#ZSH_THEME="gentoo"
+# ZSH_THEME="gentoo"
 #ZSH_THEME="lukerandall"
 # ZSH_THEME="agnoster"
-ZSH_THEME="harry"
+ZSH_THEME="harry-agnoster"
+# ZSH_THEME="harry-gentoo"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -111,28 +112,42 @@ esac
 
 source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+comp_commands=(apizza edu yt arduino-cli)
+for cmd in $comp_commands; do
+    if command -v $cmd > /dev/null 2>&1; then
+        source <($cmd completion zsh)
+        compdef _$cmd $cmd
+    fi
+done
+
 # Setup gopass completion
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion zsh | head -n -1 | tail -n +2)
     compdef _gopass gopass
 fi
-# apizza completion
-if command -v apizza > /dev/null 2>&1; then
-    source <(apizza completion zsh)
-    compdef _apizza apizza
-fi
-# github cli completion
 if command -v gh > /dev/null 2>&1; then
     source <(gh completion -s zsh)
     compdef _gh gh
 fi
-# edu completion
-if command -v edu > /dev/null 2>&1; then
-    source <(edu completion zsh)
-    compdef _edu edu
-fi
-# yt completion
-if command -v yt > /dev/null 2>&1; then
-    source <(yt completion zsh)
-    compdef _yt yt
-fi
+
+## apizza completion
+#if command -v apizza > /dev/null 2>&1; then
+#    source <(apizza completion zsh)
+#    compdef _apizza apizza
+#fi
+## github cli completion
+## edu completion
+#if command -v edu > /dev/null 2>&1; then
+#    source <(edu completion zsh)
+#    compdef _edu edu
+#fi
+## yt completion
+#if command -v yt > /dev/null 2>&1; then
+#    source <(yt completion zsh)
+#    compdef _yt yt
+#fi
+#if command -v arduino-cli > /dev/null 2>&1; then
+#    source <(arduino-cli completion zsh)
+#    compdef _arduino-cli arduino-cli
+#fi
+

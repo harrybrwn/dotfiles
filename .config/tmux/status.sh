@@ -1,8 +1,43 @@
 #!/bin/sh
 
+# Just a simple tmux status line.
+#
+# Variables:
+#
+# * STATUS_CPU - Toggle cpu stats
+#   type: bool
+#   default: true
+#
+# * STATUS_MEM - Toggle memory stats
+#   type: bool
+#   default: true
+#
+# * STATUS_WIFI - Toggle wifi info
+#   type: bool
+#   default: true
+#
+# * STATUS_CHARGING_SYMBOL - charging symbol
+#   type: string
+#   default: ""
+#
+# * STATUS_COLOR - Enable or disable status bar colors
+#   type: bool
+#   default: true
+#
+# * STATUS_BATTERY_COLOR - Enable or disable battery colors
+#   type: bool
+#   default: true
+#
+# * STATUS_BATTERY_BAR - render the batter bar based on percentage if true
+#   type: bool
+#   default: true
+#
+# * STATUS_BATTERY_PERCENT - Enable or disable the battery percentage
+#   type: bool
+#   default: true
+
 set -e
 
-bat_symb='ϟ'
 BAR='▕▏'
 
 high=76
@@ -12,8 +47,19 @@ crit=1
 BG=default
 DULL=colour246
 IMPORTANT=colour250
-if [ -z "$COLOR" ]; then
-    COLOR=false
+
+if [ -z "$STATUS_COLOR" ]; then
+    STATUS_COLOR=true
+fi
+
+if [ -z "$STATUS_CPU" ]; then
+    STATUS_CPU=true
+fi
+if [ -z "$STATUS_MEM" ]; then
+    STATUS_MEM=true
+fi
+if [ -z "$STATUS_WIFI" ]; then
+    STATUS_WIFI=true
 fi
 
 wifi() {
@@ -80,6 +126,10 @@ temp() {
 }
 
 cpu() {
+    echo "#[fg=$DULL]cpu: #[fg=$IMPORTANT]#($HOME/.config/tmux/cpu.py)"
+}
+
+cpu_and_temp() {
     echo "#[fg=$DULL]cpu: #[fg=$IMPORTANT]#($HOME/.config/tmux/cpu.py) $(temp)"
 }
 
@@ -91,22 +141,32 @@ time_status() {
     echo "#[bg=colour240,fg=$IMPORTANT] %l:%M %P #[bg=default]"
 }
 
-self=$(dirname `readlink -f "$0"`)
+# This script
+self=$(readlink -f "$0")
+# Directory for the library files
+lib="$(dirname $self)/theme"
+
+if [ ! -d "$lib" ]; then
+    err="Error: could not find theme directory '$lib'"
+    tmux set -g status-right "$err"
+    echo "$err"
+    exit 1
+fi
 
 apply() {
     local sep="#[fg=colour240]$BAR#[fg=default]"
     local if_width_lt_110='#(test ! #{window_width} -lt 110; echo $?)'
-    local CPU="#[fg=$DULL]cpu: #[fg=$IMPORTANT]#($HOME/.config/tmux/cpu.py) $(temp)"
-    local MEM="$(mem -h)"
-    local WIFI="$(wifi -a)"
+    local CPU="#($self cpu_and_temp)"
+    local MEM="#($self mem)"
+    local WIFI="#[fg=$DULL]#($lib/wifi.sh -a)"
     local stats=""
-    if [ ! -z "$CPU" ]; then
+    if $STATUS_CPU && [ ! -z "$CPU" ]; then
         stats="$stats $CPU $sep"
     fi
-    if [ ! -z "$MEM" ]; then
+    if $STATUS_MEM && [ ! -z "$MEM" ]; then
         stats="$stats $MEM $sep"
     fi
-    if [ ! -z "$WIFI" ]; then
+    if $STATUS_WIFI && [ ! -z "$WIFI" ]; then
         stats="$stats $WIFI $sep"
     fi
     tmux \
@@ -118,7 +178,7 @@ apply() {
         set -g status-left "#[bg=magenta,fg=colour0]#{?client_prefix,#[bg=$IMPORTANT]#[italics] #S ,[#S]}#[bg=$BG,fg=colour12] " \; \
         setw -g window-status-format '#[bg=colour0,fg=$dull]#[fg=colour7] #W ' \; \
         setw -g window-status-current-format '#[bg=colour240,fg=colour250,nobold,italics] #W ' \; \
-        set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) #($self/theme/battery.sh)"
+        set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) #($lib/battery.sh)"
 }
 
 "$@"

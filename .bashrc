@@ -55,7 +55,8 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [[ "$color_prompt" = yes ]]; then
-    git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
+    # git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
+    git_branch='`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`'
     PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[34m\]\$\[\033[00m\] "
 else
     git_branch=
@@ -136,5 +137,7 @@ if command -v edu > /dev/null 2>&1; then
     source <(edu completion bash)
 fi
 
+export CDPATH=\
+./:\
+$HOME/dev/golang
 
-[[ -s "/home/harry/.config/gvm/scripts/gvm" ]] && source "/home/harry/.config/gvm/scripts/gvm"

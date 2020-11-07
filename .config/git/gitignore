@@ -1,11 +1,15 @@
-.local/profile.d/keys.sh # These are all my api keys and tokens
-.travis/config.yml       # This has an api token in it
-Documents/.secret
-.apizza
-.config/apizza
-.local/share/gnupg
-.gnupg
-.vim/viminfo
+# Private Config Files
+/.apizza
+/.config/apizza
+/.local/share/gnupg
+/.gnupg
+/.vim/viminfo*
+
+# Configs with api keys
+/.netrc
+/.local/profile.d/keys.sh
+/.travis/config.yml
+.secret
 
 # Browser Stuff
 .config/google-chrome/Default

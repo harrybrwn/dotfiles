@@ -47,6 +47,12 @@ def is_git_folder(path) -> bool:
     return objs.issuperset(dir_list) or objs.issubset(dir_list)
 
 
+def _resolve_relative(path: str, root: str):
+    if os.path.isabs(path):
+        return os.path.join('/', os.path.abspath(path).replace(root, ''))
+    return path
+
+
 LONG_COMMIT_MSG = False
 
 def make_commit_msg(files, op):
@@ -100,6 +106,9 @@ class Git:
     def all_files(self):
         res = self._capture_exec('ls-files-root')
         return res.split('\n')[:-1]
+
+    def check_ignore(self, *files):
+        return self._exec('check-ignore', *files)
 
     def config_get(self, name) -> str:
         return self._capture_exec('config', '--local', '--get', name)
@@ -190,7 +199,7 @@ class dots:
         return g.commit(msg=make_commit_msg(args, 'added'))
 
     def update(self, *args, silent: bool, check: bool):
-        '''update any changed made to tracked files'''
+        '''update any local changes made to files being tracked'''
         g = self._git()
         files = [os.path.join(self.root_path, f) for f in g.changed_files()]
         if not files and not args:
@@ -258,7 +267,7 @@ class dots:
         '''
         Sync with the remote repository
 
-        :p path: Get the remote path or url'''
+        :p path: Print the remote path or url'''
         g = self._git()
 
         if path:
@@ -282,6 +291,49 @@ class dots:
             return int(pull != 0 or push != 0)
         else:
             return err('no remote repo to sync')
+
+    @subcommand(usage='ignore [files...] [flags]')
+    def ignore(self, *args, edit: bool, delete: bool, file: bool, check: bool):
+        """
+        Add files to .git/info/exclude (an internal gitignore)
+
+        :e edit: Edit the exclude file for the repo
+        :d delete: Remove a file from the exclude file
+        :f file: Print out the path to the exclude file
+        :c check: Run git check-ignore to see if files are being ignored
+        """
+        ignore_file = os.path.join(self.repo_path, 'info', 'exclude')
+        if not os.path.exists(ignore_file):
+            return err(f"default exclude file {ignore_file} does not exist")
+
+        if edit:
+            edit_args = [os.getenv('EDITOR'), ignore_file]
+            return sp.run(edit_args).returncode
+        elif file:
+            return print(ignore_file)
+        elif not args:
+            return err("no path given to add to ignored files")
+
+        # make sure all paths are reletive to the root
+        args = [_resolve_relative(a, self.root_path) for a in args]
+
+        with open(ignore_file, 'r') as f:
+            exclude_data = f.read()
+
+        if check:
+            return self._git().check_ignore(*args)
+        elif delete:
+            import re
+            for a in args:
+                pat = re.compile(f'{a}\n')
+                exclude_data = pat.sub('', exclude_data)
+        else:
+            if exclude_data[-1] != '\n':
+                exclude_data += '\n'
+            exclude_data += '\n'.join(args) + '\n'
+
+        with open(ignore_file, 'w') as f:
+            f.write(exclude_data)
 
     def git_command(self):
         print(' '.join(self._git()._command_args()))

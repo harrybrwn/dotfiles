@@ -13,8 +13,10 @@ export ZSH="$HOME/.config/zsh/oh-my-zsh"
 # ZSH_THEME="gentoo"
 #ZSH_THEME="lukerandall"
 # ZSH_THEME="agnoster"
-ZSH_THEME="harry-agnoster"
 # ZSH_THEME="harry-gentoo"
+
+ZSH_THEME="harry-agnoster"
+# ZSH_THEME="harry-bash"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load

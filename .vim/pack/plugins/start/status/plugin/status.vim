@@ -3,7 +3,7 @@
 " TODO:
 " generate color scheme based on tmux config
 
-source ~/.vim/util.vim
+" source ~/.vim/util.vim
 
 " Note:
 " `darkblue` is nice in solarized dark
@@ -13,11 +13,12 @@ source ~/.vim/util.vim
 " User1 -> %1*
 " User2 -> %2*
 " User3 -> %3*
-hi StatusAccent cterm=none ctermbg=magenta ctermfg=black
-hi StatusBg     cterm=none ctermbg=none    ctermfg=magenta
 
-let s:agnoster_char = ''
-let s:gitbranch_char = ''
+"hi StatusAccent cterm=none ctermbg=magenta ctermfg=black
+"hi StatusBg     cterm=none ctermbg=none    ctermfg=magenta
+
+"let s:agnoster_char = ''
+"let s:gitbranch_char = ''
 
 fun! GetLineInfo()
   let l:pos = line('$')

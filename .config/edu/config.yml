@@ -12,8 +12,8 @@ watch:
   crns:
     - 30313 # circuit theory lecture
     - 37572 # circuit theory lecture
-  term: 'fall'
-  year: 2020
+  term: 'spring'
+  year: 2021
   files: false # update files from canvas
   sms_notify: false # text me when classes are open
   sms_recipient: '5108124066'

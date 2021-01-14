@@ -141,6 +141,8 @@ install() {
         --disable-smack     \
         --disable-darwin    \
         --disable-xim       \
+        --enable-python3interp=yes \
+        --with-python-command=python3.7 \
         --prefix=$prefix    \
         --with-global-runtime='/usr/local/share/vim/vim82,/usr/local/share/vim'
 
@@ -158,15 +160,18 @@ Package: $build_name
 Version: 1.0
 Section: custom
 Architecture: all
-Essential: no
 Maintainer: $(git config --global --get user.name) <$(git config --global --get user.email)>
+Essential: no
 Description: This is my custom vim build. It may not work on all operating systems.
 
 EOF
+    # Add this for dependancies
+    # Depends: vim-common (= 2:8.2.1897-0york0~18.04), vim-runtime (= 2:8.2.1897-0york0~18.04)
     dpkg-deb -b $package_dir
+    local package="$package_dir.deb"
 
-    echo "sudo apt-get install -f $package_dir.deb"
-    sudo apt-get install -f $package_dir.deb
+    echo "sudo apt-get install -f $package"
+    sudo apt-get install -f $package
 }
 
 if [ -z "$*" ]; then

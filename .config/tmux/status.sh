@@ -153,6 +153,10 @@ if [ ! -d "$lib" ]; then
     exit 1
 fi
 
+if [ -z "$SESSION_BG" ]; then
+    SESSION_BG=magenta
+fi
+
 apply() {
     local sep="#[fg=colour240]$BAR#[fg=default]"
     local if_width_lt_110='#(test ! #{window_width} -lt 110; echo $?)'
@@ -175,7 +179,7 @@ apply() {
         set -g status-bg $BG \; \
         set -g message-fg "$DULL" \; \
         set -g message-bg "default" \; \
-        set -g status-left "#[bg=magenta,fg=colour0]#{?client_prefix,#[bg=$IMPORTANT]#[italics] #S ,[#S]}#[bg=$BG,fg=colour12] " \; \
+        set -g status-left "#[bg=$SESSION_BG,fg=colour0]#{?client_prefix,#[bg=$IMPORTANT]#[italics] #S ,[#S]}#[bg=$BG,fg=colour12] " \; \
         setw -g window-status-format '#[bg=colour0,fg=$dull]#[fg=colour7] #W ' \; \
         setw -g window-status-current-format '#[bg=colour240,fg=colour250,nobold,italics] #W ' \; \
         set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) #($lib/battery.sh)"

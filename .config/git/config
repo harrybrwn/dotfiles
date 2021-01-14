@@ -1,6 +1,7 @@
 [user]
     email = harrybrown98@gmail.com
     name = Harry Brown
+    signingkey = 8A86832BAEE723F51643E9C01942366B606ED985
 
 [core]
     editor = 'vim'
@@ -16,7 +17,11 @@
     helper = cache --timeout=7200
 
 [commit]
+    gpgsign = true
     #template =
+
+[gpg]
+	program = gpg
 
 [diff]
     noprefix = true

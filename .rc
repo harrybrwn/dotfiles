@@ -25,24 +25,27 @@ export GOPATH="$HOME/dev/go"
 [ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
 [ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
 if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
-    PATH="$HOME/.local/bin:$PATH"
+  PATH="$HOME/.local/bin:$PATH"
 fi
 
-# stty -ixon # disable ctrl-s
+export THEME_SECONDARY_COLOR='109'
 
 if command -v exa > /dev/null 2>&1; then
-    alias ls='exa --group-directories-first'
-    alias l='ls -la --git'
-    alias la='ls -a'
+  alias ls='exa --group-directories-first'
+  alias l='ls -la --git'
+  alias la='ls -a'
 else
-    alias ls='ls -hN --color=auto --group-directories-first'
-    alias l="ls -lAh"
-    alias la="ls -A"
+  alias ls='ls -hN --color=auto --group-directories-first'
+  alias l="ls -lAh"
+  alias la="ls -A"
 fi
 
 # Development aliases
+alias vi=vim
 alias g=git m=make mi='make install'
+alias dk=docker dk-shell='docker container run --rm -it'
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
+alias jsonfmt='python -m json.tool'
 alias re='perl -pe'
 alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 alias gotest='gotest -v -cover -race'
@@ -56,130 +59,253 @@ alias btc=bitcoin-cli
 alias fsizes='du -sh * | sort -hr'
 alias settings=gnome-control-center
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
-alias copy="xclip -i" paste="xclip -o"
+alias copy="xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
 alias htmltopdf='wkhtmltopdf'
 alias githistory='gource -a 1 -c 4.0 -f .'
 # alias wifi="nmcli --colors yes device wifi list"
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
-# Dumb aliases
+
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+alias ipinfo='curl ipinfo.io'
+
+wttr() {
+    local request="wttr.in/${1-Merced}"
+    [ "$(tput cols)" -lt 125 ] && request+='?n'
+    curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
+}
 
 mkdircd() {
-    mkdir $1 && cd $1
+  mkdir $1 && cd $1
 }
 
 net() {
-    # lspci -vv -s $(lspci | grep -i wireless | awk '{print $1}')
-    # iwconfig $(iw dev | awk '/Interface /{print $2}')
-    watch -n1 --color nmcli --colors yes device wifi list
+  # lspci -vv -s $(lspci | grep -i wireless | awk '{print $1}')
+  # iwconfig $(iw dev | awk '/Interface /{print $2}')
+  watch -n1 --color nmcli --colors yes device wifi list
 }
 
 # Because i'm scared
 rm() {
-    for f in "$*"; do
-        if
-            [ $f = $HOME ] ||
-            [ $f = '~' ] ||
-            [ "$f" = "/" ] ||
-            [ "$f" = "/home" ] ||
-            [ "$f" = "/home/" ] ||
-            [ "$f" = "$HOME/dev" ]
-        then
-            echo 'do not remove the home directory!!'
-            return 1
-        fi
-    done
-    /bin/rm $*
+  for f in "$*"; do
+    if
+      [ $f = $HOME ] ||
+      [ $f = '~' ] ||
+      [ "$f" = "/" ] ||
+      [ "$f" = "/home" ] ||
+      [ "$f" = "/home/" ] ||
+      [ "$f" = "$HOME/dev" ]
+    then
+      echo 'do not remove the home directory!!'
+      return 1
+    fi
+  done
+  /bin/rm $*
+}
+
+search() {
+  lynx "https://lite.duckduckgo.com/lite?q=$*"
 }
 
 alias o=open
+
 open() {
-    if [[ $1 == *.md ]]; then
-        x-www-browser $*  # I have a browser extention that renders markdown
-    else
-        xdg-open $*
-    fi
+  case $1 in
+  *.md)
+    # I have a browser extention that renders markdown
+    x-www-browser $*
+    ;;
+  *)
+    xdg-open $*
+  esac
 }
 
+alias '?'=google
+
 google() {
-	local q="$*"
-	if [ -z "$q" ]; then
-		x-www-browser "https://www.google.com"
-	else
-        local query=""
-        for w in $(echo "$q"); do
-            if [ -n "$query" ]; then
-                query="$query+$w"
-            else
-                query="$w"
-            fi
-        done
-		x-www-browser "https://www.google.com/search?q=$query"
-	fi
+  local q="$*"
+  if [ -z "$q" ]; then
+    x-www-browser "https://www.google.com"
+  else
+    local query=""
+    for w in $(echo "$q"); do
+      if [ -n "$query" ]; then
+        query="$query+$w"
+      else
+        query="$w"
+      fi
+    done
+    x-www-browser "https://www.google.com/search?q=$query"
+  fi
 }
 
 lines() {
-	find . -name "$1" | xargs wc -l | sort -k 1n
-    # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
+  find . -name "$1" | xargs wc -l | sort -k 1n
+  # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
 }
 
 whi() {
-    readlink -f $(which $1)
+  readlink -f $(which $1)
+}
+
+goxxd() {
+  local varname='xxdData' file='' lines=''
+  local compact=false
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+    -h|--help)
+      echo "Convert a file to a Go byte
+slice literal.
+
+goxxd <file> [options]
+  -h  help
+  -n  <n> number of columns"
+      return 0
+      ;;
+    -n)
+      lines="$2"
+      shift 2
+      ;;
+    *)
+      [ ! -z "$file" ] && echo 'Error: too many files' && return 1
+      file=$1
+      shift
+      ;;
+    esac
+  done
+  [ -z "$lines" ] && lines='12'
+  [ -n "$file" ] && varname="$(basename $file | perl -pe 's/[\.-]/_/g')"
+  echo "var $varname = []byte{"
+  hexdump $file -v -e "\"\t\" $lines/1 \"0x%02x, \" \"\n\"" |
+    sed -e 's/0x  ,//g'
+  echo "}"
 }
 
 show-colors() {
-    for i in {0..255} ; do
-        printf "\x1b[38;5;${i}mcolour${i} "
-    done
-    echo ''
+  if [ -n "$1" ]; then
+    echo "\x1b[38;5;$1mcolor$1 "
+    return;
+  fi
+  for i in {0..255}; do
+    printf "\x1b[38;5;${i}mcolor%3d " $i
+    if (( i%10==0&&i>0 )); then
+      printf "\n"
+    fi
+  #  ((i++))
+  done
+  echo ''
+}
+
+loop() {
+  x="a b c d e"
+  for v in $x; do
+    echo $v
+  done
+  unset x
+}
+
+makesmall() {
+  [ -z "$1" ] && echo 'no argument' && return 1
+  if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "Usage: $0 [file|dir]"
+    return 0
+  fi
+  [ -f "$1.tar.xz" ] && echo "'$1.tar.xz' exists!" && return 1
+  env XZ_OPT=-9 tar -cJvf "$1.tar.xz" "$1"
+  return $?
+}
+
+export NOTES="$HOME/.config/notes"
+note() {
+  [ -z "$NOTES" ] && echo 'Error: no $NOTES directory' && return 1
+  local d="$NOTES"
+  local file="note-$(date +%m_%d_%y).md"
+  while [ $# -gt 0 ]; do
+    case $1 in
+    -h|--help)
+      echo "Manage notes.
+
+note <cmd> [opts...]
+
+  flags:
+    -h get help
+
+  commands:
+    n new   make a new note
+    o open  open an existing note
+    l list  list your notes"
+      return 0
+      ;;
+    n|new)
+      shift
+      [ -n "$1" ] && d="$d/$1"
+      mkdir "$d" -p
+      [ -f "$d/$file" ] && echo "file already exists" && return 1
+      vim -c 'call util#NewNote()' "$d/$file"
+      return 0
+      ;;
+    o|open)
+      shift
+      [ -n "$1" ] && d="$d/$1"
+      [ ! -f "$d/$file" ] && echo "file does not exist" && return 1
+      vim "$d/note-$(date +%m_%d_%y).md"
+      return 0
+      ;;
+    l|list)
+      tree $NOTES
+      return 0
+      ;;
+    *)
+      shift
+      ;;
+    esac
+  done
+  vim -c 'r ~/.vim/templates/note.md' "$file"
 }
 
 reset-mouse-speed() {
-    xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
-    xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
-        1.0 0.0 0.0 \
-        0.0 1.0 0.0 \
-        0.0 0.0 1.0 > /dev/null 2>&1
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
-        1.0 0.0 0.0 \
-        0.0 1.0 0.0 \
-        0.0 0.0 1.0
+  xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
+  xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
+    1.0 0.0 0.0 \
+    0.0 1.0 0.0 \
+    0.0 0.0 1.0 > /dev/null 2>&1
+  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
+  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
+    1.0 0.0 0.0 \
+    0.0 1.0 0.0 \
+    0.0 0.0 1.0
 }
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
-    [ `hostname` != 'harry-yoga920' ] && return # only run tmux on my machine
-    alias ta='tmux attach && unalias ta'
-    if tmux ls > /dev/null 2>&1; then
-        if [ $(tmux display -p '#{session_attached}') -eq 0 ]; then
-            # Uncomment to automatically attatch tmux if session exists
-            #tmux attach -t $(tmux ls -F '#{session_name}' | head -n 1)
-            :
-        fi
-    else
-        tmux new -d -s misc -c ~/
+  [ `hostname` != 'harry-yoga920' ] && return # only run tmux on my machine
+  alias ta='tmux attach && unalias ta'
+  if tmux ls > /dev/null 2>&1; then
+    if [ $(tmux display -p '#{session_attached}') -eq 0 ]; then
+      # Uncomment to automatically attatch tmux if session exists
+      #tmux attach -t $(tmux ls -F '#{session_name}' | head -n 1)
+      :
     fi
+  else
+    tmux new -d -s dev -c ~/dev
+    tmux new -d -s misc -c ~/
+  fi
 fi
-
-#if ! echo $PATH | tr ':' '\n' | grep "$HOME/.local/bin" > /dev/null; then
-#    # echo 'no .local/bin in path'
-#    PATH="$HOME/.local/bin:$PATH"
-#fi
 
 # [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"
 [[ -f "$HOME/school/tanya/get-alias.sh" ]] && source "$HOME/school/tanya/get-alias.sh"
 
 if command -v xinput > /dev/null 2>&1; then
-    xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
-    xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
-        1.1 0.0 0.0 \
-        0.0 1.1 0.0 \
-        0.0 0.0 0.8 > /dev/null 2>&1
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
-        1.0 0.0 0.0 \
-        0.0 1.0 0.0 \
-        0.0 0.0 1.0
+  xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
+  xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
+    1.1 0.0 0.0 \
+    0.0 1.1 0.0 \
+    0.0 0.0 0.8 > /dev/null 2>&1
+  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
+  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
+    1.0 0.0 0.0 \
+    0.0 1.0 0.0 \
+    0.0 0.0 1.0
 fi
+
+# vim: syn=sh ts=1 sts=2 sw=2

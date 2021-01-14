@@ -23,7 +23,7 @@
         // "statusBar.foreground": "#000000",   // black
         // "statusBar.foreground": "#1c1e26",   // grey
     },
-    "window.zoomLevel": -1,
+    "window.zoomLevel": 0,
     "window.menuBarVisibility":"toggle",
 
     "files.associations": {
@@ -31,6 +31,7 @@
         // "TODO": "yaml",
         "vimrc": "viml",
         "*.vim": "viml",
+        "*.sql": "sql",
     },
 
     /* go */
@@ -40,7 +41,6 @@
     "python.languageServer": "Pylance",
     "python.pythonPath": "/home/harry/.local/bin/python",
     "python.jediEnabled": false,
-    "python.dataScience.sendSelectionToInteractiveWindow": false,
 
     /* C/C++ */
     "C_Cpp.updateChannel": "Insiders",
@@ -80,9 +80,22 @@
         "editor.formatOnSave": true,
         "editor.tabSize": 2,
     },
+    "[scss]": {
+        "editor.suggest.insertMode": "replace",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
 
     /* Latex */
     // "latex-workshop.view.pdf.ref.viewer": "auto",
+
+    /* SQL */
+    "[sql]": {
+        "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+    },
+    "[sqlite]": {
+        "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+    },
 
     /* Java */
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
@@ -183,5 +196,32 @@
 		"editor.wordBasedSuggestions": false,
     },
     "latex-workshop.view.pdf.viewer": "tab",
-    "cSpell.enabled": true
+    "cSpell.enabled": true,
+    "jupyter.sendSelectionToInteractiveWindow": false,
+    "latex-workshop.message.update.show": false,
+
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/public/css"
+        }
+    ],
+
+    "liveshare.shareExternalFiles": false,
+    "liveshare.anonymousGuestApproval": "accept",
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "liveshare.presence": false,
+
+    "todohighlight.keywords": [
+        {
+            "text": "TODO",
+            "backgroundColor": "white",
+            "color": "black",
+            "borderRadius": "3px"
+        }
+    ]
+
 }

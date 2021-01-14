@@ -18,11 +18,15 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export GEM_HOME="$XDG_CONFIG_HOME/gem"
 export GEM_PATH="$XDG_CONFIG_HOME/gem"
 
+# Stack (haskell)
+export STACK_ROOT="$XDG_CONIFIG_HOME/stack"
+
 # Docker
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
 # Gpg
-export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+#export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export GPG_TTY="$(tty)"
 
 # Gradle
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
@@ -35,6 +39,11 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 
 # wget
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+
+# PostgresQL
+export PSQL_HISTORY="$XDG_CONFIG_HOME/psql/history"
+export PSQLRC="$XDG_CONFIG_HOME/psql/psqlrc"
+export PGPASSFILE="$XDG_CONFIG_HOME/psql/pgpass"
 
 # X11
 export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
@@ -67,6 +76,15 @@ fi
 # less
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
+
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 5) # magenta
+export LESS_TERMCAP_md="\x1b[33m" # yello
+export LESS_TERMCAP_me=$(tput sgr0)  # reset
+export LESS_TERMCAP_se=$(tput sgr0) # reset
+export LESS_TERMCAP_so=$(tput sgr0)
+export LESS_TERMCAP_ue=$(tput sgr0) # reset
+export LESS_TERMCAP_us="\x1b[95m" # violet
+
 #export LESSHISTFILE='-'
 # export LESS_TERMCAP_mp=$(tput bold; tput setaf 4)
 # export LESS_TERMCAP_md=$(tput bold; tput setaf 5) # headers and flags
@@ -82,7 +100,7 @@ export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 # export LESS_TERMCAP_ZV=$(tput rsubm)
 # export LESS_TERMCAP_ZO=$(tput ssupm)
 # export LESS_TERMCAP_ZW=$(tput rsupm)
-#
+
 if [ -f ~/.local/profile.d/keys.sh ]; then
     . ~/.local/profile.d/keys.sh
 fi
@@ -90,3 +108,10 @@ fi
 if command -v gopass > /dev/null 2>&1; then
     export PASSWORD_STORE_DIR="$HOME/.config/passwords"
 fi
+
+# Ive had enough of this madness
+unset LESS_TERMCAP_mp LESS_TERMCAP_md LESS_TERMCAP_me LESS_TERMCAP_so
+unset LESS_TERMCAP_se LESS_TERMCAP_us LESS_TERMCAP_us LESS_TERMCAP_ue
+unset LESS_TERMCAP_mr LESS_TERMCAP_mh LESS_TERMCAP_ZN LESS_TERMCAP_ZV
+unset LESS_TERMCAP_ZO LESS_TERMCAP_ZW
+

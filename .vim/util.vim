@@ -26,7 +26,7 @@ function! Comment(cmnt_str)
   call cursor(prev[1], l:col)
 endfunction
 
-vnoremap <Leader>/ :call Comment(g:comment_char)<cr>
+" vnoremap <Leader>/ :call Comment(g:comment_char)<cr>
 
 fun! UpdateGitBranch()
     let s:git_branch = system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")

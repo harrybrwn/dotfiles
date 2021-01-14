@@ -8,24 +8,25 @@ if has("syntax")
     syntax on
 endif
 
+source $VIMRUNTIME/defaults.vim
+
 " Basic settings
 filetype indent on
 set nocompatible
 set number   " 'set rnu' or 'set relativenumber' for relative line numbers
-set ruler
+" set ruler
 set wrap      " wrap text that doesn't fit
 set linebreak " wrap by word instead of char
 set spelllang=en_us
-set bs=2 " make backspace work in Insert mode
+set backspace=2 " make backspace work in Insert mode (bs=2)
 set undodir=~/.vim/undo
 set undofile
 set updatetime=3000 " default: 4000
 
 set colorcolumn=80
-" hi ColorColumn ctermbg=0
 
 " Tab completion
-set wildmenu      " just looks nice
+set wildmenu      " get suggesions on <tab>
 set wildmode=longest:full,full
 
 " Status Line
@@ -34,24 +35,33 @@ set noshowmode
 set shortmess=filnxtToOFWatc " this if for the bar below the statusline
 
 " Tab settings
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set smartindent
+set tabstop=4     " ts
+set shiftwidth=4  " sw
+set softtabstop=4 " sts
+set expandtab     " et
+set smartindent   " si
+set smarttab      " sta
 
 " History and Persistant Data
-set viminfo=%,'100,<100,s100,h,n~/.vim/viminfo " global paste (with p)
+set viminfo=%,'100,<100,s100,h,n~/.vim/viminfo/viminfo " global paste (with p)
 set history=500
 set undolevels=1500
 
 " Searching
-set path+=** " recursive file search
+" set path+=** " recursive file search
+set path=.,**
 set hlsearch
 set incsearch " get partial results while searching
 
+" Windows
+set splitright
+set splitbelow
+
 " stop vim from adding a newline at the end
 set nofixendofline
+
+set mouse= " disable mouse
+" set virtualedit=all " move around freely in the buffer
 
 " Plugins
 "   :PlugInstall - install plugins
@@ -59,25 +69,31 @@ set nofixendofline
 "   :PlugUpdate  - update plugins
 if filereadable(expand('~/.vim/autoload/plug.vim'))
   call plug#begin('~/.vim/plugins')
-  Plug 'airblade/vim-gitgutter'
-  Plug 'altercation/vim-colors-solarized'
+  " Functionality
+  Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/goyo.vim'
+  Plug 'preservim/nerdcommenter'
+  " Plug 'editorconfig/editorconfig-vim'
+  " Plug 'ycm-core/YouCompleteMe'
+
+  " Languages
+  Plug 'fatih/vim-go'
+  Plug 'sheerun/vim-polyglot'
+  "Plug 'exu/pgsql.vim' " Postgres spesific syntax
+
+  " Themeing
+  Plug 'itchyny/lightline.vim'
+  Plug 'morhetz/gruvbox'
   Plug 'reedes/vim-colors-pencil'
   Plug 'arcticicestudio/nord-vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'preservim/nerdcommenter'
-  Plug 'fatih/vim-go'
-  Plug 'itchyny/lightline.vim'
+  Plug 'altercation/vim-colors-solarized'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'vim-pandoc/vim-pandoc-syntax'
-  Plug 'morhetz/gruvbox'
-  " Plug 'vim-airline/vim-airline'
+
+  "Plug 'airblade/vim-gitgutter'
+  "Plug 'vim-airline/vim-airline'
   call plug#end()
 endif
-
-fun PluginExists(name)
-  return isdirectory(expand('~/.vim/plugins/' . a:name))
-endfun
 
 fun! LoadAll()
   for p in split(globpath('~/.vim/auto/', '*.vim'), '\n')
@@ -85,21 +101,23 @@ fun! LoadAll()
   endfor
 endfun
 
-au VimEnter * :call LoadAll()
+" au VimEnter * :call LoadAll()
 
 packadd! dracula
 
 " Colors
-au ColorScheme * highlight Normal ctermbg=none
+au ColorScheme * hi Normal ctermbg=none
 colorscheme delek " set delek as a fallback
-silent! colo molokai
-" silent! colo vim-monokai-tasty
+" silent! colo molokai
+silent! colo gruvbox
 set background=dark
 hi CursorLineNR ctermfg=magenta
+hi ColorColumn ctermbg=0
+hi Normal ctermbg=none
 
 
 " Trailing Whitespace Detection
-hi ExtraWhitespace ctermbg=1 ctermfg=white
+hi ExtraWhitespace ctermbg=8 ctermfg=white
 match ExtraWhitespace /\s\+$/
 au BufWinEnter * match ExtraWhitespace /\s\+$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
@@ -109,9 +127,12 @@ au BufWinLeave * call clearmatches()
 
 " Key Maps
 let mapleader=","
-let g:comment_char = ''
-nmap <Leader>/ <plug>NERDCommenterToggle
-nmap <Leader>g call UpdateGitBranch()<CR>
+nmap <Leader>/ <Plug>NERDCommenterToggle
+vnoremap <Leader>/ <Plug>NERDCommenterToggle
+
+nnoremap <silent><Leader>g :Goyo<Cr>
+nnoremap <Leader>r :so ~/.vim/vimrc<cr>
+
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
 cnoremap <C-j> <C-C>
@@ -134,11 +155,10 @@ nnoremap <C-w><C-Right> <C-w>>
 nnoremap <silent><Leader>f :Lex<Cr>
 nnoremap <silent><Leader>F :Lex!<Cr>
 nnoremap <C-t> :tabnew<Cr>
-nnoremap <C-n> :rightb vnew<Cr>
 
 
 " Git Gutter
-if PluginExists('vim-gitgutter')
+if util#PluginExists('vim-gitgutter')
   highlight SignColumn      ctermbg=none
   highlight GitGutterAdd    ctermfg=2 ctermbg=none
   highlight GitGutterChange ctermfg=3 ctermbg=none
@@ -146,34 +166,28 @@ if PluginExists('vim-gitgutter')
 endif
 
 " Nerd Commenter
-if PluginExists('nerdcommenter')
+if util#PluginExists('nerdcommenter')
   let g:NERDSpaceDelims = 1
 endif
 
-" Status Line
-if !PluginExists('lightline')
-  set stl=%!MyStatusLine()
-endif
-
-" let g:lightline = {'colorscheme': 'Tomorrow_Night'}
+let g:lightline = {'colorscheme': 'Tomorrow_Night'}
+" let g:lightline = {'colorscheme': 'darcula'}
 " let g:lightline = {'colorscheme': 'dracula'}
-let g:lightline = {'colorscheme': 'darcula'}
-" let g:lightline = {'colorscheme': 'deus'}
 
 
 " My file-type settings
 autocmd BufNewFile,BufReadPost *.clang-format set syntax=yaml
 autocmd FileType make set noexpandtab
-autocmd FileType make let g:comment_char = '@#'
 
 " yaml
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
-
+" ssh
 au FileType sshconfig setlocal ts=2 sts=2 sw=2 smartindent expandtab
-
 " LaTex
 au BufNewFile *.tex 0r ~/.vim/templates/template.tex
+" Spelling
+au BufNewFile,BufReadPost *.txt set spell
 
 
 " C++
@@ -191,7 +205,7 @@ let g:netrw_sizestyle = "H"
 " Go
 " :GoInstallBinaries
 " :GoUpdateBinaries
-if PluginExists('vim-go')
+if util#PluginExists('vim-go')
   let g:go_fmt_command = "goimports"
   let g:go_highlight_variable_assignments = 0
   let g:go_highlight_variable_declarations = 0
@@ -211,17 +225,24 @@ if PluginExists('vim-go')
   let g:go_highlight_diagnostic_warnings = 1
 
   nmap <C-g> :GoDef<Cr>
-  " au FileType go inoremap { {<Cr>}<Esc>O
-  " au FileType go inoremap { {}<Esc>i
-  au FileType go inoremap {<Cr> {<Cr>}<Esc>O
+endif
+" au FileType go inoremap ( ()<Esc>i
+au FileType go inoremap {<Cr> {<Cr>}<Esc>O
+
+if util#PluginExists('goyo.vim')
+  " let g:goyo_width = 120
+  " let g:goyo_margin_top = 10
+  " let g:goyo_margin_bottom = 10
 endif
 
-if PluginExists('vim-pandoc')
-  " let g:pandoc#folding#level = 0
-  " let g:pandoc#folding#fdc = 0
-  " let g:pandoc#folding#mode = 'syntax'
-  au FileType pandoc set nofoldenable
-  " TODO files
+
+
+if util#PluginExists('vim-pandoc')
+  " set syntax=markdown
+  au FileType pandoc set syn=markdown
+  au FileType pandoc set textwidth=80
+  let g:pandoc#modules#disabled = ["folding"]
+  " Todo files
   au BufNewFile TODO set filetype=pandoc
 endif
-let g:pandoc#folding#fastfolds = 0
+

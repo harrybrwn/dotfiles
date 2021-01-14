@@ -58,9 +58,11 @@ if [[ "$color_prompt" = yes ]]; then
     # git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
     git_branch='`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`'
     PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[34m\]\$\[\033[00m\] "
+    :
 else
     git_branch=
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w \$ '
+    :
 fi
 
 unset color_prompt force_color_prompt git_branch
@@ -115,17 +117,19 @@ fi
 [ -f /home/harry/.travis/travis.sh ] && source /home/harry/.travis/travis.sh
 
 
-# Git
-function get_current_git_head() {
-    local ref
-    ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
-    local ret=$?
-    if [[ $ret != 0 ]]; then
-        [[ $ret == 128 ]] && return  # no git repo.
-        ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+# Prompt
+_git_branch() {
+    local __branch="`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`"
+    if [ -z "$__branch" ]; then
+        printf ''
+    else
+        printf "($__branch) "
     fi
-    echo ${ref#refs/heads/}
 }
+
+# Just saving my original
+# PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
+PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
 
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion bash)

@@ -48,3 +48,11 @@ augroup GitBranchUpdate
   "au CmdwinEnter,CmdwinLeave * call UpdateGitBranch()
 augroup END
 
+
+fun! LoadAll()
+  for p in split(globpath('~/.vim/auto/', '*.vim'), '\n')
+    exe 'source ' . p
+  endfor
+endfun
+
+" au VimEnter * :call LoadAll()

@@ -2,17 +2,20 @@ host: catcourses.ucmerced.edu
 basedir: $HOME/school
 
 registration:
-  term: 'spring'
+  term: 'summer'
   year: 2021
 
 notifications: true
 
 watch:
-  duration: '1h'
+  # duration: '15m'
+  duration: '23h'
+  #crns: [20514, 20170, 20307]
   crns:
-    - 30313 # circuit theory lecture
-    - 37572 # circuit theory lecture
-  term: 'spring'
+    - 20514
+    - 20170
+    # - 20307
+  term: 'summer'
   year: 2021
   files: false # update files from canvas
   sms_notify: false # text me when classes are open
@@ -35,20 +38,28 @@ replacements:
 # that has an empty replacement then it should
 # check if lower is true and lowercase it if so.
 course-replacements:
+  'ENGR 191 01':
+    - { pattern: 'Video Files',    replacement: 'videos' }
+    - { pattern: 'Lecture Slides', replacement: 'lecture_slides' }
+    - { pattern: Assignments,      replacement: assignments, lower: true }
+  'ENGR 065 01':
+    - { pattern: 'Lecture Slides',   replacement: lecture_slides }
+    - { pattern: 'Lab Instructions', replacement: labs, lower: true }
+    - { pattern: Syllabus,           replacement: syllabus, lower: true }
+  'CSE 165 01':
+    - { pattern: Lab5,           replacement: '5' }
+    - { pattern: 'Lab 4',        replacement: '4' }
+    - { pattern: '[Ll]ab (\d+)', replacement: '$1' }
   'CSE 150 01':
-    - pattern: 'Lecture slides'
-      replacement: 'lecture-slides'
-      lower: true
-    - pattern: 'Projects'
-      replacement: 'projects'
-    - pattern: 'project resource'
-      replacement: 'project_resources'
+    - { pattern: 'Lecture slides',   replacement: 'lecture-slides', lower: true }
+    - { pattern: 'Projects',         replacement: 'projects' }
+    - { pattern: 'project resource', replacement: 'project_resources' }
   'CSE 120 01': []
   'CSE 160 01':
-    - { pattern: 'Project - Test Topologies', replacement: 'test_topologies' }
+    - { pattern: 'Project - Test Topologies',     replacement: 'test_topologies' }
     - { pattern: 'Projects/TinyOS Documentation', replacement: 'Projects/docs' }
-    - { pattern: 'TinyOS -- (.*$)',      replacement: '$1' }
-    - { pattern: 'Project (\d) - (.*$)', replacement: '$1/$2' }
+    - { pattern: 'TinyOS -- (.*$)',               replacement: '$1' }
+    - { pattern: 'Project (\d) - (.*$)',          replacement: '$1/$2' }
     - { pattern: Miscellany, replacement: misc }
     - { pattern: Homeworks,  replacement: homework }
     - { pattern: Projects,   replacement: projects }
@@ -60,15 +71,10 @@ course-replacements:
     - pattern: "[Ll]abs"
       replacement: "labs"
   'CSE 031 01':
-    - pattern: "[Ll]ab #"
-      replacement: "lab"
-    - pattern: Video Lectures
-      replacement: vid_lectures
-    - pattern: " "
-      replacement: "_"
-    - pattern: "(.*)"
-      replacement: $1
-      lower: true
+    - { pattern: "[Ll]ab #",     replacement: "lab" }
+    - { pattern: Video Lectures, replacement: vid_lectures }
+    - { pattern: " ",            replacement: "_" }
+    - { pattern: "(.*)",         replacement: $1, lower: true }
   'COGS 125 01/CSE 175 01':
     - pattern: "cogs125/CSE 175 01"
       replacement: "cogs125-cse175"
@@ -78,3 +84,4 @@ course-replacements:
   'MATH 032 01':
     - pattern: ' '
       replacement: '_'
+

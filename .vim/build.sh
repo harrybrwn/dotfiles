@@ -79,7 +79,7 @@ get_debian_package() {
 }
 
 get_packages() {
-    sudo add-apt-repository ppa:jonathonf/vim --yes
+    #sudo add-apt-repository ppa:jonathonf/vim --yes
     sudo apt-get update
     local data_dir="$(get_package_dir)/../data"
     [ -d $data_dir ] && rm -r $data_dir
@@ -104,6 +104,8 @@ get_packages() {
     done
 }
 
+build() {
+}
 
 # Notes:
 # Dependancies:
@@ -175,6 +177,7 @@ EOF
 }
 
 if [ -z "$*" ]; then
+    echo 'No arguments'
     exit 1
 fi
 

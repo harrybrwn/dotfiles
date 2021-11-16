@@ -141,7 +141,7 @@ if command -v edu > /dev/null 2>&1; then
     source <(edu completion bash)
 fi
 
-export CDPATH=\
-./:\
-$HOME/dev/golang
+# export CDPATH=\
+# ./:\
+# $HOME/dev/golang
 

@@ -4,6 +4,8 @@
 #
 # Variables:
 #
+# * SESSION_BG - background color of the tmux session name
+#
 # * STATUS_CPU - Toggle cpu stats
 #   type: bool
 #   default: true
@@ -68,15 +70,27 @@ wifi() {
         echo 'Not Connected'
         return
     fi
+
+    # adding "0" to end because /proc/net/wireless adds a "."
+    local snr="$(awk 'NR==3{print $3}' /proc/net/wireless)0"
+    local link_quality="$(awk "BEGIN{printf \"%.1f\", 100 * $snr/70}")"
     local out
-    if [ "$1" = "ssid" ]; then
-        out=$ssid
-    elif [ "$1" = "-a" ]; then
-        out="$(awk "BEGIN{printf \"%.1f\", 100 * `awk 'NR==3{print $3}' /proc/net/wireless`/70}") $ssid"
-    else
-        out=$(awk "BEGIN{printf \"%.1f\", 100 * `awk 'NR==3{print $3}' /proc/net/wireless`/70}")
-    fi
-    echo "#[fg=$DULL]$out"
+
+    case $1 in
+        -a)
+            out="$ssid $link_quality%"
+            ;;
+        ssid)
+            out=$ssid
+            ;;
+        link|link-quality)
+            out=$link_quality
+            ;;
+        *)
+            out=$link_quality
+            ;;
+    esac
+    echo "$out"
 }
 
 _percent_hex_range() {
@@ -162,7 +176,7 @@ apply() {
     local if_width_lt_110='#(test ! #{window_width} -lt 110; echo $?)'
     local CPU="#($self cpu_and_temp)"
     local MEM="#($self mem)"
-    local WIFI="#[fg=$DULL]#($lib/wifi.sh -a)"
+    local WIFI="#[fg=$DULL]#($self wifi -a)"
     local stats=""
     if $STATUS_CPU && [ ! -z "$CPU" ]; then
         stats="$stats $CPU $sep"
@@ -173,15 +187,19 @@ apply() {
     if $STATUS_WIFI && [ ! -z "$WIFI" ]; then
         stats="$stats $WIFI $sep"
     fi
+    # tmux set -g message-fg "$DULL"
+    # tmux set -g message-bg "default"
     tmux \
-        set -g status-right-length 110 \; \
-        set -g status-left-length 50 \; \
-        set -g status-bg $BG \; \
-        set -g message-fg "$DULL" \; \
-        set -g message-bg "default" \; \
-        set -g status-left "#[bg=$SESSION_BG,fg=colour0]#{?client_prefix,#[bg=$IMPORTANT]#[italics] #S ,[#S]}#[bg=$BG,fg=colour12] " \; \
+        set -g status-right-length 110    \; \
+        set -g status-left-length 50      \; \
+        set -g status-bg $BG              \; \
+        set -g message-style fg="$DULL"   \;\
+        set -g message-style bg="default" \;\
+        set -g status-left \
+"#[bg=$SESSION_BG,fg=default]\
+#{?client_prefix,#[bg=$IMPORTANT]#[fg=$BG] #S ,[#S]}#[bg=$BG,fg=$BG] " \; \
         setw -g window-status-format '#[bg=colour0,fg=$dull]#[fg=colour7] #W ' \; \
-        setw -g window-status-current-format '#[bg=colour240,fg=colour250,nobold,italics] #W ' \; \
+        setw -g window-status-current-format '#[bg=colour235,fg=colour247,nobold,italics] #W ' \; \
         set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) #($lib/battery.sh)"
 }
 

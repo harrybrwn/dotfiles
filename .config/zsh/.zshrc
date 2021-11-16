@@ -15,8 +15,9 @@ export ZSH="$HOME/.config/zsh/oh-my-zsh"
 # ZSH_THEME="agnoster"
 # ZSH_THEME="harry-gentoo"
 
-ZSH_THEME="harry-agnoster"
-# ZSH_THEME="harry-bash"
+# ZSH_THEME="harry-agnoster"
+ZSH_THEME="harry-bash"
+#ZSH_THEME="half-life"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -109,10 +110,11 @@ st*)
     ;;
 *)
     source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    :
     ;;
 esac
 
-source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 comp_commands=(apizza edu yt arduino-cli)
 for cmd in $comp_commands; do
@@ -131,6 +133,14 @@ if command -v gh > /dev/null 2>&1; then
     source <(gh completion -s zsh)
     compdef _gh gh
 fi
+if command -v govm > /dev/null 2>&1; then
+    source <(govm completion zsh)
+    compdef _govm govm
+fi
+# if command -v arpdb > /dev/null 2>&1; then
+#     source <(arpdb completion zsh)
+#     compdef _arpdb arpdb
+# fi
 
 ## apizza completion
 #if command -v apizza > /dev/null 2>&1; then

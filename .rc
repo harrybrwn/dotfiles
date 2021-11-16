@@ -6,7 +6,7 @@
 #                        |___/        \
 #######################################\
 # github: https://github.com/harrybrwn
-# website: http://harrybrwn.com
+# website: https://harrybrwn.com
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -20,15 +20,21 @@ set -o ignoreeof
 # Enable colors for less and man pages
 export LESS="--RAW-CONTROL-CHARS"
 
-export GO_VERSION="go1.15"
 export GOPATH="$HOME/dev/go"
-[ -f "$HOME/.local/profile.d/paths.sh" ] && . "$HOME/.local/profile.d/paths.sh"
-[ -f "$HOME/.local/profile.d/vars.sh" ] && . "$HOME/.local/profile.d/vars.sh"
+export GOROOT="/usr/local/go"
+if [ -z "$TMUX" ]; then
+  PATH="$GOPATH/bin:$PATH"
+  PATH="$GOROOT/bin:$PATH"
+fi
+
+[ -f "$HOME/.local/profile.d/profile.sh" ] && . "$HOME/.local/profile.d/profile.sh"
 if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
 
 export THEME_SECONDARY_COLOR='109'
+
+#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
 
 if command -v exa > /dev/null 2>&1; then
   alias ls='exa --group-directories-first'
@@ -36,14 +42,14 @@ if command -v exa > /dev/null 2>&1; then
   alias la='ls -a'
 else
   alias ls='ls -hN --color=auto --group-directories-first'
-  alias l="ls -lAh"
-  alias la="ls -A"
+  alias l="ls -lAh --group-directories-first"
+  alias la="ls -A --group-directories-first"
 fi
 
 # Development aliases
-alias vi=vim
+alias vim=nvim vi=vim
 alias g=git m=make mi='make install'
-alias dk=docker dk-shell='docker container run --rm -it'
+alias dk=docker
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 alias jsonfmt='python -m json.tool'
 alias re='perl -pe'
@@ -51,12 +57,24 @@ alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=
 alias gotest='gotest -v -cover -race'
 # My Tool aliases
 alias ap=apizza apizza-docker='docker run --rm -it apizza:latest'
-alias pass=gopass pas=gopass
+alias pass=gopass
 alias wifi=wavemon howto=how2 say=espeak
 alias arduino=arduino-cli
 alias btc=bitcoin-cli
+alias :q=exit
+alias :e=vim
 
-alias fsizes='du -sh * | sort -hr'
+if ! command -v qemu > /dev/null 2>&1; then
+  alias qemu=qemu-system-x86_64
+fi
+
+if command -v lolcat > /dev/null 2>&1; then
+  # alias cat=lolcat
+  :
+fi
+
+alias ytdl=youtube-dl
+alias fsizes='du -bshc * | sort -hr'
 alias settings=gnome-control-center
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
 alias copy="xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
@@ -69,9 +87,10 @@ alias screenrec='sh ~/tools/screencast.sh'
 
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias ipinfo='curl ipinfo.io'
+alias qmake=/usr/bin/qmake
 
 wttr() {
-    local request="wttr.in/${1-Merced}"
+    local request="wttr.in/${1-San Franciso, CA}"
     [ "$(tput cols)" -lt 125 ] && request+='?n'
     curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
 }
@@ -90,10 +109,10 @@ net() {
 rm() {
   for f in "$*"; do
     if
-      [ $f = $HOME ] ||
-      [ $f = '~' ] ||
+      [ "$f" = $HOME ] ||
+      [ "$f" = '~' ] ||
       [ "$f" = "/" ] ||
-      [ "$f" = "/home" ] ||
+      [ "$f" = "/home" ]  ||
       [ "$f" = "/home/" ] ||
       [ "$f" = "$HOME/dev" ]
     then
@@ -104,12 +123,18 @@ rm() {
   /bin/rm $*
 }
 
+is-my-laptop() {
+  if [ "$(hostname)" = "harry-yoga920" ]; then
+    return 0
+  fi
+  return 1
+}
+
 search() {
   lynx "https://lite.duckduckgo.com/lite?q=$*"
 }
 
 alias o=open
-
 open() {
   case $1 in
   *.md)
@@ -122,7 +147,6 @@ open() {
 }
 
 alias '?'=google
-
 google() {
   local q="$*"
   if [ -z "$q" ]; then
@@ -159,13 +183,18 @@ goxxd() {
 slice literal.
 
 goxxd <file> [options]
-  -h  help
-  -n  <n> number of columns"
+  -h --help   help
+  -n <n>      number of columns
+     --var    variable name"
       return 0
       ;;
     -n)
       lines="$2"
       shift 2
+      ;;
+    --var)
+      varname="$1"
+      shift
       ;;
     *)
       [ ! -z "$file" ] && echo 'Error: too many files' && return 1
@@ -174,8 +203,11 @@ goxxd <file> [options]
       ;;
     esac
   done
+
   [ -z "$lines" ] && lines='12'
-  [ -n "$file" ] && varname="$(basename $file | perl -pe 's/[\.-]/_/g')"
+  if [ -n "$file" ] && [ -z "$varname"]; then
+    varname="$(basename $file | perl -pe 's/[\.-]/_/g')"
+  fi
   echo "var $varname = []byte{"
   hexdump $file -v -e "\"\t\" $lines/1 \"0x%02x, \" \"\n\"" |
     sed -e 's/0x  ,//g'
@@ -217,6 +249,7 @@ makesmall() {
 }
 
 export NOTES="$HOME/.config/notes"
+
 note() {
   [ -z "$NOTES" ] && echo 'Error: no $NOTES directory' && return 1
   local d="$NOTES"
@@ -264,17 +297,23 @@ note <cmd> [opts...]
   vim -c 'r ~/.vim/templates/note.md' "$file"
 }
 
+py() {
+  python -c "print($@)"
+}
+
 reset-mouse-speed() {
-  xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
-  xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
-    1.0 0.0 0.0 \
-    0.0 1.0 0.0 \
-    0.0 0.0 1.0 > /dev/null 2>&1
-  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
-  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
-    1.0 0.0 0.0 \
-    0.0 1.0 0.0 \
-    0.0 0.0 1.0
+  if command -v xinput > /dev/null 2>&1; then
+    xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
+    xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
+      1.0 0.0 0.0 \
+      0.0 1.0 0.0 \
+      0.0 0.0 1.0 > /dev/null 2>&1
+    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
+    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
+      1.0 0.0 0.0 \
+      0.0 1.0 0.0 \
+      0.0 0.0 1.0
+  fi
 }
 
 if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
@@ -287,25 +326,39 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
       :
     fi
   else
-    tmux new -d -s dev -c ~/dev
-    tmux new -d -s misc -c ~/
+    tmux \
+      new -d -s misc -c ~/
   fi
 fi
 
-# [[ -s "$HOME/.config/gvm/scripts/gvm" ]] && source "$HOME/.config/gvm/scripts/gvm"
-[[ -f "$HOME/school/tanya/get-alias.sh" ]] && source "$HOME/school/tanya/get-alias.sh"
-
 if command -v xinput > /dev/null 2>&1; then
-  xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
-  xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
-    1.1 0.0 0.0 \
-    0.0 1.1 0.0 \
-    0.0 0.0 0.8 > /dev/null 2>&1
-  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
-  xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
-    1.0 0.0 0.0 \
-    0.0 1.0 0.0 \
-    0.0 0.0 1.0
+  # xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
+  # xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
+  #   1.1 0.0 0.0 \
+  #   0.0 1.1 0.0 \
+  #   0.0 0.0 1.0 > /dev/null 2>&1
+  # xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
+  # xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
+  #   1.0 0.0 0.0 \
+  #   0.0 1.0 0.0 \
+  #   0.0 0.0 0.8
+  :
 fi
+
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
+export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
+
+# export CATALINA_BASE="$HOME/dev/claresco/tools/apache-tomcat-7.0.47"
+export CATALINA_BASE="/usr/local/tomcat7"
+export CATALINA_HOME="$CATALINA_BASE"
+# export CATALINA_HOME="$HOME/dev/claresco/tools/apache-tomcat-8.0.53"
+export TOMCAT_HOME="$CATALINA_HOME"
+
+
+export ANT_HOME="/usr/share/ant"
+
+# tomcat() {
+#   $CATALINA_BASE/bin/catalina.sh $@
+# }
 
 # vim: syn=sh ts=1 sts=2 sw=2

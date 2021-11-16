@@ -2,12 +2,10 @@
     "editor.minimap.enabled": true,
     "editor.renderControlCharacters": false,
     "editor.suggestSelection": "first",
-    "editor.tabSize": 4,
     "files.trimTrailingWhitespace": true,
 
     "workbench.colorTheme": "Horizon",
     "workbench.activityBar.visible": true,
-    "workbench.iconTheme": "material-icon-theme",
     "workbench.colorCustomizations": {
         "editorLineNumber.foreground": "#d5d8da2f",
         // "statusBar.background": "#e95378",   // pink
@@ -23,7 +21,6 @@
         // "statusBar.foreground": "#000000",   // black
         // "statusBar.foreground": "#1c1e26",   // grey
     },
-    "window.zoomLevel": 0,
     "window.menuBarVisibility":"toggle",
 
     "files.associations": {
@@ -36,15 +33,16 @@
 
     /* go */
     "go.useLanguageServer": true,
+    "go.toolsManagement.autoUpdate": true,
+    "go.executable.path": "/usr/local/go/bin/go",
 
     /* Python */
     "python.languageServer": "Pylance",
-    "python.pythonPath": "/home/harry/.local/bin/python",
+    "python.pythonPath": "/home/harry/anaconda3/bin/python",
     "python.jediEnabled": false,
 
     /* C/C++ */
     "C_Cpp.updateChannel": "Insiders",
-    "C_Cpp.intelliSenseCachePath": "~/.cache/vscode",
     "[c]": {
         "editor.defaultFormatter": "ms-vscode.cpptools",
         "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
@@ -53,6 +51,9 @@
     "[cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
+
+    /* Rust */
+    "rust-analyzer.inlayHints.enable": false,
 
     /* js/ts */
     "[jsx-tags]": {
@@ -68,6 +69,7 @@
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
         "editor.tabSize": 2
     },
     "[typescript]": {
@@ -89,6 +91,17 @@
     /* Latex */
     // "latex-workshop.view.pdf.ref.viewer": "auto",
 
+    "[markdown-math]": {
+        "editor.tabSize": 2
+    },
+    /* Markdown */
+    "[md]": {
+        "editor.tabSize": 2
+    },
+    "[markdown]": {
+        "editor.tabSize": 2
+    },
+
     /* SQL */
     "[sql]": {
         "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
@@ -105,6 +118,11 @@
         "editor.suggest.snippetsPreventQuickSuggestions": false,
         "editor.formatOnSave": false,
         "files.trimTrailingWhitespace": false,
+    },
+
+    /* Verilog */
+    "[verilog]": {
+        "editor.tabSize": 2,
     },
 
     /* Vim Mode ext. */
@@ -149,64 +167,15 @@
         "merkleroot",
         "protobuf",
         "protoc",
-        "systemd"
+        "systemd",
+        "unmarshaling"
     ],
 
-    // DART SETTINGS:
-    //
-    // Causes the debug view to automatically appear when a breakpoint is hit. This
-	// setting is global and not configurable per-language.
-	"debug.openDebug": "openOnDebugBreak",
-	"[dart]": {
-		// Automatically format code on save and during typing of certain characters
-		// (like `;` and `}`).
-		"editor.formatOnSave": true,
-		"editor.formatOnType": true,
-
-		// Draw a guide line at 80 characters, where Dart's formatting will wrap code.
-		"editor.rulers": [80],
-
-		// Disables built-in highlighting of words that match your selection. Without
-		// this, all instances of the selected text will be highlighted, interfering
-		// with Dart's ability to highlight only exact references to the selected variable.
-		"editor.selectionHighlight": false,
-
-		// By default, VS Code prevents code completion from popping open when in
-		// "snippet mode" (editing placeholders in inserted code). Setting this option
-		// to `false` stops that and allows completion to open as normal, as if you
-		// weren't in a snippet placeholder.
-		"editor.suggest.snippetsPreventQuickSuggestions": false,
-
-		// By default, VS Code will pre-select the most recently used item from code
-		// completion. This is usually not the most relevant item.
-		//
-		// "first" will always select top item
-		// "recentlyUsedByPrefix" will filter the recently used items based on the
-		//     text immediately preceeding where completion was invoked.
-		"editor.suggestSelection": "first",
-
-		// Allows pressing <TAB> to complete snippets such as `for` even when the
-		// completion list is not visible.
-		"editor.tabCompletion": "onlySnippets",
-
-		// By default, VS Code will populate code completion with words found in the
-		// current file when a language service does not provide its own completions.
-		// This results in code completion suggesting words when editing comments and
-		// strings. This setting will prevent that.
-		"editor.wordBasedSuggestions": false,
-    },
-    "latex-workshop.view.pdf.viewer": "tab",
     "cSpell.enabled": true,
+
+    "latex-workshop.view.pdf.viewer": "tab",
     "jupyter.sendSelectionToInteractiveWindow": false,
     "latex-workshop.message.update.show": false,
-
-    "liveSassCompile.settings.formats": [
-        {
-            "format": "expanded",
-            "extensionName": ".css",
-            "savePath": "/public/css"
-        }
-    ],
 
     "liveshare.shareExternalFiles": false,
     "liveshare.anonymousGuestApproval": "accept",
@@ -222,6 +191,21 @@
             "color": "black",
             "borderRadius": "3px"
         }
-    ]
-
+    ],
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "liveshare.authenticationProvider": "GitHub",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "cmake.configureOnOpen": true,
+    "editor.cursorStyle": "line",
+    "editor.insertSpaces": false,
+    "editor.lineNumbers": "on",
+    "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+    "editor.wordWrap": "off",
+    "workbench.iconTheme": "material-icon-theme",
+    "python.defaultInterpreterPath": "/home/harry/anaconda3/bin/python",
+    "redhat.telemetry.enabled": false,
 }

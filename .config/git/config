@@ -66,3 +66,8 @@
         --pretty='tformat:%C(auto)%h%Creset %Cblue(%cd)%Creset%C(auto)%d%Creset %s' \
         -n 25
     top   = !git --no-pager log --all --graph --abbrev-commit --decorate --oneline -n
+
+    smu = submodule update --init --recursive
+	tiuphorse = !echo \"neigh neight bitch\"
+[init]
+	defaultBranch = main

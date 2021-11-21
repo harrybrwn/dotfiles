@@ -49,7 +49,7 @@ fi
 # Development aliases
 alias vim=nvim vi=vim
 alias g=git m=make mi='make install'
-alias dk=docker
+alias dk=docker dkc=docker-compose
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 alias jsonfmt='python -m json.tool'
 alias re='perl -pe'

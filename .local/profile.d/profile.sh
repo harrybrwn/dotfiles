@@ -1,7 +1,3 @@
-#!/bin/sh
-
-set -e
-
 BASEDIR=$(dirname $0)
 LIBFILES=(
     "vars.sh"

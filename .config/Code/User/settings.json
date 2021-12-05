@@ -155,20 +155,18 @@
     "explorer.confirmDragAndDrop": false,
     "explorer.confirmDelete": false,
     "todo-tree.tree.showScanModeButton": false,
-
-    "cSpell.words": [
-        "monospace",
-    ],
     "cSpell.userWords": [
         "Merkle",
-        "Popd",
-        "Pushd",
-        "UTXO",
         "merkleroot",
+        "monospace",
+        "Popd",
         "protobuf",
         "protoc",
+        "Pushd",
+        "struct",
         "systemd",
-        "unmarshaling"
+        "unmarshaling",
+        "UTXO"
     ],
 
     "cSpell.enabled": true,

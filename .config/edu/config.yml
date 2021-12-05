@@ -2,7 +2,7 @@ host: catcourses.ucmerced.edu
 basedir: $HOME/school
 
 registration:
-  term: 'summer'
+  term: 'fall'
   year: 2021
 
 notifications: true
@@ -15,7 +15,7 @@ watch:
     - 20514
     - 20170
     # - 20307
-  term: 'summer'
+  term: 'fall'
   year: 2021
   files: false # update files from canvas
   sms_notify: false # text me when classes are open

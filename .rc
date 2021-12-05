@@ -343,6 +343,8 @@ export TOMCAT_HOME="$CATALINA_HOME"
 
 export ANT_HOME="/usr/share/ant"
 
+export COMPOSE_DOCKER_CLI_BUILD=1
+
 # tomcat() {
 #   $CATALINA_BASE/bin/catalina.sh $@
 # }

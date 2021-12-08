@@ -182,6 +182,7 @@
     },
     "liveshare.presence": false,
 
+    /* TODO Highlighting */
     "todohighlight.keywords": [
         {
             "text": "TODO",

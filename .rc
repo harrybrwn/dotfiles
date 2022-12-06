@@ -20,6 +20,14 @@ set -o ignoreeof
 # Enable colors for less and man pages
 export LESS="--RAW-CONTROL-CHARS"
 
+# Kubernetes
+export KUBE_EDITOR="code -w"
+
+# AWS cli
+export AWS_PAGER=less
+export AWS_DEFAULT_OUTPUT=json
+
+# Go
 export GOPATH="$HOME/dev/go"
 export GOROOT="/usr/local/go"
 if [ -z "$TMUX" ]; then
@@ -31,6 +39,7 @@ fi
 if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
+PATH="$PATH:$HOME/.local/share/yarn/global/node_modules/.bin"
 
 export THEME_SECONDARY_COLOR='109'
 
@@ -49,20 +58,22 @@ fi
 # Development aliases
 alias vim=nvim vi=vim
 alias g=git m=make mi='make install'
-alias dk=docker dkc=docker-compose
+alias cl=clear
+alias dk=docker dkc='docker compose'
+alias ku=kubectl kube=kubectl
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
-alias jsonfmt='python -m json.tool'
+alias jsonfmt='python3 -m json.tool'
 alias re='perl -pe'
-alias gohtml='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
-alias gotest='gotest -v -cover -race'
+alias go-test-cover='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 # My Tool aliases
 alias ap=apizza apizza-docker='docker run --rm -it apizza:latest'
 alias pass=gopass
 alias wifi=wavemon howto=how2 say=espeak
 alias arduino=arduino-cli
 alias btc=bitcoin-cli
-alias :q=exit
+alias :q=exit q=exit
 alias :e=vim
+alias watchkube="watch 'kubectl get pods -A && printf \"%120s\n\" | sed \"s/ /-/g\" && kubectl top pods -A --sort-by memory'"
 
 if ! command -v qemu > /dev/null 2>&1; then
   alias qemu=qemu-system-x86_64
@@ -73,26 +84,34 @@ if command -v lolcat > /dev/null 2>&1; then
   :
 fi
 
+if [ -f /opt/drawio/drawio ]; then
+  alias drawio=/opt/drawio/drawio
+fi
 alias ytdl=youtube-dl
-alias fsizes='du -bshc * | sort -hr'
+#alias fsizes='du -bshc * | sort -hr'
 alias settings=gnome-control-center
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
-alias copy="xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
+alias copy="perl -pe 'chomp if eof' | xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
 alias aspdf='libreoffice --headless --invisible --convert-to pdf'
 alias htmltopdf='wkhtmltopdf'
 alias githistory='gource -a 1 -c 4.0 -f .'
 # alias wifi="nmcli --colors yes device wifi list"
 alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
 alias screenrec='sh ~/tools/screencast.sh'
+alias winbox='wine ~/.config/wine/bin/winbox.exe'
 
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias ipinfo='curl ipinfo.io'
-alias qmake=/usr/bin/qmake
+
 
 wttr() {
     local request="wttr.in/${1-San Franciso, CA}"
     [ "$(tput cols)" -lt 125 ] && request+='?n'
     curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
+}
+
+fsizes() {
+  du -bshc $(\ls -A) | sort -rh
 }
 
 mkdircd() {
@@ -123,13 +142,6 @@ rm() {
   /bin/rm $*
 }
 
-is-my-laptop() {
-  if [ "$(hostname)" = "harry-yoga920" ]; then
-    return 0
-  fi
-  return 1
-}
-
 search() {
   lynx "https://lite.duckduckgo.com/lite?q=$*"
 }
@@ -141,8 +153,12 @@ open() {
     # I have a browser extention that renders markdown
     x-www-browser $*
     ;;
+  *.deb)
+    file-roller $*
+    ;;
   *)
     xdg-open $*
+    ;;
   esac
 }
 
@@ -224,7 +240,6 @@ show-colors() {
     if (( i%10==0&&i>0 )); then
       printf "\n"
     fi
-  #  ((i++))
   done
   echo ''
 }
@@ -298,7 +313,7 @@ note <cmd> [opts...]
 }
 
 py() {
-  python -c "print($@)"
+  python3 -c "print($@)"
 }
 
 reset-mouse-speed() {
@@ -331,22 +346,19 @@ if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
   fi
 fi
 
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
-export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
-
-# export CATALINA_BASE="$HOME/dev/claresco/tools/apache-tomcat-7.0.47"
-export CATALINA_BASE="/usr/local/tomcat7"
-export CATALINA_HOME="$CATALINA_BASE"
-# export CATALINA_HOME="$HOME/dev/claresco/tools/apache-tomcat-8.0.53"
-export TOMCAT_HOME="$CATALINA_HOME"
-
-
-export ANT_HOME="/usr/share/ant"
-
+# Docker
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-# tomcat() {
-#   $CATALINA_BASE/bin/catalina.sh $@
-# }
+# Node Version Manager
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+
+# Grossness :(
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
+export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
+export CATALINA_BASE="/usr/local/tomcat7"
+export CATALINA_HOME="$CATALINA_BASE"
+export TOMCAT_HOME="$CATALINA_HOME"
 
 # vim: syn=sh ts=1 sts=2 sw=2

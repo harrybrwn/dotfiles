@@ -137,6 +137,26 @@ if command -v govm > /dev/null 2>&1; then
     source <(govm completion zsh)
     compdef _govm govm
 fi
+if command -v kubectl > /dev/null 2>&1; then
+    source <(kubectl completion zsh)
+    compdef _kubectl kubectl
+fi
+#if command -v minikube > /dev/null 2>&1; then
+#    source <(minikube completion zsh)
+#fi
+if command -v kind > /dev/null 2>&1; then
+    source <(kind completion zsh)
+    compdef _kind kind
+fi
+if command -v k3d > /dev/null 2>&1; then
+    source <(k3d completion zsh)
+    compdef _k3d k3d
+fi
+if command -v helm > /dev/null 2>&1; then
+    source <(helm completion zsh 2>/dev/null)
+    compdef _helm helm
+fi
+
 # if command -v arpdb > /dev/null 2>&1; then
 #     source <(arpdb completion zsh)
 #     compdef _arpdb arpdb

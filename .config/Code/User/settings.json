@@ -1,31 +1,42 @@
 {
+    /* Editor settings */
     "editor.minimap.enabled": true,
     "editor.renderControlCharacters": false,
     "editor.suggestSelection": "first",
+    "editor.cursorStyle": "line",
+    "editor.insertSpaces": false,
+    "editor.lineNumbers": "on",
+    "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+    "editor.wordWrap": "off",
+
     "files.trimTrailingWhitespace": true,
 
     "workbench.colorTheme": "Horizon",
     "workbench.activityBar.visible": true,
     "workbench.colorCustomizations": {
-        "editorLineNumber.foreground": "#d5d8da2f",
-        // "statusBar.background": "#e95378",   // pink
-        // "statusBar.background": "#42a5f5",   // blue
-        // "statusBar.background": "#5293e5",   // blue
-        // "statusBar.background": "#007ACC",   // default blue
-        // "statusBar.background": "#CF4F6Daa", // pink red
-        // "statusBar.background": "#34FEBB",   // green
+        // "statusBar.background": "#007ACC",   // default vscode blue
         // "statusBar.background": "#9f4bc4bb", // purple
 
-        // "statusBar.foreground": "#ffffffda", // white
-        // "statusBar.foreground": "#797b80",   // light grey
-        // "statusBar.foreground": "#000000",   // black
-        // "statusBar.foreground": "#1c1e26",   // grey
+        /* Horizon */
+        "editorLineNumber.foreground": "#d5d8da2f",
+        "statusBar.background": "#1c1e26",    // grey (default for horizon theme)
+        // "statusBar.background": "#e95378",   // pink (same as horizon theme's pink)
+        // "statusBar.foreground": "#e95378",   // pink (same as horizon theme's pink)
+
+        /* Pitch Black
+        "editor.selectionHighlightBackground": "#0b003b",
+        "editor.selectionHighlightBorder": "#0b003b"
+        */
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
     },
     "window.menuBarVisibility":"toggle",
 
     "files.associations": {
         "*.h": "c",
-        // "TODO": "yaml",
+        "TODO": "markdown",
         "vimrc": "viml",
         "*.vim": "viml",
         "*.sql": "sql",
@@ -34,25 +45,25 @@
     /* go */
     "go.useLanguageServer": true,
     "go.toolsManagement.autoUpdate": true,
-    "go.executable.path": "/usr/local/go/bin/go",
 
     /* Python */
     "python.languageServer": "Pylance",
     "python.pythonPath": "/home/harry/anaconda3/bin/python",
-    "python.jediEnabled": false,
+    "python.defaultInterpreterPath": "/home/harry/anaconda3/bin/python",
+    "[python]": {
+        // "files.trimTrailingWhitespace": false
+    },
 
     /* C/C++ */
-    "C_Cpp.updateChannel": "Insiders",
     "[c]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
         "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
         "editor.fontLigatures": true,
     },
     "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
     },
 
     /* Rust */
+    "rust.show_warnings": true,
     "rust-analyzer.inlayHints.enable": false,
 
     /* js/ts */
@@ -89,7 +100,7 @@
     },
 
     /* Latex */
-    // "latex-workshop.view.pdf.ref.viewer": "auto",
+    "latex-workshop.view.pdf.viewer": "tab",
 
     "[markdown-math]": {
         "editor.tabSize": 2
@@ -110,6 +121,11 @@
         "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
     },
 
+    /* JSON Editor stuff */
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
     /* Java */
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "java.configuration.checkProjectSettingsExclusions": false,
@@ -124,6 +140,17 @@
     "[verilog]": {
         "editor.tabSize": 2,
     },
+
+    /* HTML Files */
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    /* Bash and Shell Scripts */
+    "[shellscript]": {
+        "editor.tabSize": 2
+    },
+
 
     /* Vim Mode ext. */
     "vim.vimrc.path": "/home/harry/.vim/vimrc",
@@ -147,15 +174,33 @@
     ],
 
     /* Built-it Terminal */
-    "terminal.integrated.shell.linux": "/bin/bash",
     "terminal.integrated.fontFamily": "'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "terminal.integrated.defaultProfile.linux": "bash", // Use bash
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "zsh"
+        },
+        "fish": {
+            "path": "fish"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
 
-    /* Misc. */
-    "breadcrumbs.enabled": false,
-    "explorer.confirmDragAndDrop": false,
-    "explorer.confirmDelete": false,
-    "todo-tree.tree.showScanModeButton": false,
+    /* Spell Checker */
+    "cSpell.enabled": true,
     "cSpell.userWords": [
+        "kubernetes",
         "Merkle",
         "merkleroot",
         "monospace",
@@ -169,19 +214,6 @@
         "UTXO"
     ],
 
-    "cSpell.enabled": true,
-
-    "latex-workshop.view.pdf.viewer": "tab",
-    "jupyter.sendSelectionToInteractiveWindow": false,
-    "latex-workshop.message.update.show": false,
-
-    "liveshare.shareExternalFiles": false,
-    "liveshare.anonymousGuestApproval": "accept",
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "liveshare.presence": false,
-
     /* TODO Highlighting */
     "todohighlight.keywords": [
         {
@@ -191,20 +223,30 @@
             "borderRadius": "3px"
         }
     ],
-    "[json]": {
+
+    /* Liveshare extention */
+    "liveshare.authenticationProvider": "GitHub",
+    "liveshare.shareExternalFiles": false,
+    "liveshare.anonymousGuestApproval": "accept",
+    "liveshare.presence": false,
+
+    /* VSCode Pets Extention */
+    "vscode-pets.position": "explorer",
+    "vscode-pets.petSize": "medium",
+    "vscode-pets.theme": "none",
+    "vscode-pets.petType": "cat",
+
+    /* Misc. */
+    "breadcrumbs.enabled": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "jupyter.sendSelectionToInteractiveWindow": false,
+    "cmake.configureOnOpen": true,
+    "redhat.telemetry.enabled": false,
+    "[css]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "liveshare.authenticationProvider": "GitHub",
-    "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
+    "vs-kubernetes": {
+        "vscode-kubernetes.minikube-path.linux": "/home/harry/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
     },
-    "cmake.configureOnOpen": true,
-    "editor.cursorStyle": "line",
-    "editor.insertSpaces": false,
-    "editor.lineNumbers": "on",
-    "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
-    "editor.wordWrap": "off",
-    "workbench.iconTheme": "material-icon-theme",
-    "python.defaultInterpreterPath": "/home/harry/anaconda3/bin/python",
-    "redhat.telemetry.enabled": false,
 }

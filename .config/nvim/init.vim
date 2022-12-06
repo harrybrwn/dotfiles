@@ -141,3 +141,5 @@ au FileType pandoc hi Normal ctermbg=none
 " Yaml
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab smartindent
+
+au FileType sh setlocal ts=2 sts=2 sw=2 expandtab smartindent

@@ -39,11 +39,11 @@ fi
 if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
-PATH="$PATH:$HOME/.local/share/yarn/global/node_modules/.bin"
+if [ -d "$HOME/.local/share/yarn/global" ]; then
+  PATH="$PATH:$HOME/.local/share/yarn/global/node_modules/.bin"
+fi
 
 export THEME_SECONDARY_COLOR='109'
-
-#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
 
 if command -v exa > /dev/null 2>&1; then
   alias ls='exa --group-directories-first'
@@ -66,43 +66,29 @@ alias jsonfmt='python3 -m json.tool'
 alias re='perl -pe'
 alias go-test-cover='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 # My Tool aliases
-alias ap=apizza apizza-docker='docker run --rm -it apizza:latest'
 alias pass=gopass
-alias wifi=wavemon howto=how2 say=espeak
-alias arduino=arduino-cli
+alias say=espeak wifi=wavemon
 alias btc=bitcoin-cli
 alias :q=exit q=exit
 alias :e=vim
 alias watchkube="watch 'kubectl get pods -A && printf \"%120s\n\" | sed \"s/ /-/g\" && kubectl top pods -A --sort-by memory'"
+alias paths='sed "s/:/\n/g" <<< "$PATH"'
+alias copy="perl -pe 'chomp if eof' | xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
+alias topdf='libreoffice --headless --invisible --convert-to pdf'
+alias htmltopdf='wkhtmltopdf'
+alias githistory='gource -a 1 -c 4.0 -f .'
+alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
+alias screenrec='sh ~/tools/screencast.sh'
+alias winbox='wine ~/.config/wine/bin/winbox.exe'
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+alias ipinfo='curl ipinfo.io'
 
 if ! command -v qemu > /dev/null 2>&1; then
   alias qemu=qemu-system-x86_64
 fi
-
-if command -v lolcat > /dev/null 2>&1; then
-  # alias cat=lolcat
-  :
-fi
-
 if [ -f /opt/drawio/drawio ]; then
   alias drawio=/opt/drawio/drawio
 fi
-alias ytdl=youtube-dl
-#alias fsizes='du -bshc * | sort -hr'
-alias settings=gnome-control-center
-alias paths='sed "s/:/\n/g" <<< "$PATH"'
-alias copy="perl -pe 'chomp if eof' | xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
-alias aspdf='libreoffice --headless --invisible --convert-to pdf'
-alias htmltopdf='wkhtmltopdf'
-alias githistory='gource -a 1 -c 4.0 -f .'
-# alias wifi="nmcli --colors yes device wifi list"
-alias wget='wget --hsts-file ~/.config/wget/wget-hsts'
-alias screenrec='sh ~/tools/screencast.sh'
-alias winbox='wine ~/.config/wine/bin/winbox.exe'
-
-alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-alias ipinfo='curl ipinfo.io'
-
 
 wttr() {
     local request="wttr.in/${1-San Franciso, CA}"
@@ -244,25 +230,6 @@ show-colors() {
   echo ''
 }
 
-loop() {
-  x="a b c d e"
-  for v in $x; do
-    echo $v
-  done
-  unset x
-}
-
-makesmall() {
-  [ -z "$1" ] && echo 'no argument' && return 1
-  if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    echo "Usage: $0 [file|dir]"
-    return 0
-  fi
-  [ -f "$1.tar.xz" ] && echo "'$1.tar.xz' exists!" && return 1
-  env XZ_OPT=-9 tar -cJvf "$1.tar.xz" "$1"
-  return $?
-}
-
 export NOTES="$HOME/.config/notes"
 
 note() {
@@ -331,28 +298,30 @@ reset-mouse-speed() {
   fi
 }
 
-if command -v tmux > /dev/null && [ -z "$TMUX" ]; then
-  [ `hostname` != 'harry-yoga920' ] && return # only run tmux on my machine
-  alias ta='tmux attach && unalias ta'
-  if tmux ls > /dev/null 2>&1; then
-    if [ $(tmux display -p '#{session_attached}') -eq 0 ]; then
-      # Uncomment to automatically attatch tmux if session exists
-      #tmux attach -t $(tmux ls -F '#{session_name}' | head -n 1)
-      :
-    fi
-  else
-    tmux \
-      new -d -s misc -c ~/
+setup() {
+  if [ -n "$TMUX" ]; then
+    echo 'environment already setup'
+    exit 1
   fi
-fi
+  if tmux has-session -t 'home' 2>/dev/null; then
+    tmux attach
+    return
+  fi
+  tmux \
+    new -d -n 'home' -s home -c ~/            \;\
+      new-window -c ~/ -t 'home:2' -n 'misc'  \;\
+      new-window -c ~/ -t 'home:3' -n 'stuff' \;\
+      select-window -t 'home:1'               \;\
+    new -d -n 'dev' -s dev -c ~/dev           \;\
+    new -n misc -s misc -c ~/
+}
 
 # Docker
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 # Node Version Manager
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
+[ -f "$NVM_DIR" ] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # Grossness :(
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
@@ -360,5 +329,6 @@ export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
 export CATALINA_BASE="/usr/local/tomcat7"
 export CATALINA_HOME="$CATALINA_BASE"
 export TOMCAT_HOME="$CATALINA_HOME"
+#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
 
 # vim: syn=sh ts=1 sts=2 sw=2

@@ -80,9 +80,6 @@ esac
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
@@ -128,7 +125,7 @@ _git_branch() {
 }
 
 # Just saving my original
-# PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
+#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
 PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
 
 if command -v gopass > /dev/null 2>&1; then
@@ -140,8 +137,4 @@ fi
 if command -v edu > /dev/null 2>&1; then
     source <(edu completion bash)
 fi
-
-# export CDPATH=\
-# ./:\
-# $HOME/dev/golang
 

@@ -4,7 +4,7 @@
     signingkey = 8A86832BAEE723F51643E9C01942366B606ED985
 
 [core]
-    editor = 'vim'
+    editor = 'nvim'
     excludesFile = ~/.config/git/gitignore # global gitignore
     pager = less
 
@@ -17,7 +17,7 @@
     helper = cache --timeout=7200
 
 [commit]
-    gpgsign = true
+    gpgsign = false
     #template =
 
 [gpg]
@@ -36,6 +36,9 @@
 [web]
     # set the browser executable
     browser = brave-browser
+
+[init]
+	defaultBranch = main
 
 [color]
     ui = auto
@@ -69,5 +72,4 @@
 
     smu = submodule update --init --recursive
 	tiuphorse = !echo \"neigh neight bitch\"
-[init]
-	defaultBranch = main
+

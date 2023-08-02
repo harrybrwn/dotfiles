@@ -33,8 +33,9 @@ scrolling:
 font:
   size: 9
   normal:
-    family: monospace
+    #family: monospace
     #family: Consolas
+    family: RobotoMono Nerd Font Mono
     style: Regular
 
 cursor:
@@ -58,25 +59,25 @@ key_bindings:
   - { key: Equals, mods: Control,       action: IncreaseFontSize }
   - { key: Key0,   mods: Control,       action: ResetFontSize    }
   - { key: F11,                         action: ToggleFullscreen }
-  - { key: Key1, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.0"] }}
-  - { key: Key2, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.2"] }}
-  - { key: Key3, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.3"] }}
-  - { key: Key4, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.4"] }}
-  - { key: Key5, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.5"] }}
-  - { key: Key6, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.6"] }}
-  - { key: Key7, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.7"] }}
-  - { key: Key8, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.8"] }}
-  - { key: Key9, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.9"] }}
-  - { key: Key1, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.15"] }}
-  - { key: Key2, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.25"] }}
-  - { key: Key3, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.35"] }}
-  - { key: Key4, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.45"] }}
-  - { key: Key5, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.55"] }}
-  - { key: Key6, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.65"] }}
-  - { key: Key7, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.75"] }}
-  - { key: Key8, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.85"] }}
-  - { key: Key9, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.95"] }}
-  - { key: Key0, mods: Alt,         command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "1.0"]  }}
+  #- { key: Key1, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.0"] }}
+  #- { key: Key2, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.2"] }}
+  #- { key: Key3, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.3"] }}
+  #- { key: Key4, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.4"] }}
+  #- { key: Key5, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.5"] }}
+  #- { key: Key6, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.6"] }}
+  #- { key: Key7, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.7"] }}
+  #- { key: Key8, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.8"] }}
+  #- { key: Key9, mods: Alt,       command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.9"] }}
+  #- { key: Key1, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.15"] }}
+  #- { key: Key2, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.25"] }}
+  #- { key: Key3, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.35"] }}
+  #- { key: Key4, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.45"] }}
+  #- { key: Key5, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.55"] }}
+  #- { key: Key6, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.65"] }}
+  #- { key: Key7, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.75"] }}
+  #- { key: Key8, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.85"] }}
+  #- { key: Key9, mods: Alt|Control, command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "0.95"] }}
+  #- { key: Key0, mods: Alt,         command: { program: "sh", args: ["/home/harry/tools/alacritty-opacity.sh", "1.0"]  }}
 
 schemes:
   dracula: &dracula

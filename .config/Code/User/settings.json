@@ -64,7 +64,14 @@
 
     /* Rust */
     "rust.show_warnings": true,
-    "rust-analyzer.inlayHints.enable": false,
+    // "rust-analyzer.inlayHints.enable": false,
+    "rust-analyzer.inlayHints.typeHints.enable": false,
+    "rust-analyzer.inlayHints.typeHints.hideNamedConstructor": false,
+    "rust-analyzer.inlayHints.typeHints.hideClosureInitialization": false,
+    "rust-analyzer.inlayHints.chainingHints.enable": false,
+    "rust-analyzer.inlayHints.parameterHints.enable": false,
+    "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+    "rust-analyzer.inlayHints.maxLength": 250, // default 25
 
     /* js/ts */
     "[jsx-tags]": {
@@ -93,10 +100,16 @@
         "editor.formatOnSave": true,
         "editor.tabSize": 2,
     },
+    "[Astro]": {
+        "editor.tabSize": 2,
+    },
     "[scss]": {
         "editor.suggest.insertMode": "replace",
         "editor.formatOnSave": true,
-        "editor.tabSize": 2
+        "editor.tabSize": 2,
+        // "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.maxTokenizationLineLength": 20000,
+        "editor.defaultFormatter": "sibiraj-s.vscode-scss-formatter"
     },
 
     /* Latex */
@@ -143,7 +156,8 @@
 
     /* HTML Files */
     "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 2
     },
 
     /* Bash and Shell Scripts */
@@ -151,6 +165,21 @@
         "editor.tabSize": 2
     },
 
+    /* Terraform */
+    "[terraform]": {
+        "editor.tabSize": 2
+    },
+    "[terraform-vars]": {
+        "editor.tabSize": 2
+    },
+
+    /* Astro */
+    "[astro]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
 
     /* Vim Mode ext. */
     "vim.vimrc.path": "/home/harry/.vim/vimrc",
@@ -249,4 +278,8 @@
     "vs-kubernetes": {
         "vscode-kubernetes.minikube-path.linux": "/home/harry/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
     },
+
+    "nix.enableLanguageServer": true,
+    "nix.serverPath": "/home/harry/.nix-profile/bin/rnix-lsp",
+    "window.zoomLevel": -1,
 }

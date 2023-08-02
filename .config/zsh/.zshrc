@@ -81,7 +81,7 @@ ZSH_THEME="harry-bash"
 #plugins=(git man-theme)
 #plugins=(git)
 
-plugins=(man-theme vundle golang)
+plugins=(man-theme vundle golang kubectl)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -109,7 +109,7 @@ case "$TERM" in
 st*)
     ;;
 *)
-    source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    #source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     :
     ;;
 esac

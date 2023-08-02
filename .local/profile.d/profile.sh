@@ -1,4 +1,9 @@
-BASEDIR=$(dirname $0)
+if [ -n "$BASH_VERSION" ]; then
+    BASEDIR="$(dirname "$BASH_SOURCE")"
+else
+    BASEDIR=$(dirname $0)
+fi
+
 LIBFILES=(
     "vars.sh"
     "paths.sh"

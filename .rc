@@ -13,6 +13,7 @@
 
 export EDITOR=vim
 export VISUAL=vim
+export PAGER=less
 
 IGNOREOF=10
 set -o ignoreeof
@@ -35,7 +36,7 @@ if [ -z "$TMUX" ]; then
   PATH="$GOROOT/bin:$PATH"
 fi
 
-[ -f "$HOME/.local/profile.d/profile.sh" ] && . "$HOME/.local/profile.d/profile.sh"
+[ -f "$HOME/.local/profile.d/profile.sh" ] && source "$HOME/.local/profile.d/profile.sh"
 if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
@@ -48,7 +49,7 @@ export THEME_SECONDARY_COLOR='109'
 if command -v exa > /dev/null 2>&1; then
   alias ls='exa --group-directories-first'
   alias l='ls -la --git'
-  alias la='ls -a'
+  alias la='ls -a --group-directories-first'
 else
   alias ls='ls -hN --color=auto --group-directories-first'
   alias l="ls -lAh --group-directories-first"
@@ -60,7 +61,8 @@ alias vim=nvim vi=vim
 alias g=git m=make mi='make install'
 alias cl=clear
 alias dk=docker dkc='docker compose'
-alias ku=kubectl kube=kubectl
+alias k=kubectl ku=kubectl kube=kubectl
+alias tf=terraform
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 alias jsonfmt='python3 -m json.tool'
 alias re='perl -pe'
@@ -82,6 +84,9 @@ alias screenrec='sh ~/tools/screencast.sh'
 alias winbox='wine ~/.config/wine/bin/winbox.exe'
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias ipinfo='curl ipinfo.io'
+alias w3c-validator='docker container run --rm -it --network host netresearch/validator-w3c'
+alias nix-tree='nix run github:utdemir/nix-tree'
+alias clear-buildkit-cache='docker buildx prune --filter=type=exec.cachemount --force'
 
 if ! command -v qemu > /dev/null 2>&1; then
   alias qemu=qemu-system-x86_64
@@ -90,10 +95,52 @@ if [ -f /opt/drawio/drawio ]; then
   alias drawio=/opt/drawio/drawio
 fi
 
+setup() {
+  if [ -n "$TMUX" ]; then
+    echo 'environment already setup'
+    exit 1
+  fi
+  if tmux has-session -t 'home' 2>/dev/null; then
+    tmux attach
+    return
+  fi
+  tmux \
+    new -d -n 'home' -s home -c ~/              \;\
+      new-window -c ~/ -t 'home:2' -n 'home'    \;\
+      new-window -c ~/ -t 'home:3' -n 'home'    \;\
+      select-window -t 'home:1'                 \;\
+      send-keys -t 'home:1' 'curl wttr.in/' C-m \;\
+      send-keys -t 'home:1' 'cal' C-m           \;\
+    new -d -n 'dev' -s dev -c ~/dev             \;\
+    new -d -n clerk -s clerk -c ~/dev/finance/statement-viewer             \;\
+      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
+      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
+      select-window -t 'clerk:1'                \;\
+    new -n misc -s misc -c ~/                   \;\
+    select-window -t 'home:1'
+}
+
 wttr() {
-    local request="wttr.in/${1-San Franciso, CA}"
-    [ "$(tput cols)" -lt 125 ] && request+='?n'
-    curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
+  local request="https://wttr.in/"
+  local args=()
+  while [ $# -gt 0 ]; do
+    case $1 in
+      -h|--help)
+        request+=':help'
+        shift
+        ;;
+      *)
+        request+="$1"
+        shift
+        ;;
+    esac
+  done
+  #local request="wttr.in/"
+  #local request="wttr.in/?0" # small
+  #local request="wttr.in/?n" # shorter
+  [ "$(tput cols)" -lt 125 ] && request+='?n'
+  #echo "$request"
+  curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
 }
 
 fsizes() {
@@ -298,30 +345,13 @@ reset-mouse-speed() {
   fi
 }
 
-setup() {
-  if [ -n "$TMUX" ]; then
-    echo 'environment already setup'
-    exit 1
-  fi
-  if tmux has-session -t 'home' 2>/dev/null; then
-    tmux attach
-    return
-  fi
-  tmux \
-    new -d -n 'home' -s home -c ~/            \;\
-      new-window -c ~/ -t 'home:2' -n 'misc'  \;\
-      new-window -c ~/ -t 'home:3' -n 'stuff' \;\
-      select-window -t 'home:1'               \;\
-    new -d -n 'dev' -s dev -c ~/dev           \;\
-    new -n misc -s misc -c ~/
-}
-
 # Docker
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 # Node Version Manager
 export NVM_DIR="$HOME/.config/nvm"
-[ -f "$NVM_DIR" ] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Grossness :(
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
@@ -330,5 +360,17 @@ export CATALINA_BASE="/usr/local/tomcat7"
 export CATALINA_HOME="$CATALINA_BASE"
 export TOMCAT_HOME="$CATALINA_HOME"
 #export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
+
+source "$XDG_CONFIG_HOME/cargo/env"
+
+export RUST_BACKTRACE=1 # 0|1|full
+
+# pnpm
+export PNPM_HOME="/home/harry/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 # vim: syn=sh ts=1 sts=2 sw=2

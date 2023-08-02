@@ -18,3 +18,4 @@ fi
 #    PATH="$HOME/.local/bin:$PATH"
 #fi
 
+. "/home/harry/.config/cargo/env"

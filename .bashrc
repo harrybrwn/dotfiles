@@ -56,8 +56,10 @@ fi
 
 if [[ "$color_prompt" = yes ]]; then
     # git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
-    git_branch='`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`'
-    PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[34m\]\$\[\033[00m\] "
+    #git_branch='`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`'
+    #PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[34m\]\$\[\033[00m\] "
+    PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] \$(__git_ps1)\[\033[34m\]\$\[\033[00m\] "
+    #PS1='butts \x1b[01;32m\u@\x1b[01;32m\h:\x1b[01;34m\w\x1b[31m $(__git_ps1)\x1b[34m$\x1b[00m '
     :
 else
     git_branch=
@@ -68,13 +70,13 @@ fi
 unset color_prompt force_color_prompt git_branch
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+#case "$TERM" in
+#xterm*|rxvt*)
+#    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+#    ;;
+#*)
+#    ;;
+#esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -89,6 +91,7 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -110,10 +113,6 @@ fi
 #######################
 . ~/.rc
 
-# added by travis gem
-[ -f /home/harry/.travis/travis.sh ] && source /home/harry/.travis/travis.sh
-
-
 # Prompt
 _git_branch() {
     local __branch="`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`"
@@ -124,9 +123,15 @@ _git_branch() {
     fi
 }
 
+__nix_prompt() {
+  if [ -n "${IN_NIX_SHELL:-}" ]; then
+    printf '\033[36m(nix:%s)\033[0m ' "${IN_NIX_SHELL}"
+  fi
+}
+
 # Just saving my original
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
-PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
+PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)\$ '
 
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion bash)
@@ -137,4 +142,43 @@ fi
 if command -v edu > /dev/null 2>&1; then
     source <(edu completion bash)
 fi
+if command -v kubectl > /dev/null 2>&1; then
+  source <(kubectl completion bash)
+fi
+if command -v helm > /dev/null 2>&1; then
+  source <(helm completion bash)
+fi
+
+complete -C /usr/bin/mc mc
+
+if [ -f /usr/local/share/complete_alias/complete_alias ]; then
+  . /usr/local/share/complete_alias/complete_alias
+  for a in \
+    dk   \
+    dkc  \
+    ku   \
+    kube \
+    g    \
+    vi   \
+    k
+  do
+    complete -F _complete_alias "$a"
+  done
+fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+#__conda_setup="$('/home/harry/.local/share/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+#if [ $? -eq 0 ]; then
+#    eval "$__conda_setup"
+#else
+#    if [ -f "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
+#        . "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh"
+#    else
+#        export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
+#    fi
+#fi
+#unset __conda_setup
+# <<< conda initialize <<<
+#export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
 

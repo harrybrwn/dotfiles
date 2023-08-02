@@ -97,8 +97,6 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   call plug#end()
 endif
 
-packadd! dracula
-
 " Colors
 au ColorScheme * hi Normal ctermbg=none
 colorscheme delek " set delek as a fallback

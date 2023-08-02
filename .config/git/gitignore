@@ -14,6 +14,7 @@
 # Browser Stuff
 .config/google-chrome/Default
 .config/BraveSoftware/Brave-Browser/Default
+.config/psql/history
 
 # Vim Swapfiles
 [._]*.s[a-v][a-z]
@@ -22,4 +23,3 @@
 [._]s[a-rt-v][a-z]
 [._]ss[a-gi-z]
 [._]sw[a-p]
-

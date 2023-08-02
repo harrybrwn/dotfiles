@@ -1,0 +1,33 @@
+--
+-- psql configuration
+--
+
+\set QUIET on
+-- print the execution time of queries
+\timing on
+
+\set QUIET off
+
+\set PAGER ON
+\set HISTSIZE 8000
+\set HISTCONTROL ignoredups
+
+\echo 'Admin Queries:'
+\echo '\t:settings\t' 'server settings'
+\echo '\t:locks\t\t'  'server locks info'
+\echo '\t:waits\t\t'  'waiting queries'
+\echo '\t:activity\t' 'current connection activity'
+\echo '\t:queries\t'  'current running queries'
+\echo '\t:tables\t\t' 'show all tables'
+\echo '\t:reload\t\t' 'reload the psql settings file'
+\echo ''
+
+\set reload '\\i ~/.config/psql/psqlrc'
+\set settings 'select name, setting,unit,context from pg_settings;'
+\set locks  'SELECT bl.pid AS blocked_pid, a.usename AS blocked_user, kl.pid AS blocking_pid, ka.usename AS blocking_user, a.query AS blocked_statement FROM pg_catalog.pg_locks bl JOIN pg_catalog.pg_stat_activity a ON bl.pid = a.pid JOIN pg_catalog.pg_locks kl JOIN pg_catalog.pg_stat_activity ka ON kl.pid = ka.pid ON bl.transactionid = kl.transactionid AND bl.pid != kl.pid WHERE NOT bl.granted;'
+\set waits 'SELECT pg_stat_activity.pid, pg_stat_activity.query, pg_stat_activity.wait_event_type as type, pg_stat_activity.wait_event as event, now() - pg_stat_activity.query_start AS \"totaltime\", pg_stat_activity.backend_start FROM pg_stat_activity WHERE pg_stat_activity.query !~ \'%IDLE%\'::text;'
+\set activity 'select datname, pid, usename, application_name,client_addr, client_hostname, client_port, query, state from pg_stat_activity;'
+\set queries 'select current_timestamp - query_start as runtime,pid,datname,usename,query from pg_stat_activity where query != \'<IDLE>\' order by 1 desc;'
+\set tables 'SELECT * FROM pg_catalog.pg_tables;'
+
+-- vim: syn=plsql

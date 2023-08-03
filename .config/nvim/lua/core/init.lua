@@ -1,6 +1,0 @@
-require("core.settings")
-require("core.keymaps")
-require("core.telescope")
-require("core.treesitter")
-require("core.filetree")
-require("core.lsp")

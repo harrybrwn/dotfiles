@@ -11,4 +11,3 @@ set("n", "<leader>sf", tele.find_files, { desc = "[S]earch [F]iles" })
 set("n", "<leader>sg", tele.live_grep, { desc = "[S]earch by [G]rep" })
 set("n", "<C-p>", tele.git_files)
 set("n", "<leader>ps", function() tele.grep_string({ search = vim.fn.input("grep> ") }) end)
-

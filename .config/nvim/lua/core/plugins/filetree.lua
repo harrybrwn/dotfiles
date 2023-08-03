@@ -4,7 +4,6 @@ local api = require("nvim-tree.api")
 -- Disable NetRW (vim's default file tree)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
---vim.keymap.set("n", "<leader>0", vim.cmd.NvimTreeFocus)
 vim.keymap.set("n", "g0", vim.cmd.NvimTreeFocus, { noremap = true })
 
 tree.setup({
@@ -26,7 +25,7 @@ tree.setup({
     vim.keymap.set('n', '<C-]>', api.tree.change_root_to_node, opts('CD'))
     vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer, opts('Open: In Place'))
     vim.keymap.set('n', '<C-k>', api.node.show_info_popup, opts('Info'))
-    vim.keymap.set('n', '<C-r>', api.fs.rename_sub, opts('Rename: Omit Filename'))
+    -- vim.keymap.set('n', '<C-r>', api.fs.rename_sub, opts('Rename: Omit Filename'))
     vim.keymap.set('n', '<C-t>', api.node.open.tab, opts('Open: New Tab'))
     vim.keymap.set('n', '<C-v>', api.node.open.vertical, opts('Open: Vertical Split'))
     vim.keymap.set('n', '<C-x>', api.node.open.horizontal, opts('Open: Horizontal Split'))
@@ -38,9 +37,9 @@ tree.setup({
     vim.keymap.set('n', '.', api.node.run.cmd, opts('Run Command'))
     vim.keymap.set('n', '-', api.tree.change_root_to_parent, opts('Up'))
     vim.keymap.set('n', 'a', api.fs.create, opts('Create'))
-    vim.keymap.set('n', 'bd', api.marks.bulk.delete, opts('Delete Bookmarked'))
-    vim.keymap.set('n', 'bmv', api.marks.bulk.move, opts('Move Bookmarked'))
-    vim.keymap.set('n', 'B', api.tree.toggle_no_buffer_filter, opts('Toggle Filter: No Buffer'))
+    -- vim.keymap.set('n', 'bd', api.marks.bulk.delete, opts('Delete Bookmarked'))
+    -- vim.keymap.set('n', 'bmv', api.marks.bulk.move, opts('Move Bookmarked'))
+    -- vim.keymap.set('n', 'B', api.tree.toggle_no_buffer_filter, opts('Toggle Filter: No Buffer'))
     vim.keymap.set('n', 'c', api.fs.copy.node, opts('Copy'))
     vim.keymap.set('n', 'C', api.tree.toggle_git_clean_filter, opts('Toggle Filter: Git Clean'))
     vim.keymap.set('n', '[c', api.node.navigate.git.prev, opts('Prev Git'))
@@ -48,7 +47,7 @@ tree.setup({
     vim.keymap.set('n', 'd', api.fs.remove, opts('Delete'))
     vim.keymap.set('n', 'D', api.fs.trash, opts('Trash'))
     vim.keymap.set('n', 'E', api.tree.expand_all, opts('Expand All'))
-    vim.keymap.set('n', 'e', api.fs.rename_basename, opts('Rename: Basename'))
+    -- vim.keymap.set('n', 'e', api.fs.rename_basename, opts('Rename: Basename'))
     vim.keymap.set('n', ']e', api.node.navigate.diagnostics.next, opts('Next Diagnostic'))
     vim.keymap.set('n', '[e', api.node.navigate.diagnostics.prev, opts('Prev Diagnostic'))
     vim.keymap.set('n', 'F', api.live_filter.clear, opts('Clean Filter'))
@@ -77,8 +76,5 @@ tree.setup({
     vim.keymap.set('n', '<2-LeftMouse>', api.node.open.edit, opts('Open'))
     vim.keymap.set('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
     vim.keymap.set('n', '<leader>p', api.node.navigate.parent_close, opts('Close current parent folder'))
-    vim.keymap.set('n', '<leader>n', function()
-      print("testing...")
-    end, opts('Testing'))
   end
 })

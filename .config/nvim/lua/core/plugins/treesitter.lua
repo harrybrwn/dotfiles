@@ -2,18 +2,18 @@ require("nvim-treesitter.configs").setup {
   ensure_installed = {
     -- god tier
     'c',
-    'cpp',
     -- go
     'go',
     'gomod',
+    'gosum',
+    'gowork',
     -- web
     'typescript',
     'javascript',
     'html',
-    'json',
-    'yaml',
     'astro',
     'tsx',
+    'http', -- https://learn.microsoft.com/en-us/aspnet/core/test/http-files
     -- misc languages
     'python',
     'rust',
@@ -21,18 +21,36 @@ require("nvim-treesitter.configs").setup {
     'lua',
     'nix',
     'dockerfile',
+    'make',
+    -- random file formats
+    'json',
+    'yaml',
+    'toml',
     'git_config',
     'gitcommit',
     'gitignore',
-    -- hashicorp
+    -- hashicorp's universe
     'hcl',
     'terraform',
     -- markdown
     'markdown',
     'markdown_inline',
+    -- actual dog doodoo
+    'cpp',
   },
-  highlight = { enable = true },
-  indent = { enable = true },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = false,
+
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+  },
   incremental_selection = {
     enable = true,
     keymaps = {

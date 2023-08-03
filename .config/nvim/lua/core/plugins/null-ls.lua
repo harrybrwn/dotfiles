@@ -32,4 +32,5 @@ local opts = {
   end,
 }
 
+-- If lsp-zero is being used, this should be called after lsp-zero's setup function is called.
 null_ls.setup(opts)

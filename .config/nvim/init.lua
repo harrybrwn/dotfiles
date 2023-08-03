@@ -1,3 +1,5 @@
+require("core.settings")
+require("core.keymaps")
 local lazy = require("core.lazy")
 
 -- Plugins
@@ -21,6 +23,7 @@ lazy.setup({
   -- Syntax parsers and highlighting
   {
     "nvim-treesitter/nvim-treesitter",
+    tag = "v0.9.0",
     config = function()
       pcall(require("nvim-treesitter.install").update { with_sync = true })
     end,
@@ -31,35 +34,36 @@ lazy.setup({
     -- "gc" and "gcc" to comment lines and regions
     "numToStr/Comment.nvim",
     tag = "v0.8.0",
-    config = function()
-      require("Comment").setup {}
-    end,
-  },
-
-  -- Statusline
-  {
-    "nvim-lualine/lualine.nvim",
-    config = require("core.plugins.lualine"),
-    dependencies = {
-      'nvim-tree/nvim-web-devicons' -- Icon set
-    },
+    lazy = false,
+    opts = {},
   },
 
   -- Auto closes brackets
-  "rstacruz/vim-closer",
+  { "rstacruz/vim-closer" },
+
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.2",
     dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      defaults = {
+        mappings = {
+          i = { ["<C-j>"] = "close" },
+          n = { ["<C-j>"] = "close" }
+        }
+      }
+    }
   },
 
   -- Auto formatting
   {
     "jose-elias-alvarez/null-ls.nvim",
     event = "BufRead",
-    opts = function()
+    config = function()
       require("core.plugins.null-ls")
     end,
+    -- must load after lsp-zero.setup
+    dependencies = { "VonHeikemen/lsp-zero.nvim" },
   },
 
   -- Alternate file explorer
@@ -72,22 +76,26 @@ lazy.setup({
   {
     "ray-x/lsp_signature.nvim",
     event = "VeryLazy",
-    opts = {},
-    config = function(_, opts) require 'lsp_signature'.setup(opts) end
+  },
+
+  -- Display lsp diagnostics
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = { height = 5 },
+    lazy = false,
   },
 
   -- Themes
-  { "navarasu/onedark.nvim", lazy = false, priority = 1000 },
-  { "ntk148v/vim-horizon",   lazy = false, priority = 1000 },
-  { "rebelot/kanagawa.nvim", lazy = false, priority = 1000 },
-  { "folke/tokyonight.nvim", lazy = false, priority = 1000 },
-  { "AlexvZyl/nordic.nvim",  lazy = false, priority = 1000 },
+  { "navarasu/onedark.nvim",   lazy = false, priority = 1000 },
+  { "ntk148v/vim-horizon",     lazy = false, priority = 1000 },
+  { "rebelot/kanagawa.nvim",   lazy = false, priority = 1000 },
+  { "folke/tokyonight.nvim",   lazy = false, priority = 1000 },
+  { "AlexvZyl/nordic.nvim",    lazy = false, priority = 1000 },
+  { import = "plugins.lualine" },
 })
 
-require("core.settings")
-require("core.keymaps")
 require("core.plugins")
-require("core.lsp")
 
 -- Misc
 vim.opt.number        = true
@@ -117,7 +125,6 @@ vim.opt.syntax        = "on"
 vim.opt.background    = "dark"
 vim.opt.termguicolors = false
 vim.cmd.colorscheme("tokyonight")
--- vim.cmd.colorscheme("grey")
 
 -- History and Persistant Data
 vim.opt.history    = 1000

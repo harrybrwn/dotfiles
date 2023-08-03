@@ -27,7 +27,7 @@ function export.setup(spec)
   lazy.setup({
     spec = spec,
     defaults = {
-      lazy = false,
+      lazy = true,
       version = false,
     },
     checker = { enabled = true }, -- automatically check for plugin updates

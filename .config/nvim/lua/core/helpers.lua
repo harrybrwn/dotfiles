@@ -23,8 +23,20 @@ end
 
 ---Pretty print lua table
 function _G.dump(...)
-    local objects = vim.tbl_map(vim.inspect, { ... })
-    print(unpack(objects))
+  local objects = vim.tbl_map(vim.inspect, { ... })
+  print(unpack(objects))
+end
+
+function _G.list_buffers()
+  local len     = 0
+  local buffers = {};
+  for buffer = 1, vim.fn.bufnr('$') do
+    if not vim.fn.buflisted(buffer) ~= 1 then
+      len = len + 1
+      buffers[len] = buffer
+    end
+  end
+  return buffers
 end
 
 return helpers

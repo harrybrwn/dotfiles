@@ -22,11 +22,13 @@ lsp.ensure_installed({
   'dockerls',                        -- docker
   'docker_compose_language_service', -- docker-compose
   'clangd',                          -- c/c++
+  'eslint',
 })
 
 lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lspconfig.rnix.setup {}
 lspconfig.astro.setup {}
+lspconfig.eslint.setup {}
 
 lspconfig.rust_analyzer.setup {
   settings = {
@@ -42,14 +44,17 @@ lspconfig.gopls.setup {
   cmd = { "gopls" },
   filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
   root_dir = lsputil.root_pattern("go.work", "go.mod", ".git"),
-  settits = {
+  settings = {
     gopls = {
       completeUnimported = true,
-      usePlaceholders = true,
+      usePlaceholders = false,
       analyses = {
         unusedparams = true,
       },
       staticcheck = true,
+      buildFlags = {
+        "-tags=functional"
+      },
     }
   }
 }

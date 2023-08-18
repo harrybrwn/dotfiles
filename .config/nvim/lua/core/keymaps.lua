@@ -4,7 +4,7 @@ vim.g.mapleader = ","
 vim.keymap.set("v", "<Leader>p", '"_dP', { noremap = true })
 vim.keymap.set("n", "<leader>f", vim.cmd.NvimTreeFindFileToggle)
 vim.keymap.set("n", "<leader>e", vim.cmd.TroubleToggle)
-vim.keymap.set("n", "<C-n>", ":tabnew<CR>")
+vim.keymap.set("n", "<leader>t", ":tabnew<CR>")
 vim.keymap.set("n", '<C-w>"', function()
   if os.getenv("TMUX") == nil then
     return

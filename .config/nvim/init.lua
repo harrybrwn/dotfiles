@@ -1,5 +1,7 @@
 require("core.settings")
 require("core.keymaps")
+require("core.autocmds")
+local helpers = require("core.helpers")
 local lazy = require("core.lazy")
 
 -- Plugins
@@ -24,9 +26,9 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter",
     tag = "v0.9.0",
-    config = function()
+    config = helpers.with_notify_disabled(function()
       pcall(require("nvim-treesitter.install").update { with_sync = true })
-    end,
+    end),
   },
 
   -- Commenting utility
@@ -103,7 +105,6 @@ lazy.setup({
   { import = "plugins.lualine" },
 })
 
-require("core.autocmds")
 require("core.plugins")
 require("core.helpers")
 

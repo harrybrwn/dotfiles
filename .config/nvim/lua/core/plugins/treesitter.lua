@@ -1,4 +1,4 @@
-require("nvim-treesitter.configs").setup {
+local options = {
   ensure_installed = {
     -- god tier
     'c',
@@ -14,6 +14,7 @@ require("nvim-treesitter.configs").setup {
     'astro',
     'tsx',
     'http', -- https://learn.microsoft.com/en-us/aspnet/core/test/http-files
+    'css',
     -- misc languages
     'python',
     'rust',
@@ -62,3 +63,5 @@ require("nvim-treesitter.configs").setup {
   },
   additional_vim_regex_highlighting = false,
 }
+
+require("nvim-treesitter.configs").setup(options)

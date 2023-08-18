@@ -27,8 +27,9 @@ lsp.ensure_installed({
 
 lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lspconfig.rnix.setup {}
-lspconfig.astro.setup {}
 lspconfig.eslint.setup {}
+
+lspconfig.astro.setup {}
 
 lspconfig.rust_analyzer.setup {
   settings = {
@@ -52,11 +53,11 @@ lspconfig.gopls.setup {
         unusedparams = true,
       },
       staticcheck = true,
-      buildFlags = {
-        "-tags=functional"
-      },
     }
-  }
+  },
+  on_attach = function(client, bufnr)
+    require("core.plugins.custom-editorconfig").on_attach(client, bufnr)
+  end
 }
 
 local cmp = require('cmp')

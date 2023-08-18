@@ -42,3 +42,5 @@ vim.api.nvim_create_autocmd(
     end
   }
 )
+
+vim.cmd [[ autocmd BufRead,BufEnter *.astro set filetype=astro ]]

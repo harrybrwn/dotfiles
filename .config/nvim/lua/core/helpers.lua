@@ -39,4 +39,19 @@ function _G.list_buffers()
   return buffers
 end
 
+-- Returns a function that wraps fn so it is called with vim.notify disabled
+-- temporarily.
+--
+---@param fn function
+---@return function
+function helpers.with_notify_disabled(fn)
+  return function()
+    local notify = vim.notify
+      ---@diagnostic disable-next-line: duplicate-set-field
+    vim.notify = function(_, _, _) end
+    fn()
+    vim.notify = notify
+  end
+end
+
 return helpers

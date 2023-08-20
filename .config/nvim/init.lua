@@ -15,38 +15,64 @@ lazy.setup({
       { 'neovim/nvim-lspconfig' },                            -- Required
       { 'williamboman/mason.nvim' },                          -- Optional
       { 'williamboman/mason-lspconfig.nvim' },                -- Optional
+      -- Snippets
+      { 'L3MON4D3/LuaSnip',                 tag = 'v2.0.0' }, -- Required
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' },                                 -- Required
       { 'hrsh7th/cmp-nvim-lsp' },                             -- Required
-      { 'L3MON4D3/LuaSnip',                 tag = 'v2.0.0' }, -- Required
-    }
+      { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-path' },
+      { 'saadparwaiz1/cmp_luasnip' },
+    },
+  },
+
+  -- Function signature pop-up
+  {
+    "ray-x/lsp_signature.nvim",
+    -- event = "VeryLazy",
+    -- must load after lsp-zero.setup
+    dependencies = { "VonHeikemen/lsp-zero.nvim" },
+    lazy = false,
+  },
+
+
+  {
+    'hrsh7th/nvim-cmp',
+    event = "InsertEnter",
+    dependencies = {
+      'L3MON4D3/LuaSnip',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+    },
+  },
+  -- 'hrsh7th/cmp-nvim-lsp',
+  -- 'hrsh7th/cmp-buffer',
+  -- 'hrsh7th/cmp-path',
+  -- 'saadparwaiz1/cmp_luasnip',
+
+  -- Snippets for completion
+  {
+    "L3MON4D3/LuaSnip",
+    tag = 'v2.0.0',
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      config = function() require("luasnip.loaders.from_vscode").lazy_load() end,
+    },
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+    },
   },
 
   -- Syntax parsers and highlighting
   {
     "nvim-treesitter/nvim-treesitter",
     tag = "v0.9.0",
-    config = helpers.with_notify_disabled(function()
-      pcall(require("nvim-treesitter.install").update { with_sync = true })
-    end),
+    -- config = helpers.with_notify_disabled(function()
+    --   pcall(require("nvim-treesitter.install").update { with_sync = true })
+    -- end),
   },
-
-  -- Commenting utility
-  {
-    -- "gc" and "gcc" to comment lines and regions
-    "numToStr/Comment.nvim",
-    tag = "v0.8.0",
-    lazy = false,
-    opts = {
-      -- toggler = {
-      --   line = "<leader>/",
-      --   block = "<leader>/",
-      -- }
-    },
-  },
-
-  -- Auto closes brackets
-  { "rstacruz/vim-closer",     lazy = false },
 
   {
     "nvim-telescope/telescope.nvim",
@@ -79,41 +105,40 @@ lazy.setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 
-  -- Function signature pop-up
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "VeryLazy",
-  },
-
-  -- Display lsp diagnostics
-  {
-    "folke/trouble.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = { height = 5 },
-    lazy = false,
-  },
-
   -- Themes
-  { "navarasu/onedark.nvim",   lazy = false, priority = 1000 },
-  { "ntk148v/vim-horizon",     lazy = false, priority = 1000 },
-  -- { "rebelot/kanagawa.nvim",   lazy = false, priority = 1000 },
-  { "folke/tokyonight.nvim",   lazy = false, priority = 1000 },
-  { "AlexvZyl/nordic.nvim",    lazy = false, priority = 1000 },
-  { "shaunsingh/nord.nvim",    lazy = false, priority = 1000 },
-  { "sainnhe/everforest",      lazy = false, priority = 1000 },
+  --
+  -- Look for more good ones here https://github.com/rockerBOO/awesome-neovim#tree-sitter-supported-colorscheme
+  { "navarasu/onedark.nvim", lazy = false, priority = 1000 },
+  {
+    "folke/tokyonight.nvim",
+    lazy = true,
+    opts = {
+      style = "night", -- storm, moon, night, day
+    },
+  },
+  { "ntk148v/vim-horizon",   lazy = false, priority = 1000 },
+  { "rebelot/kanagawa.nvim", lazy = false, priority = 1000 },
+  { "AlexvZyl/nordic.nvim",  lazy = false, priority = 1000 },
+  { "shaunsingh/nord.nvim",  lazy = false, priority = 1000 },
+  { "sainnhe/everforest",    lazy = false, priority = 1000 },
+  -- { "shaunsingh/solarized.nvim" },
+  "maxmx03/solarized.nvim",
+  -- { "svrana/neosolarized.nvim", lazy = false, priority = 1000 },
+  "sainnhe/sonokai",
+  "catppuccin/nvim",
   -- { "yorickpeterse/nvim-grey", lazy = false, priority = 1000 },
+  { import = "plugins" },
   { import = "plugins.lualine" },
 })
-
 require("core.plugins")
-require("core.helpers")
 
 -- Misc
 vim.opt.number        = true
-vim.opt.wrap          = true
+vim.opt.wrap          = false
 vim.opt.linebreak     = true
 vim.opt.backspace     = "indent,eol,start"
 vim.opt.mouse         = 'nv'
+vim.opt.fixendofline  = false
 
 -- Tabs
 local indent          = 4
@@ -123,12 +148,7 @@ vim.opt.softtabstop   = indent
 vim.opt.expandtab     = true
 vim.opt.smartindent   = true
 vim.opt.colorcolumn   = '80'
-vim.opt.formatoptions = {
-  t = true,
-  c = true,
-  q = true,
-  j = true,
-} -- default: "tcqj"
+vim.opt.formatoptions = { t = true, c = true, q = true, j = true } -- default: "tcqj"
 vim.opt.textwidth     = 80
 
 -- Searching
@@ -140,22 +160,21 @@ vim.opt.laststatus    = 2
 vim.opt.showmode      = false
 
 -- Colors
+local theme           = vim.cmd.colorscheme
 vim.opt.syntax        = "on"
 vim.opt.background    = "dark"
 vim.opt.termguicolors = true
--- vim.cmd.colorscheme("tokyonight")
--- vim.cmd.colorscheme("everforest")
--- vim.cmd.colorscheme("horizon")
--- vim.cmd.colorscheme("kanagawa")
--- vim.cmd.colorscheme("gray")
--- vim.cmd.colorscheme("bw")
-vim.cmd.colorscheme("nord")
+-- theme("tokyonight")
+-- theme("everforest")
+-- theme("horizon")
+-- theme("kanagawa")
+-- theme("gray")
+-- theme("bw")
+-- theme("nord")
+-- theme("solarized")
+theme("catppuccin")
+-- theme("sonokai")
 
 -- History and Persistant Data
 vim.opt.history    = 1000
 vim.opt.undolevels = 1500
-
--- dump(list_buffers())
--- for key, value in pairs(list_buffers()) do
---   print('buffer:', key, value)
--- end

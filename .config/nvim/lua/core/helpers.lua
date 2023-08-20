@@ -1,5 +1,3 @@
-vim.cmd("filetype plugin on")
-
 local helpers = {}
 
 -- This doesn't work for some reason
@@ -9,7 +7,7 @@ local helpers = {}
 function helpers.tabsize(ft, tabwidth)
   --print("filetype", ft, "tabwidth", tabwidth)
   vim.api.nvim_create_autocmd(
-    {'Filetype'},
+    { 'Filetype' },
     {
       pattern = ft,
       callback = function()
@@ -47,11 +45,18 @@ end
 function helpers.with_notify_disabled(fn)
   return function()
     local notify = vim.notify
-      ---@diagnostic disable-next-line: duplicate-set-field
+    ---@diagnostic disable-next-line: duplicate-set-field
     vim.notify = function(_, _, _) end
     fn()
     vim.notify = notify
   end
+end
+
+--- Function equivalent to basename in POSIX systems
+--@param str the path string
+function helpers.basename(str)
+  local name = string.gsub(str, "(.*/)(.*)", "%2")
+  return name
 end
 
 return helpers

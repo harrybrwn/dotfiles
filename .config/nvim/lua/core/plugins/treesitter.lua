@@ -48,6 +48,17 @@ local options = {
 
   highlight = {
     enable = true,
+    disable = function(lang, bufnr)
+      if lang == "comment" then
+        print('parsing comments:', lang)
+      elseif lang == "json" then
+        if vim.api.nvim_buf_line_count(bufnr) > 50000 then
+          return true
+        end
+      end
+      return false
+    end,
+    additional_vim_regex_highlighting = false,
   },
   indent = {
     enable = true,

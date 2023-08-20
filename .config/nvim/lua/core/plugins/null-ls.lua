@@ -1,8 +1,12 @@
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local null_ls = require("null-ls")
-local utils = require("null-ls/utils")
 
 local fmt = null_ls.builtins.formatting
+local diags = null_ls.builtins.diagnostics
+
+local format_on_save_disabled = {
+  --lua = true,
+}
 
 local opts = {
   sources = {
@@ -13,15 +17,19 @@ local opts = {
     fmt.rustfmt,
     fmt.terraform_fmt,
     fmt.trim_whitespace.with({
-      filetypes = { 'text', 'sh', 'toml', 'make', 'conf', 'tmux' },
+      filetypes = {
+        'sh', 'toml', 'make', 'conf', 'tmux', 'go', 'rust', 'javascript', 'typescript',
+      },
     }),
-    null_ls.builtins.formatting.eslint.with({
-      condition = function ()
-        return utils.make_conditional_utils().root_has_file(".eslintrc.ejs")
-      end
-    }),
+    fmt.nixfmt,
+    fmt.jq,
+    diags.actionlint,
+    diags.buf,
   },
   on_attach = function(client, bufnr)
+    if format_on_save_disabled[vim.bo.filetype] ~= nil then
+      return
+    end
     if client.supports_method("textDocument/formatting") then
       vim.api.nvim_clear_autocmds({
         group = augroup,

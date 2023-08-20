@@ -1,1 +1,9 @@
 require("core.plugins.custom-editorconfig").setup()
+
+-- Folding
+-- zf[motion] Create a fold
+-- zo         Open a fold
+-- zc         Close a fold
+-- zd         Delete a fold
+-- zE         Eliminate all file folds
+vim.opt.foldcolumn = '1' -- shows folds in gutter (left of line numbers)

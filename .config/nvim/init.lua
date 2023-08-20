@@ -35,7 +35,6 @@ lazy.setup({
     lazy = false,
   },
 
-
   {
     'hrsh7th/nvim-cmp',
     event = "InsertEnter",
@@ -46,10 +45,6 @@ lazy.setup({
       'hrsh7th/cmp-path',
     },
   },
-  -- 'hrsh7th/cmp-nvim-lsp',
-  -- 'hrsh7th/cmp-buffer',
-  -- 'hrsh7th/cmp-path',
-  -- 'saadparwaiz1/cmp_luasnip',
 
   -- Snippets for completion
   {
@@ -69,9 +64,9 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter",
     tag = "v0.9.0",
-    -- config = helpers.with_notify_disabled(function()
-    --   pcall(require("nvim-treesitter.install").update { with_sync = true })
-    -- end),
+    config = helpers.with_notify_disabled(function()
+      pcall(require("nvim-treesitter.install").update { with_sync = true })
+    end),
   },
 
   {

@@ -7,3 +7,4 @@ require("core.plugins.custom-editorconfig").setup()
 -- zd         Delete a fold
 -- zE         Eliminate all file folds
 vim.opt.foldcolumn = '1' -- shows folds in gutter (left of line numbers)
+vim.opt.foldopen = "insert,mark,percent,quickfix,search,tag,undo"

@@ -27,9 +27,9 @@ local opts = {
     diags.buf,
   },
   on_attach = function(client, bufnr)
-    if format_on_save_disabled[vim.bo.filetype] ~= nil then
-      return
-    end
+    -- if format_on_save_disabled[vim.bo.filetype] ~= nil then
+    --   return
+    -- end
     if client.supports_method("textDocument/formatting") then
       vim.api.nvim_clear_autocmds({
         group = augroup,

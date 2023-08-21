@@ -125,6 +125,7 @@ lazy.setup({
   { import = "plugins" },
   { import = "plugins.lualine" },
 })
+
 require("core.plugins")
 
 -- Misc

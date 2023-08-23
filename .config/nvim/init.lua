@@ -120,7 +120,8 @@ lazy.setup({
   "maxmx03/solarized.nvim",
   -- { "svrana/neosolarized.nvim", lazy = false, priority = 1000 },
   "sainnhe/sonokai",
-  "catppuccin/nvim",
+  { "catppuccin/nvim",         tag = "v1.4.0" },
+  "ntk148v/komau.vim",
   -- { "yorickpeterse/nvim-grey", lazy = false, priority = 1000 },
   { import = "plugins" },
   { import = "plugins.lualine" },
@@ -135,6 +136,9 @@ vim.opt.linebreak     = true
 vim.opt.backspace     = "indent,eol,start"
 vim.opt.mouse         = 'nv'
 vim.opt.fixendofline  = false
+vim.opt.spell         = true
+vim.opt.spelllang     = "en"
+-- vim.opt.spellfile     = './.spell.add' .. ',' .. vim.fn.expand("~/.config/nvim/spell/custom.add")
 
 -- Tabs
 local indent          = 4
@@ -144,7 +148,14 @@ vim.opt.softtabstop   = indent
 vim.opt.expandtab     = true
 vim.opt.smartindent   = true
 vim.opt.colorcolumn   = '80'
-vim.opt.formatoptions = { t = true, c = true, q = true, j = true } -- default: "tcqj"
+vim.opt.formatoptions = {
+  t = true,  -- autowrap using textwidth
+  c = true,  -- autowrap using textwidth and insert comment
+  q = true,  -- format comments with "gq"
+  j = true,  -- remove comment when joining lines
+  r = true,  -- insert comment on <Enter>
+  o = false, -- insert comment on "o" and "O"
+}
 vim.opt.textwidth     = 80
 
 -- Searching
@@ -166,11 +177,14 @@ vim.opt.termguicolors = true
 -- theme("kanagawa")
 -- theme("gray")
 -- theme("bw")
+-- theme("habamax")
 -- theme("nord")
 -- theme("solarized")
 theme("catppuccin")
 -- theme("sonokai")
+-- theme("komau")
+vim.cmd("highlight SpellBad guifg=NONE guibg=NONE gui=underline")
 
--- History and Persistant Data
+-- History and Persistent Data
 vim.opt.history    = 1000
 vim.opt.undolevels = 1500

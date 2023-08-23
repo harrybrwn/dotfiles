@@ -1,6 +1,7 @@
 local set = vim.keymap.set
 local tele = require("telescope.builtin")
 local tele_themes = require("telescope.themes")
+
 set("n", "<leader>?", function()
   tele.current_buffer_fuzzy_find(tele_themes.get_dropdown {
     winblend = 10,

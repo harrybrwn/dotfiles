@@ -1,7 +1,9 @@
+local path = require("core.util.path")
+
+local cli_installed = true
+local parser_dir = path.join(os.getenv("XDG_DATA_HOME"), 'tree-sitter/parsers')
 local options = {
   ensure_installed = {
-    -- god tier
-    'c',
     -- go
     'go',
     'gomod',
@@ -23,6 +25,8 @@ local options = {
     'nix',
     'dockerfile',
     'make',
+    'c',
+    'cpp',
     -- random file formats
     'json',
     'yaml',
@@ -33,18 +37,17 @@ local options = {
     -- hashicorp's universe
     'hcl',
     'terraform',
-    -- markdown
     'markdown',
     'markdown_inline',
-    -- actual dog doodoo
-    'cpp',
   },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
   -- Automatically install missing parsers when entering buffer
   -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = false,
+  auto_install = true,
+
+  parser_install_dir = cli_installed and parser_dir or nil,
 
   highlight = {
     enable = true,
@@ -73,6 +76,14 @@ local options = {
     },
   },
   additional_vim_regex_highlighting = false,
+
+  autotag = {
+    enable = true,
+    enable_close = true,
+  }
 }
 
+if cli_installed then
+  vim.opt.rtp:prepend(parser_dir)
+end
 require("nvim-treesitter.configs").setup(options)

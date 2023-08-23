@@ -21,7 +21,6 @@ local opts = {
         'sh', 'toml', 'make', 'conf', 'tmux', 'go', 'rust', 'javascript', 'typescript',
       },
     }),
-    fmt.nixfmt,
     fmt.jq,
     diags.actionlint,
     diags.buf,

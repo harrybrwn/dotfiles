@@ -2,16 +2,18 @@ local lsp = require('lsp-zero').preset({})
 local lspconfig = require("lspconfig")
 local lsputil = require("lspconfig/util")
 
+---@param client lsp.Client
+---@param bufnr number
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings to learn the available actions
-  require("core.plugins.custom-editorconfig").on_attach(client, bufnr)
+  require("core.plugins.custom-editorconfig").lsp_on_attach(client, bufnr)
   lsp.default_keymaps({ buffer = bufnr })
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr })
 end)
 
 lsp.ensure_installed({
   -- Languages/Frameworks
-  'pylsp',         -- python
+  'pyright',       -- python
   'gopls',         -- golang
   'rust_analyzer', -- rust
   'clangd',        -- c/c++
@@ -57,8 +59,11 @@ lspconfig.gopls.setup {
     gopls = {
       completeUnimported = true,
       usePlaceholders = false,
+      -- https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md
       analyses = {
         unusedparams = true,
+        nilness = true,
+        unusedwrite = true,
       },
       staticcheck = true,
     }

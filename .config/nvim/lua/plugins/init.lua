@@ -13,9 +13,6 @@ return {
     },
   },
 
-  -- Auto closes brackets
-  -- { "rstacruz/vim-closer", lazy = false },
-
   {
     "windwp/nvim-autopairs",
     --event = "InsertEnter",
@@ -44,7 +41,6 @@ return {
         cmp_autopairs.on_confirm_done()
       )
       local ts_conds = require('nvim-autopairs.ts-conds')
-      local cond = require('nvim-autopairs.conds')
       local npairs = require("nvim-autopairs")
       local Rule = require('nvim-autopairs.rule')
 

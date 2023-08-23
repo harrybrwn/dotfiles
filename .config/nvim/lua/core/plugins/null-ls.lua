@@ -4,10 +4,6 @@ local null_ls = require("null-ls")
 local fmt = null_ls.builtins.formatting
 local diags = null_ls.builtins.diagnostics
 
-local format_on_save_disabled = {
-  --lua = true,
-}
-
 local opts = {
   sources = {
     fmt.gofmt,
@@ -26,9 +22,6 @@ local opts = {
     diags.buf,
   },
   on_attach = function(client, bufnr)
-    -- if format_on_save_disabled[vim.bo.filetype] ~= nil then
-    --   return
-    -- end
     if client.supports_method("textDocument/formatting") then
       vim.api.nvim_clear_autocmds({
         group = augroup,

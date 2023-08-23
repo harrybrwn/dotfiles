@@ -138,7 +138,6 @@ vim.opt.mouse         = 'nv'
 vim.opt.fixendofline  = false
 vim.opt.spell         = true
 vim.opt.spelllang     = "en"
--- vim.opt.spellfile     = './.spell.add' .. ',' .. vim.fn.expand("~/.config/nvim/spell/custom.add")
 
 -- Tabs
 local indent          = 4

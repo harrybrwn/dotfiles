@@ -4,7 +4,6 @@ local api = require("nvim-tree.api")
 -- Disable NetRW (vim's default file tree)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
--- vim.keymap.set("n", "g0", vim.cmd.NvimTreeFocus, { noremap = true })
 vim.keymap.set("n", "g0", vim.cmd.NvimTreeFindFile, { noremap = true })
 
 tree.setup({

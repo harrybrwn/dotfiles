@@ -11,6 +11,7 @@ vim.api.nvim_create_autocmd(
       'nix',
       'vim',
       'html',
+      'astro',
     },
     callback = function()
       vim.opt_local.tabstop = 2

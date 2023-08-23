@@ -1,3 +1,5 @@
+local path = require("core.util.path")
+
 vim.g.mapleader = ","
 
 ---@param cmd string
@@ -5,17 +7,6 @@ vim.g.mapleader = ","
 ---@param opts table|nil
 local function nset(cmd, action, opts)
   vim.keymap.set("n", cmd, action, opts)
-end
-
---- Function equivalent to dirname in POSIX systems
----@param str string the path string
-local function dirname(str)
-  if str:match(".-/.-") then
-    local name = string.gsub(str, "(.*/)(.*)", "%1")
-    return name
-  else
-    return ''
-  end
 end
 
 ---create a function that runs tmux split-window
@@ -28,7 +19,7 @@ local function window_split_fn(size)
   return function()
     -- Open a tmux virticle tmux window that is 20% the size of the current pane.
     -- local file = vim.fn.expand("%")
-    local dir = dirname(vim.api.nvim_buf_get_name(0))
+    local dir = path.dirname(vim.api.nvim_buf_get_name(0))
     local cmd = string.format('tmux split-window -v -p %d -c "%s"', size or 30, dir)
     local handle = io.popen(cmd, 'r')
     if handle == nil then

@@ -28,9 +28,10 @@ function export.setup(spec)
     spec = spec,
     defaults = {
       lazy = true,
-      version = false,
+      version = false, -- always use the latest git commit
+      --version = "*", -- try using the latest stable version if semver is supported
     },
-    checker = { enabled = true }, -- automatically check for plugin updates
+    checker = { enabled = false }, -- automatically check for plugin updates
   })
 end
 

@@ -12,6 +12,7 @@ vim.api.nvim_create_autocmd(
       'vim',
       'html',
       'astro',
+      'terraform',
     },
     callback = function()
       vim.opt_local.tabstop = 2
@@ -44,4 +45,23 @@ vim.api.nvim_create_autocmd(
   }
 )
 
+-- For some reason my formatoptions are being overridden and I have to set them
+-- in an autocmd.
+vim.api.nvim_create_autocmd(
+  { 'BufEnter' },
+  {
+    pattern = "*",
+    callback = function()
+      vim.opt_local.formatoptions:remove("o")
+    end
+  }
+)
+
 vim.cmd [[ autocmd BufRead,BufEnter *.astro set filetype=astro ]]
+
+-- Auto-reload buffer when a file changes on disk
+vim.opt.autoread   = true
+vim.cmd("autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif")
+vim.cmd(
+  [[autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None]])
+

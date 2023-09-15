@@ -67,3 +67,9 @@ vim.keymap.set(
   "<leader>c",
   ":'<,'>yank | put! | '<,'>!sh -c \"perl -pe 'chomp if eof' | xclip -i -selection clipboard\""
 )
+
+--
+--
+--
+--
+--

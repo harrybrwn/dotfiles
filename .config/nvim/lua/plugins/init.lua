@@ -5,12 +5,7 @@ return {
     "numToStr/Comment.nvim",
     tag = "v0.8.0",
     lazy = false,
-    opts = {
-      -- toggler = {
-      --   line = "<leader>/",
-      --   block = "<leader>/",
-      -- }
-    },
+    opts = {},
   },
 
   {

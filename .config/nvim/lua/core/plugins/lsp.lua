@@ -7,6 +7,7 @@ local lsputil = require("lspconfig/util")
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings to learn the available actions
   require("core.plugins.custom-editorconfig").lsp_on_attach(client, bufnr)
+  require("lsp-inlayhints").on_attach(client, bufnr)
   lsp.default_keymaps({ buffer = bufnr })
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr })
 end)
@@ -43,10 +44,27 @@ lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 
 lspconfig.rust_analyzer.setup {
   settings = {
+    -- https://rust-analyzer.github.io/manual.html
     ['rust-analyzer'] = {
       cargo = {
         allFeatures = true,
-      }
+      },
+      -- auto import settings.
+      imports = {
+        granularity = {
+          group = "crate",
+        },
+        prefix = "plain", -- no prefix restrictions
+      },
+      procMacro = { enable = true },
+      inlayHints = {
+        maxLength = 50, -- default 25
+        typeHints = {
+          enable = true,
+          hideNamedConstructor = true,
+        },
+        parameterHints = { enable = false },
+      },
     }
   }
 }
@@ -105,8 +123,8 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
     { name = "luasnip" },
-    { name = "buffer" },
-    { name = "path" },
+    -- { name = "buffer" },
+    -- { name = "path" },
   }),
   mapping = cmp.mapping.preset.insert({
     -- `Enter` key to confirm completion
@@ -114,7 +132,11 @@ cmp.setup({
     -- `Tab` key to confirm completion
     ['<Tab>'] = cmp.mapping.confirm({ select = false }),
     -- ['<C-Space>'] = cmp.mapping.complete(),
+
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(4),
+    ['<C-y>'] = cmp.mapping.scroll_docs(-1),
+    ['<C-e>'] = cmp.mapping.scroll_docs(1),
   }),
   window = {
     completion = cmp.config.window.bordered(),

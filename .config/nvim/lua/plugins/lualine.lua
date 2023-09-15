@@ -34,6 +34,7 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = "VeryLazy",
     opts = {
+      -- theme = 'nord',
       extentions = { "nvim-tree" },
       options = {
         icons_enabled = true,

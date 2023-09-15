@@ -1,4 +1,5 @@
 local path = require("core.util.path")
+local ts_parsers = require("nvim-treesitter.parsers")
 
 local cli_installed = true
 local parser_dir = path.join(os.getenv("XDG_DATA_HOME"), 'tree-sitter/parsers')
@@ -9,6 +10,7 @@ local options = {
     'gomod',
     'gosum',
     'gowork',
+    'gotmpl', -- added in this file
     -- web
     'typescript',
     'javascript',
@@ -83,7 +85,21 @@ local options = {
   }
 }
 
+local parser_configs = ts_parsers.get_parser_configs()
+parser_configs.gotmpl = {
+  install_info = {
+    url = "https://github.com/ngalaiko/tree-sitter-go-template",
+    branch = "master",
+    files = { "src/parser.c" },
+    -- requires_generate_from_grammar = false,
+  },
+  filetype = "gotmpl",
+  used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" },
+}
+--vim.cmd [[autocmd BufNewFile,BufRead * if search('{{.\+}}', 'nw') | setlocal filetype=gotmpl | endif]]
+
 if cli_installed then
   vim.opt.rtp:prepend(parser_dir)
 end
+
 require("nvim-treesitter.configs").setup(options)

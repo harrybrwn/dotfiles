@@ -1,8 +1,8 @@
+local lazy = require("core.lazy")
+local helpers = require("core.helpers")
 require("core.settings")
 require("core.keymaps")
 require("core.autocmds")
-local helpers = require("core.helpers")
-local lazy = require("core.lazy")
 
 -- Plugins
 lazy.setup({
@@ -25,6 +25,7 @@ lazy.setup({
       { 'saadparwaiz1/cmp_luasnip' },
     },
   },
+  { "lvimuser/lsp-inlayhints.nvim", opts = {}, lazy = false },
 
   -- Function signature pop-up
   {
@@ -33,6 +34,7 @@ lazy.setup({
     -- must load after lsp-zero.setup
     dependencies = { "VonHeikemen/lsp-zero.nvim" },
     lazy = false,
+    opts = {},
   },
 
   {
@@ -78,6 +80,14 @@ lazy.setup({
         mappings = {
           i = { ["<C-j>"] = "close" },
           n = { ["<C-j>"] = "close" }
+        },
+        file_ignore_patterns = { '.git' },
+      },
+      pickers = {
+        live_grep = {
+          additional_args = function(opts)
+            return { "--hidden" }
+          end,
         }
       }
     }
@@ -113,15 +123,39 @@ lazy.setup({
   },
   { "ntk148v/vim-horizon",   lazy = false, priority = 1000 },
   { "rebelot/kanagawa.nvim", lazy = false, priority = 1000 },
-  { "AlexvZyl/nordic.nvim",  lazy = false, priority = 1000 },
-  { "shaunsingh/nord.nvim",  lazy = false, priority = 1000 },
-  { "sainnhe/everforest",    lazy = false, priority = 1000 },
+  {
+    "AlexvZyl/nordic.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      override = {
+        FoldColumn = { fg = 'none', bg = 'none' },
+        Visual = { bg = 0x111111 },
+      },
+      cursorline = {
+        -- Bold font in cursorline.
+        bold = false,
+        -- Bold cursorline number.
+        bold_number = true,
+        -- Avialable styles: 'dark', 'light'.
+        theme = 'dark',
+        -- Blending the cursorline bg with the buffer bg.
+        blend = 0.7,
+      },
+      ts_context = {
+        dark_background = true,
+      },
+    },
+  },
+  { "shaunsingh/nord.nvim", lazy = false, priority = 1000 },
+  { "sainnhe/everforest",   lazy = false, priority = 1000 },
   -- { "shaunsingh/solarized.nvim" },
   "maxmx03/solarized.nvim",
   -- { "svrana/neosolarized.nvim", lazy = false, priority = 1000 },
   "sainnhe/sonokai",
   { "catppuccin/nvim",         tag = "v1.4.0" },
   "ntk148v/komau.vim",
+  "lunarvim/templeos.nvim",
   -- { "yorickpeterse/nvim-grey", lazy = false, priority = 1000 },
   { import = "plugins" },
   { import = "plugins.lualine" },
@@ -155,6 +189,7 @@ vim.opt.formatoptions = {
   r = true,  -- insert comment on <Enter>
   o = false, -- insert comment on "o" and "O"
 }
+vim.opt.formatoptions:remove "o"
 vim.opt.textwidth     = 80
 
 -- Searching
@@ -171,19 +206,23 @@ vim.opt.syntax        = "on"
 vim.opt.background    = "dark"
 vim.opt.termguicolors = true
 -- theme("tokyonight")
--- theme("everforest")
+theme("everforest")
+-- theme("catppuccin")
+-- theme("sonokai")
 -- theme("horizon")
+-- theme("onedark")
 -- theme("kanagawa")
 -- theme("gray")
 -- theme("bw")
 -- theme("habamax")
 -- theme("nord")
+-- theme("nordic")
 -- theme("solarized")
-theme("catppuccin")
--- theme("sonokai")
 -- theme("komau")
 vim.cmd("highlight SpellBad guifg=NONE guibg=NONE gui=underline")
+-- vim.cmd("highlight FoldColumn guifg=NONE guibg=NONE gui=NONE")
 
 -- History and Persistent Data
 vim.opt.history    = 1000
 vim.opt.undolevels = 1500
+

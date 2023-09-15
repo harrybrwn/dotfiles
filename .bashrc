@@ -181,4 +181,3 @@ fi
 #unset __conda_setup
 # <<< conda initialize <<<
 #export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
-

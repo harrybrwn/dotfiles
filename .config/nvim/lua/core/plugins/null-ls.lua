@@ -8,6 +8,7 @@ local opts = {
   sources = {
     fmt.gofmt,
     fmt.goimports_reviser,
+    fmt.goimports,
     fmt.golines,
     fmt.stylua,
     fmt.rustfmt,
@@ -17,7 +18,7 @@ local opts = {
         'sh', 'toml', 'make', 'conf', 'tmux', 'go', 'rust', 'javascript', 'typescript',
       },
     }),
-    fmt.jq,
+    -- fmt.jq,
     diags.actionlint,
     diags.buf,
   },

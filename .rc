@@ -6,7 +6,7 @@
 #                        |___/        \
 #######################################\
 # github: https://github.com/harrybrwn
-# website: https://harrybrwn.com
+# website: https://hrry.me
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -105,18 +105,20 @@ setup() {
     return
   fi
   tmux \
-    new -d -n 'home' -s home -c ~/              \;\
-      new-window -c ~/ -t 'home:2' -n 'home'    \;\
-      new-window -c ~/ -t 'home:3' -n 'home'    \;\
-      select-window -t 'home:1'                 \;\
-      send-keys -t 'home:1' 'curl wttr.in/' C-m \;\
-      send-keys -t 'home:1' 'cal' C-m           \;\
-    new -d -n 'dev' -s dev -c ~/dev             \;\
-    new -d -n clerk -s clerk -c ~/dev/finance/statement-viewer             \;\
+    new-session -d -n misc -s misc -c ~/    \;\
+    new-session -d -n 'dev' -s dev -c ~/dev \;\
+    new-session -d -n clerk -s clerk -c ~/dev/finance/statement-viewer             \;\
       new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
       new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
       select-window -t 'clerk:1'                \;\
-    new -n misc -s misc -c ~/                   \;\
+    new-session -d -n homelab -s homelab -c ~/dev/web/hrry.me 'nix develop' \;\
+      new-window -t 'homelab:2' -n homelab -c ~/dev/web/hrry.me \;\
+      select-window -t 'homelab:1'         \;\
+    new-session -d -n website -s website -c ~/dev/web/harrybrwn.github.io \;\
+    new-session -n 'home' -s home -c ~/              \;\
+      new-window -t 'home:2' -n 'home' -c ~/ \;\
+      new-window -t 'home:3' -n 'home' -c ~/ \;\
+      select-window -t 'home:1'              \;\
     select-window -t 'home:1'
 }
 
@@ -372,5 +374,9 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# bun
+export BUN_INSTALL="$XDG_CONFIG_HOME/bun"
+export PATH="$PATH:$BUN_INSTALL/bin"
 
 # vim: syn=sh ts=1 sts=2 sw=2

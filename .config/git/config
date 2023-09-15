@@ -27,6 +27,10 @@
     noprefix = true
     context = 3 # number of lines shown around each change
 
+[diff "lockb"]
+    textconv = bun
+    binary = true
+
 [format]
     #pretty = 'tformat:%C(auto)%h%Creset %Cblue(%cd)%Creset%C(auto)%d%Creset %s %C(magenta)[%cn]%Creset'
 

@@ -1,0 +1,11 @@
+# Search hidden files
+--hidden
+
+--glob=!.git/
+
+# Don't use git to ignore files
+--no-ignore-vcs
+--no-ignore-global
+--no-ignore-parent
+
+# vim: ft=conf

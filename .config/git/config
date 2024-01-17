@@ -1,7 +1,7 @@
 [user]
     email = harrybrown98@gmail.com
     name = Harry Brown
-    signingkey = 8A86832BAEE723F51643E9C01942366B606ED985
+    signingkey = 056BB3A269A76794
 
 [core]
     editor = 'nvim'

@@ -86,6 +86,9 @@ fi
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 
+# ripgrep (rg)
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+
 #export LESS_TERMCAP_mb=$(tput bold; tput setaf 5) # magenta
 #export LESS_TERMCAP_md="\x1b[33m" # yello
 #export LESS_TERMCAP_me=$(tput sgr0)  # reset
@@ -123,4 +126,3 @@ fi
 #unset LESS_TERMCAP_se LESS_TERMCAP_us LESS_TERMCAP_us LESS_TERMCAP_ue
 #unset LESS_TERMCAP_mr LESS_TERMCAP_mh LESS_TERMCAP_ZN LESS_TERMCAP_ZV
 #unset LESS_TERMCAP_ZO LESS_TERMCAP_ZW
-

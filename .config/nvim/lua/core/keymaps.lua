@@ -30,6 +30,27 @@ local function window_split_fn(size)
   end
 end
 
+---Open a popup with the error on the current line.
+local function popup_diagnostics()
+  vim.diagnostic.open_float(0, {
+    scope = "line",
+    format = function(diag)
+      local level = "w"
+      if diag.severity == 1 then
+        level = "e"
+      end
+      return string.format(
+        "[%s] %s (%s)",
+        level,
+        --diag.lnum + 1,
+        --diag.col + 1,
+        diag.message,
+        diag.source
+      )
+    end
+  })
+end
+
 -- Paste without yanking (visual mode)
 nset("<leader>f", vim.cmd.NvimTreeFindFileToggle, { desc = "[F]iletree toggle" })
 nset("<leader>e", vim.cmd.TroubleToggle, { desc = "[E]rror diagnostics window toggle" })
@@ -41,6 +62,7 @@ nset("<leader>gdh", function() vim.cmd.DiffviewFileHistory(vim.fn.expand('%')) e
 -- Misc
 nset('<C-w>"', window_split_fn(30), { desc = "Open a tmux window below vim." })
 vim.keymap.set("v", "<Leader>p", '"_dP', { noremap = true, desc = "Paste without yanking the highlighted text" })
+nset("<leader>E", popup_diagnostics, { desc = "Show [E]rror in a popup" })
 
 -- Faster escape key
 for _, mode in pairs({ 'i', 'n', 'v', 'c' }) do
@@ -61,6 +83,8 @@ nset("<C-I>", function()
   local bufnr = vim.api.nvim_get_current_buf()
   vim.lsp.buf.format({ bufnr = bufnr })
 end)
+nset("<Leader>F", function() vim.cmd("echo expand('%')") end)
+nset("<Leader>ct", vim.cmd.tabclose, { noremap = true })
 
 vim.keymap.set(
   "v",

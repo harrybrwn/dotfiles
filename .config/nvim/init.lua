@@ -25,7 +25,7 @@ lazy.setup({
       { 'saadparwaiz1/cmp_luasnip' },
     },
   },
-  { "lvimuser/lsp-inlayhints.nvim", opts = {}, lazy = false },
+  { "lvimuser/lsp-inlayhints.nvim", opts = {},    lazy = false },
 
   -- Function signature pop-up
   {
@@ -110,10 +110,26 @@ lazy.setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function() vim.g.barbar_auto_setup = false end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
+  },
+
   -- Themes
   --
   -- Look for more good ones here https://github.com/rockerBOO/awesome-neovim#tree-sitter-supported-colorscheme
-  { "navarasu/onedark.nvim", lazy = false, priority = 1000 },
+  { "navarasu/onedark.nvim",        lazy = false, priority = 1000 },
   {
     "folke/tokyonight.nvim",
     lazy = true,
@@ -147,8 +163,9 @@ lazy.setup({
       },
     },
   },
-  { "shaunsingh/nord.nvim", lazy = false, priority = 1000 },
-  { "sainnhe/everforest",   lazy = false, priority = 1000 },
+  { "shaunsingh/nord.nvim",     lazy = false, priority = 1000 },
+  { "sainnhe/everforest",       lazy = false, priority = 1000 },
+  { "ellisonleao/gruvbox.nvim", lazy = false, priority = 1000, config = true },
   -- { "shaunsingh/solarized.nvim" },
   "maxmx03/solarized.nvim",
   -- { "svrana/neosolarized.nvim", lazy = false, priority = 1000 },
@@ -205,24 +222,10 @@ local theme           = vim.cmd.colorscheme
 vim.opt.syntax        = "on"
 vim.opt.background    = "dark"
 vim.opt.termguicolors = true
--- theme("tokyonight")
-theme("everforest")
--- theme("catppuccin")
--- theme("sonokai")
--- theme("horizon")
--- theme("onedark")
--- theme("kanagawa")
--- theme("gray")
--- theme("bw")
--- theme("habamax")
--- theme("nord")
--- theme("nordic")
--- theme("solarized")
--- theme("komau")
+theme("gruvbox") -- tokyonight gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized
 vim.cmd("highlight SpellBad guifg=NONE guibg=NONE gui=underline")
 -- vim.cmd("highlight FoldColumn guifg=NONE guibg=NONE gui=NONE")
 
 -- History and Persistent Data
 vim.opt.history    = 1000
 vim.opt.undolevels = 1500
-

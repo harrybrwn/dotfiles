@@ -12,7 +12,6 @@
     "files.trimTrailingWhitespace": true,
 
     "workbench.colorTheme": "Horizon",
-    "workbench.activityBar.visible": true,
     "workbench.colorCustomizations": {
         // "statusBar.background": "#007ACC",   // default vscode blue
         // "statusBar.background": "#9f4bc4bb", // purple
@@ -281,5 +280,4 @@
 
     "nix.enableLanguageServer": true,
     "nix.serverPath": "/home/harry/.nix-profile/bin/rnix-lsp",
-    "window.zoomLevel": -1,
 }

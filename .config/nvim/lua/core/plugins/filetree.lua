@@ -1,5 +1,6 @@
 local tree = require("nvim-tree")
 local api = require("nvim-tree.api")
+local actions = require("nvim-tree.actions")
 
 -- Disable NetRW (vim's default file tree)
 vim.g.loaded_netrw = 1
@@ -71,19 +72,23 @@ function M.on_attach(bufnr)
   vim.keymap.set('n', '<2-LeftMouse>', api.node.open.edit, opts('Open'))
   vim.keymap.set('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
   vim.keymap.set('n', '<leader>p', api.node.navigate.parent_close, opts('Close current parent folder'))
+  vim.keymap.set('n', '<leader>a', function() actions.tree.find_file.fn() end, opts('Find current file'))
 end
 
 -- TODO move setup to be handled by lazyvim
 tree.setup({
   view = {
-    centralize_selection = true,
+    side = "left",
+    -- width = "10%",
     width = {
       min = 30,
-      max = 50,
-      padding = 1,
+      max = "15%",
+      --padding = 1,
     },
+    centralize_selection = false, -- center with 'zz' when entering the tree
     cursorline = true,
-    preserve_window_proportions = true,
+    preserve_window_proportions = false,
+    float = { enable = false, quit_on_focus_loss = true }, -- view in floating window
   },
   filters = {
     dotfiles = false,
@@ -96,10 +101,19 @@ tree.setup({
   renderer = {
     highlight_modified = "all",
     highlight_git = true,
+    highlight_diagnostics = true,
+    highlight_opened_files = "none", -- icon|name|all|none
+    group_empty = true,              -- group empty folders as one pathname
+    indent_markers = {
+      enable = false
+    },
   },
   tab = { sync = { open = true, close = true } },
   diagnostics = { enable = true },
-  update_focused_file = { enable = true },
+  update_focused_file = { enable = false }, -- move cursor to current open file
+  filesystem_watchers = {
+    ignore_dirs = { "node_modules" },
+  },
   on_attach = M.on_attach,
 })
 

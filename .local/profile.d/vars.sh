@@ -2,6 +2,7 @@
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_CACHE_HOME"  ] && export XDG_CACHE_HOME="$HOME/.cache"
 [ -z "$XDG_DATA_HOME"   ] && export XDG_DATA_HOME="$HOME/.local/share"
+[ -z "$XDG_STATE_HOME"  ] && export XDG_DATA_HOME="$HOME/.local/state"
 #export XDG_RUNTIME_DIR=
 
 # Python stuff
@@ -82,47 +83,29 @@ if command -v R > /dev/null 2>&1; then
     unset rversion
 fi
 
+# Gopass
+if command -v gopass > /dev/null 2>&1; then
+    export PASSWORD_STORE_DIR="$HOME/.config/passwords"
+fi
+
 # less
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 
 # ripgrep (rg)
-export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
 
-#export LESS_TERMCAP_mb=$(tput bold; tput setaf 5) # magenta
-#export LESS_TERMCAP_md="\x1b[33m" # yello
-#export LESS_TERMCAP_me=$(tput sgr0)  # reset
-#export LESS_TERMCAP_se=$(tput sgr0) # reset
-#export LESS_TERMCAP_so=$(tput sgr0)
-#export LESS_TERMCAP_ue=$(tput sgr0) # reset
-#export LESS_TERMCAP_us="\x1b[95m" # violet
+# MinIO Client
+export MC_CONFIG_DIR="$XDG_CONFIG_HOME/mc"
 
-#export LESSHISTFILE='-'
-# export LESS_TERMCAP_mp=$(tput bold; tput setaf 4)
-# export LESS_TERMCAP_md=$(tput bold; tput setaf 5) # headers and flags
-# export LESS_TERMCAP_me=$(tput sgr0)
-# export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 0) # status bar
-# export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-# export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7) # names of other programs
-# # unset LESS_TERMCAP_us
-# export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
-# export LESS_TERMCAP_mr=$(tput rev)
-# export LESS_TERMCAP_mh=$(tput dim)
-# export LESS_TERMCAP_ZN=$(tput ssubm)
-# export LESS_TERMCAP_ZV=$(tput rsubm)
-# export LESS_TERMCAP_ZO=$(tput ssupm)
-# export LESS_TERMCAP_ZW=$(tput rsupm)
+# Terraform
+export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform"
+export TF_PLUGIN_CACHE_DIR="$TF_CLI_CONFIG_FILE/plugin-cache"
 
+# Nix
+export PATH="$PATH:$HOME/.local/state/nix/profiles/profile/bin"
+
+# My secret keys
 if [ -f ~/.local/profile.d/keys.sh ]; then
     . ~/.local/profile.d/keys.sh
 fi
-
-if command -v gopass > /dev/null 2>&1; then
-    export PASSWORD_STORE_DIR="$HOME/.config/passwords"
-fi
-
-# Ive had enough of this madness
-#unset LESS_TERMCAP_mp LESS_TERMCAP_md LESS_TERMCAP_me LESS_TERMCAP_so
-#unset LESS_TERMCAP_se LESS_TERMCAP_us LESS_TERMCAP_us LESS_TERMCAP_ue
-#unset LESS_TERMCAP_mr LESS_TERMCAP_mh LESS_TERMCAP_ZN LESS_TERMCAP_ZV
-#unset LESS_TERMCAP_ZO LESS_TERMCAP_ZW

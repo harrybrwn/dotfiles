@@ -1,4 +1,5 @@
 require("core.plugins.custom-editorconfig").setup()
+local table = require("table")
 
 -- Folding
 -- zf[motion] Create a fold
@@ -6,5 +7,15 @@ require("core.plugins.custom-editorconfig").setup()
 -- zc         Close a fold
 -- zd         Delete a fold
 -- zE         Eliminate all file folds
-vim.opt.foldcolumn = '1' -- shows folds in gutter (left of line numbers)
-vim.opt.foldopen = "insert,mark,percent,quickfix,search,tag,undo"
+
+vim.opt.foldcolumn = "auto" -- shows folds in gutter (left of line numbers)
+--vim.opt.foldcolumn = '1' -- shows folds in gutter (left of line numbers)
+vim.opt.foldopen = table.concat({
+	"insert",
+	"mark",
+	"percent",
+	"quickfix",
+	"search",
+	"tag",
+	"undo",
+}, ",")

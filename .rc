@@ -11,7 +11,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-export EDITOR=vim
+export EDITOR=nvim
 export VISUAL=vim
 export PAGER=less
 
@@ -57,7 +57,7 @@ else
 fi
 
 # Development aliases
-alias vim=nvim vi=vim
+alias vim=nvim vi=vim v=nvim
 alias g=git m=make mi='make install'
 alias cl=clear
 alias dk=docker dkc='docker compose'
@@ -87,6 +87,10 @@ alias ipinfo='curl ipinfo.io'
 alias w3c-validator='docker container run --rm -it --network host netresearch/validator-w3c'
 alias nix-tree='nix run github:utdemir/nix-tree'
 alias clear-buildkit-cache='docker buildx prune --filter=type=exec.cachemount --force'
+alias hm=home-manager
+alias fish=asciiquarium
+
+export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 
 if ! command -v qemu > /dev/null 2>&1; then
   alias qemu=qemu-system-x86_64
@@ -105,16 +109,15 @@ setup() {
     return
   fi
   tmux \
-    new-session -d -n misc -s misc -c ~/    \;\
-    new-session -d -n 'dev' -s dev -c ~/dev \;\
-    new-session -d -n clerk -s clerk -c ~/dev/finance/statement-viewer             \;\
-      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
-      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
+    new-session  -d -n misc -s misc -c ~/    \;\
+    new-session  -d -n 'dev' -s dev -c ~/dev \;\
+    new-session  -d -n clerk -s clerk -c ~/dev/finance/statement-viewer      \;\
+      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer  \;\
+      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer  \;\
       select-window -t 'clerk:1'                \;\
     new-session -d -n homelab -s homelab -c ~/dev/web/hrry.me 'nix develop' \;\
-      new-window -t 'homelab:2' -n homelab -c ~/dev/web/hrry.me \;\
+      new-window    -t 'homelab:2' -n homelab -c ~/dev/web/hrry.me \;\
       select-window -t 'homelab:1'         \;\
-    new-session -d -n website -s website -c ~/dev/web/harrybrwn.github.io \;\
     new-session -n 'home' -s home -c ~/              \;\
       new-window -t 'home:2' -n 'home' -c ~/ \;\
       new-window -t 'home:3' -n 'home' -c ~/ \;\
@@ -345,6 +348,16 @@ reset-mouse-speed() {
       0.0 1.0 0.0 \
       0.0 0.0 1.0
   fi
+}
+
+wallpaper() {
+  if [ ! -f "$1" ]; then
+    echo "Error no file"
+    return 1
+  fi
+  gsettings set \
+    org.gnome.desktop.background \
+    picture-uri "file://$(readlink -f "$1")"
 }
 
 # Docker

@@ -13,9 +13,9 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-HISTFILE="$HOME/.config/bash/.bash_history"
+HISTSIZE=10000
+#HISTFILESIZE=2000
+#HISTFILE="$HOME/.config/bash/.bash_history"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -151,19 +151,16 @@ fi
 
 complete -C /usr/bin/mc mc
 
+if [ ! -f /usr/local/share/complete_alias/complete_alias ]; then
+  git clone git@github.com:cykerway/complete-alias.git /usr/local/share/complete_alias
+fi
 if [ -f /usr/local/share/complete_alias/complete_alias ]; then
   . /usr/local/share/complete_alias/complete_alias
-  for a in \
-    dk   \
-    dkc  \
-    ku   \
-    kube \
-    g    \
-    vi   \
-    k
-  do
-    complete -F _complete_alias "$a"
-  done
+  if [ -n "${COMPLETE_ALIASES:-}" ]; then
+    for a in ${COMPLETE_ALIASES}; do
+      complete -F _complete_alias "$a"
+    done
+  fi
 fi
 
 # >>> conda initialize >>>

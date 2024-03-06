@@ -22,3 +22,12 @@ assert(util.endswith("123", "123"))
 assert(util.endswith("123", "23"))
 assert(util.endswith("123", "3"))
 assert(tbl_eq(util.split("a b c", " "), {"a", "b", "c"}))
+
+local a = { 'one', 'two', 'three' }
+util.extend(a, { 'four', 'five' })
+assert(a[1] == 'one')
+assert(a[2] == 'two')
+assert(a[3] == 'three')
+assert(a[4] == 'four')
+assert(a[5] == 'five')
+

@@ -18,4 +18,6 @@ fi
 #    PATH="$HOME/.local/bin:$PATH"
 #fi
 
-. "/home/harry/.config/cargo/env"
+if [ -d "$HOME/.config/cargo" ] && [ -f "$HOME/.config/cargo/env" ]; then
+    . "$HOME/.config/cargo/env"
+fi

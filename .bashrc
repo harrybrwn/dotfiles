@@ -92,7 +92,6 @@ fi
 
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -131,7 +130,10 @@ __nix_prompt() {
 
 # Just saving my original
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
-PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)\$ '
+#PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)\$ '
+if command -v __git_ps1 > /dev/null; then
+  PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)\$ '
+fi
 
 if command -v gopass > /dev/null 2>&1; then
     source <(gopass completion bash)
@@ -152,7 +154,7 @@ fi
 complete -C /usr/bin/mc mc
 
 if [ ! -f /usr/local/share/complete_alias/complete_alias ]; then
-  git clone git@github.com:cykerway/complete-alias.git /usr/local/share/complete_alias
+  sudo git clone git@github.com:cykerway/complete-alias.git /usr/local/share/complete_alias
 fi
 if [ -f /usr/local/share/complete_alias/complete_alias ]; then
   . /usr/local/share/complete_alias/complete_alias
@@ -163,18 +165,18 @@ if [ -f /usr/local/share/complete_alias/complete_alias ]; then
   fi
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/home/harry/.local/share/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-#if [ $? -eq 0 ]; then
-#    eval "$__conda_setup"
-#else
-#    if [ -f "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
-#        . "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh"
-#    else
-#        export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
-#    fi
-#fi
-#unset __conda_setup
-# <<< conda initialize <<<
-#export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
+# # >>> conda initialize >>>
+# # !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('/home/harry/.local/share/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# # <<< conda initialize <<<
+# export PATH="$HOME/.local/share/anaconda3/bin:$PATH"

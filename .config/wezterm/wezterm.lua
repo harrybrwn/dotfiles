@@ -33,17 +33,22 @@ config.background = {
 	},
 }
 config.background = nil -- reset background
+config.window_background_opacity = 1.0
 
 -- Fonts
-config.font_size = 9
+config.font_size = 10
 config.font_dirs = { wezterm.home_dir .. "/.local/share/fonts" }
 config.font = wezterm.font_with_fallback({
+	-- "LiterationMono Nerd Font",
+	-- "SauceCodePro Nerd Font",
+	-- "FiraMono Nerd Font Mono",
 	"RobotoMono Nerd Font Mono",
 	"JetBrains Mono",
 	"Noto Color Emoji",
 	"Symbols Nerd Font Mono",
 	"monospace",
 })
+config.warn_about_missing_glyphs = false
 
 -- Windows
 config.enable_scroll_bar = false
@@ -69,19 +74,27 @@ wezterm.on("format-window-title", function(tab, pane, tabs, panes, config)
 end)
 
 -- Tab Bar
-config.enable_tab_bar = false
-config.use_fancy_tab_bar = false
+config.enable_tab_bar = true
 config.tab_bar_at_bottom = true
+config.hide_tab_bar_if_only_one_tab = true
+config.use_fancy_tab_bar = false
+config.switch_to_last_active_tab_when_closing_tab = false
+config.tab_and_split_indices_are_zero_based = false
+config.show_new_tab_button_in_tab_bar = false
 
 -- Keys
-config.leader = { key = "b", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
 	{ key = "F11", mods = nil, action = wezterm.action.ToggleFullScreen },
 	{ key = "P", mods = "CTRL", action = wezterm.action.ActivateCommandPalette },
+	-- replicate tmux keybindings
 	{ key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
 	{ key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Right") },
 	{ key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Down") },
 	{ key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Up") },
+	{ key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
+	{ key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
+	{ key = "c", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
 	{
 		key = "|",
 		mods = "LEADER|SHIFT",
@@ -111,6 +124,7 @@ config.keys = {
 		}),
 	},
 }
+
 -- Disable default tab keybindings
 if not config.enable_tab_bar then
 	table.insert(config.keys, { key = "T", mods = "CTRL", action = wezterm.action.DisableDefaultAssignment })

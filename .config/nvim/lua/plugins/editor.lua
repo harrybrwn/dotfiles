@@ -76,7 +76,7 @@ return {
 	-- Syntax parsers and highlighting
 	{
 		"nvim-treesitter/nvim-treesitter",
-		tag = "v0.9.0",
+		tag = "v0.9.2",
 		config = helpers.with_notify_disabled(function()
 			pcall(require("nvim-treesitter.install").update({ with_sync = true }))
 		end),

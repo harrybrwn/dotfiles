@@ -57,7 +57,6 @@ else
 fi
 
 # Development aliases
-alias vim=nvim vi=vim v=nvim
 alias g=git m=make mi='make install'
 alias cl=clear
 alias dk=docker dkc='docker compose'
@@ -89,6 +88,10 @@ alias nix-tree='nix run github:utdemir/nix-tree'
 alias clear-buildkit-cache='docker buildx prune --filter=type=exec.cachemount --force'
 alias hm=home-manager
 alias fish=asciiquarium
+if command -v nvim > /dev/null; then
+  alias vim=nvim
+fi
+alias vi=vim v=vim
 
 export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 

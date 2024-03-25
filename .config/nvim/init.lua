@@ -61,3 +61,6 @@ vim.opt.colorcolumn = "" -- "80"
 -- History and Persistent Data
 vim.opt.history = 1000
 vim.opt.undolevels = 1500
+
+-- Make sure this is the first item in the rtp.
+vim.opt.runtimepath:prepend(vim.fn.stdpath("config"))

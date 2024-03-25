@@ -9,7 +9,6 @@ local table = require("table")
 -- zE         Eliminate all file folds
 
 vim.opt.foldcolumn = "auto" -- shows folds in gutter (left of line numbers)
---vim.opt.foldcolumn = '1' -- shows folds in gutter (left of line numbers)
 vim.opt.foldopen = table.concat({
 	"insert",
 	"mark",

@@ -16,6 +16,7 @@ lsp.ensure_installed({
 	-- Languages/Frameworks
 	"pyright", -- python
 	"gopls", -- golang
+	"golangci_lint_ls",
 	"rust_analyzer", -- rust
 	"clangd", -- c/c++
 	"sqlls", -- sql

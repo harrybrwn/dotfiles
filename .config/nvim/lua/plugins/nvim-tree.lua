@@ -19,6 +19,8 @@ return {
 				--   min = 40,
 				--   max = "20%",
 				-- },
+				-- width = { min = "10%", max = 40 },
+				-- width = { min = 40, max = "20%" },
 				centralize_selection = false, -- center with 'zz' when entering the tree
 				cursorline = true, -- show line at the cursor
 				preserve_window_proportions = false, -- don't readjust window sizes

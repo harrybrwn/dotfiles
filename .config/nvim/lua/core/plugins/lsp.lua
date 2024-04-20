@@ -28,7 +28,7 @@ lsp.ensure_installed({
 	"verible", -- SystemVerilog
 	"asm_lsp", -- GAS/NASM/Go assembly
 	"tsserver", -- typescript
-	"eslint", -- web stuff
+	-- "eslint", -- web stuff
 	"cssls", -- css
 	--'eslint_d',
 
@@ -69,6 +69,8 @@ lspconfig.rust_analyzer.setup({
 					hideNamedConstructor = true,
 				},
 				parameterHints = { enable = false },
+				closingBraceHints = { enable = false }, -- hints after a closing brace '}'
+				implicitDrops = { enable = false },
 			},
 		},
 	},
@@ -118,10 +120,27 @@ lspconfig.yamlls.setup({
 	},
 })
 
-lspconfig.eslint.setup({
-	root_dir = lsputil.root_pattern("package.json"),
+-- See configuration does here:
+-- https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md
+lspconfig.tsserver.setup({
+	-- This on_attach function does *not* override the one setup by lsp-zero at
+	-- the top of this file.
+	on_attach = function(client)
+		-- Disable auto formating
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
+	end,
 	settings = {
-		format = false,
+		javascript = {
+			format = {
+				semicolons = "insert",
+			},
+		},
+		typescript = {
+			format = {
+				semicolons = "insert",
+			},
+		},
 	},
 })
 

@@ -32,6 +32,11 @@ function export.setup(spec)
 			--version = "*", -- try using the latest stable version if semver is supported
 		},
 		checker = { enabled = false }, -- automatically check for plugin updates
+		change_detection = {
+			-- automatically check for config file changes and reload the ui
+			enabled = true,
+			notify = false, -- get a notification when changes are found
+		},
 	})
 end
 

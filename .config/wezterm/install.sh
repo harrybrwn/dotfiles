@@ -27,7 +27,6 @@ font_install "RobotoMono"
 font_install "LiberationMono"
 font_install "FiraMono"
 font_install "SourceCodePro"
-exit 0
 
 readonly URL="$(wezterm_deb_url)"
 echo "Downloading \"$URL\""

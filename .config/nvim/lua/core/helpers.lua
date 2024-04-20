@@ -22,16 +22,22 @@ function _G.dump(...)
 	print(unpack(objects))
 end
 
-function _G.list_buffers()
+---Don't use this. Use vim.api.nvim_list_bufs
+function helpers.list_buffers()
 	local len = 0
 	local buffers = {}
 	for buffer = 1, vim.fn.bufnr("$") do
-		if not vim.fn.buflisted(buffer) ~= 1 then
+		if vim.fn.buflisted(buffer) ~= 1 then
 			len = len + 1
 			buffers[len] = buffer
 		end
 	end
 	return buffers
+end
+
+function _G.test_list_bufs()
+	vim.print(helpers.list_buffers())
+	vim.print(vim.api.nvim_list_bufs())
 end
 
 -- Returns a function that wraps fn so it is called with vim.notify disabled

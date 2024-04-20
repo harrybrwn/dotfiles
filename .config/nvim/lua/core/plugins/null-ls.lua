@@ -30,6 +30,24 @@ local opts = {
 		-- fmt.jq,
 		diags.actionlint,
 		diags.buf,
+		diags.eslint.with({
+			condition = function(utils)
+				return utils.root_has_file({
+					".eslintrc",
+					".eslintrc.js",
+					".eslintrc.cjs",
+					".eslintrc.yaml",
+					".eslintrc.yml",
+					".eslintrc.json",
+					"eslint.config.js",
+					"eslint.config.mjs",
+					"eslint.config.cjs",
+					"eslint.config.ts",
+					"eslint.config.mts",
+					"eslint.config.cts",
+				})
+			end,
+		}),
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then

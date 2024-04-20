@@ -7,7 +7,13 @@ function M.on_attach(bufnr)
 	local actions = require("nvim-tree.actions")
 
 	local function opts(desc)
-		return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+		return {
+			desc = "nvim-tree: " .. desc,
+			buffer = bufnr,
+			noremap = true,
+			silent = true,
+			nowait = true,
+		}
 	end
 
 	-- These are my custom keymaps, to use the defaults either delete this function or use `api.config.mappings.default_on_attach`.
@@ -69,6 +75,20 @@ function M.on_attach(bufnr)
 	vim.keymap.set("n", "<leader>a", function()
 		actions.tree.find_file.fn()
 	end, opts("Find current file"))
+	vim.keymap.set("n", "<leader>H", function()
+		local Path = require("plenary.path")
+		local node = api.tree.get_node_under_cursor()
+		local cwd = vim.loop.cwd()
+		local rel_path = Path:new(node.absolute_path):make_relative(cwd)
+		local item = {
+			value = rel_path,
+			context = {
+				row = 1,
+				col = 0,
+			},
+		}
+		require("harpoon"):list():add(item)
+	end, opts("[H]arpoon the file under cursor"))
 end
 
 function M.setup()

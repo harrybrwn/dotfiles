@@ -18,6 +18,7 @@ vim.opt.fixendofline = false
 vim.opt.spell = true
 vim.opt.spelllang = "en"
 vim.opt.splitright = true
+vim.opt.scrolloff = 1 -- keep cursor n lines above the bottom
 
 -- Tabs
 local indent = 4

@@ -56,3 +56,21 @@ vim.cmd("autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' 
 vim.cmd(
 	[[autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None]]
 )
+
+-- vim.api.nvim_add_user_command("Clear", function(opts)
+-- 	vim.print(opts)
+-- end, { nargs = 1 })
+
+vim.api.nvim_buf_create_user_command(0, "Clear", function(_opts)
+	for _, bufnr in pairs(vim.api.nvim_list_bufs()) do
+		print(bufnr, vim.api.nvim_buf_is_loaded(bufnr), vim.api.nvim_buf_get_name(bufnr))
+	end
+end, {})
+
+-- Disable autoformat for lua files
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = { "javascript", "typescript" },
+	callback = function()
+		vim.b.autoformat = false
+	end,
+})

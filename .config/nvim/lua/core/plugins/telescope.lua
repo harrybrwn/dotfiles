@@ -29,7 +29,7 @@ function M.init()
 	end, { desc = "[?] Fuzzy search in the current buffer" })
 	set("n", "<leader>sf", find_files, { desc = "[S]earch [F]iles" })
 	set("n", "<leader>sg", live_grep, { desc = "[S]earch by [G]rep" })
-	set("n", "<C-p>", tele.git_files)
+	-- set("n", "<C-p>", tele.git_files)
 	set("n", "<leader>ps", grep_string, { desc = "Grep for a string" })
 end
 

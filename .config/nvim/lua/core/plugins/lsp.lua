@@ -28,7 +28,7 @@ lsp.ensure_installed({
 	"verible", -- SystemVerilog
 	"asm_lsp", -- GAS/NASM/Go assembly
 	"tsserver", -- typescript
-	-- "eslint", -- web stuff
+	"eslint", -- web stuff
 	"cssls", -- css
 	--'eslint_d',
 

@@ -1,0 +1,9 @@
+misc/
+spell/
+
+colors/base16-grayscale-dark.vim
+colors/neorobpike.lua
+colors/robpike.vim
+colors/silent.vim
+
+lazy-lock.json

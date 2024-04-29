@@ -1,6 +1,15 @@
 local helpers = require("core.helpers")
 
 return {
+	-- Commenting utility
+	{
+		-- "gc" and "gcc" to comment lines and regions
+		"numToStr/Comment.nvim",
+		tag = "v0.8.0",
+		lazy = false,
+		opts = {},
+	},
+
 	-- Language Server
 	{
 		"VonHeikemen/lsp-zero.nvim",
@@ -20,7 +29,12 @@ return {
 			{ "saadparwaiz1/cmp_luasnip" },
 		},
 	},
+
+	-- Use LSP for inlay hints.
 	{ "lvimuser/lsp-inlayhints.nvim", opts = {}, lazy = false },
+
+	-- Use treesitter to autoclose html tags
+	{ "windwp/nvim-ts-autotag", lazy = false },
 
 	-- null-ls auto formatting
 	{
@@ -32,6 +46,14 @@ return {
 		end,
 		-- must load after lsp-zero.setup
 		dependencies = { "VonHeikemen/lsp-zero.nvim" },
+	},
+
+	-- Display lsp diagnostics
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = { height = 5 },
+		event = "BufRead",
 	},
 
 	-- Function signature pop-up

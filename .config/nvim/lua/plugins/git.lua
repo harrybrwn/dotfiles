@@ -54,4 +54,20 @@ return {
 			},
 		},
 	},
+
+	-- Git diffs
+	{
+		"sindrets/diffview.nvim",
+		lazy = false,
+		opts = function()
+			local actions = require("diffview.actions")
+			return {
+				keymaps = {
+					file_history_panel = {
+						{ "n", "K", actions.open_commit_log, { desc = "Show commit details" } },
+					},
+				},
+			}
+		end,
+	},
 }

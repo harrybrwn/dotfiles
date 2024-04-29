@@ -7,10 +7,6 @@ local function find_files()
 	})
 end
 
-local function live_grep()
-	tele.live_grep()
-end
-
 local function grep_string()
 	tele.grep_string({
 		search = vim.fn.input("grep> "),
@@ -28,9 +24,12 @@ function M.init()
 		}))
 	end, { desc = "[?] Fuzzy search in the current buffer" })
 	set("n", "<leader>sf", find_files, { desc = "[S]earch [F]iles" })
-	set("n", "<leader>sg", live_grep, { desc = "[S]earch by [G]rep" })
+	set("n", "<leader>sg", tele.live_grep, { desc = "[S]earch by [G]rep" })
 	-- set("n", "<C-p>", tele.git_files)
 	set("n", "<leader>ps", grep_string, { desc = "Grep for a string" })
+	-- set("n", "<leader>sk", )
+	set("n", "<leader>sk", tele.keymaps, { desc = "[S]earch [K]eymaps" })
+	set("n", "<leader>sb", tele.buffers, { desc = "[S]earch [B]uffers" })
 end
 
 return M

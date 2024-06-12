@@ -114,14 +114,15 @@ setup() {
   tmux \
     new-session  -d -n misc -s misc -c ~/    \;\
     new-session  -d -n 'dev' -s dev -c ~/dev \;\
-    new-session  -d -n clerk -s clerk -c ~/dev/finance/statement-viewer      \;\
-      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer  \;\
-      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer  \;\
-      select-window -t 'clerk:1'                \;\
-    new-session -d -n homelab -s homelab -c ~/dev/web/hrry.me 'nix develop' \;\
-      new-window    -t 'homelab:2' -n homelab -c ~/dev/web/hrry.me \;\
-      select-window -t 'homelab:1'         \;\
-    new-session -n 'home' -s home -c ~/              \;\
+    new-session  -d -n clerk -s clerk -c ~/dev/finance/statement-viewer    \;\
+      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
+      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
+      select-window -t 'clerk:1'                                           \;\
+    new-session -d -n homelab -s homelab -c ~/dev/web/hrry.me \;\
+      new-window    -t 'homelab:2' -c ~/dev/web/hrry.me       \;\
+      new-window    -t 'homelab:3' -c ~/dev/web/hrry.me       \;\
+      select-window -t 'homelab:1'                            \;\
+    new-session -n 'home' -s home -c ~/      \;\
       new-window -t 'home:2' -n 'home' -c ~/ \;\
       new-window -t 'home:3' -n 'home' -c ~/ \;\
       select-window -t 'home:1'              \;\
@@ -361,6 +362,23 @@ wallpaper() {
   gsettings set \
     org.gnome.desktop.background \
     picture-uri "file://$(readlink -f "$1")"
+}
+
+ipv6-disable() {
+  echo '$ sudo -v'
+  sudo -v
+  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+  sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+  # sudo sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
+}
+
+ipv6-enable() {
+  echo '$ sudo -v'
+  sudo -v
+  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+  sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
+  # sudo sysctl -w net.ipv6.conf.tun0.disable_ipv6=0
+  sudo sysctl -p
 }
 
 # Docker

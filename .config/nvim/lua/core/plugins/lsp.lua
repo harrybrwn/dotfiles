@@ -31,6 +31,7 @@ lsp.ensure_installed({
 	"eslint", -- web stuff
 	"cssls", -- css
 	--'eslint_d',
+	"volar", -- vue
 
 	-- Configuration/Tools
 	"ansiblels", -- ansible

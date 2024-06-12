@@ -52,6 +52,7 @@ return {
 	{
 		"folke/trouble.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		tag = "v2.10.0", -- v3.* requires neovim >= 0.9.2
 		opts = { height = 5 },
 		event = "BufRead",
 	},

@@ -99,8 +99,8 @@ export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
 export MC_CONFIG_DIR="$XDG_CONFIG_HOME/mc"
 
 # Terraform
-export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform"
-export TF_PLUGIN_CACHE_DIR="$TF_CLI_CONFIG_FILE/plugin-cache"
+#export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform"
+#export TF_PLUGIN_CACHE_DIR="$TF_CLI_CONFIG_FILE/plugin-cache"
 
 # Nix
 export PATH="$PATH:$HOME/.local/state/nix/profiles/profile/bin"

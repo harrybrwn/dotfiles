@@ -49,15 +49,9 @@ end
 
 -- Paste without yanking (visual mode)
 nset("<leader>f", vim.cmd.NvimTreeFindFileToggle, { desc = "[F]iletree toggle" })
-nset("<leader>e", vim.cmd.TroubleToggle, { desc = "[E]rror diagnostics window toggle" })
-nset("<leader>E", popup_diagnostics, { desc = "Show [E]rror in a popup" })
+-- nset("<leader>e", vim.cmd.TroubleToggle, { desc = "[E]rror diagnostics window toggle" })
+-- nset("<leader>E", popup_diagnostics, { desc = "Show [E]rror in a popup" })
 nset("<leader>t", vim.cmd.tabnew, { desc = "[T]ab create" })
--- Git Helpers
-nset("<leader>gdo", vim.cmd.DiffviewOpen, { desc = "[G]it [D]iff [O]pen" })
-nset("<leader>gdc", vim.cmd.DiffviewClose, { desc = "[G]it [D]iff [C]lose" })
-nset("<leader>gdh", function()
-	vim.cmd.DiffviewFileHistory(vim.fn.expand("%"))
-end, { desc = "Git [D]iff [H]istory" })
 -- Misc
 nset('<C-w>"', window_split_fn(30), { desc = "Open a tmux window below vim." })
 vim.keymap.set("v", "<Leader>p", '"_dP', { noremap = true, desc = "Paste without yanking the highlighted text" })

@@ -51,21 +51,45 @@ return {
 	-- Display lsp diagnostics
 	{
 		"folke/trouble.nvim",
+		tag = (vim.version().minor >= 10 and "v3.4.3" or "v2.10.0"),
 		dependencies = { "nvim-tree/nvim-web-devicons" },
-		tag = "v2.10.0", -- v3.* requires neovim >= 0.9.2
-		opts = { height = 5 },
 		event = "BufRead",
+		opts = {
+			height = 5,
+			auto_preview = true,
+			cycle_results = false,
+		},
+		keys = {
+			{ "<leader>e", vim.cmd.TroubleToggle, desc = "[E]rror diagnostics window toggle" },
+			{ "<leader>xx", vim.cmd.TroubleToggle, desc = "[E]rror diagnostics window toggle" },
+			{
+				"<leader>E",
+				function()
+					vim.diagnostic.open_float(0, {
+						scope = "line",
+						format = function(diag)
+							local level = "w"
+							if diag.severity == 1 then
+								level = "e"
+							end
+							return string.format(
+								"[%s] %s (%s)",
+								level,
+								--diag.lnum + 1,
+								--diag.col + 1,
+								diag.message,
+								diag.source
+							)
+						end,
+					})
+				end,
+				desc = "Show [E]rror in a popup",
+			},
+		},
 	},
 
 	-- Function signature pop-up
-	{
-		"ray-x/lsp_signature.nvim",
-		-- event = "VeryLazy",
-		-- must load after lsp-zero.setup
-		dependencies = { "VonHeikemen/lsp-zero.nvim" },
-		lazy = false,
-		opts = {},
-	},
+	{ "ray-x/lsp_signature.nvim", event = "VeryLazy", opts = {} },
 
 	{
 		"hrsh7th/nvim-cmp",
@@ -81,7 +105,7 @@ return {
 	-- Snippets for completion
 	{
 		"L3MON4D3/LuaSnip",
-		tag = "v2.0.0",
+		tag = "v2.3.0",
 		dependencies = {
 			{
 				"rafamadriz/friendly-snippets",

@@ -22,7 +22,7 @@ set -o ignoreeof
 export LESS="--RAW-CONTROL-CHARS"
 
 # Kubernetes
-export KUBE_EDITOR="code -w"
+export KUBE_EDITOR="nvim"
 
 # AWS cli
 export AWS_PAGER=less

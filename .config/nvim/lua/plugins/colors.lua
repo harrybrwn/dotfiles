@@ -10,11 +10,14 @@ return {
 	{ "shaunsingh/solarized.nvim" },
 	--"maxmx03/solarized.nvim",
 	"sainnhe/sonokai",
-	{ "catppuccin/nvim", tag = "v1.4.0" },
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	"ntk148v/komau.vim",
 	"lunarvim/templeos.nvim",
 	-- { "yorickpeterse/nvim-grey", lazy = false, priority = 1000 },
-	{ "navarasu/onedark.nvim", opts = { style = "darker" }, lazy = false, priority = 1000 },
+	{
+		"navarasu/onedark.nvim",
+		opts = { style = "darker" },
+	},
 	{ "mcchrish/zenbones.nvim", dependencies = { "rktjmp/lush.nvim" }, lazy = false, priority = 1000 },
 
 	{

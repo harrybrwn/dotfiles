@@ -36,7 +36,7 @@ config.background = nil -- reset background
 config.window_background_opacity = 1.0
 
 -- Fonts
-config.font_size = 10
+config.font_size = 11
 config.font_dirs = { wezterm.home_dir .. "/.local/share/fonts" }
 config.font = wezterm.font_with_fallback({
 	-- "LiterationMono Nerd Font",

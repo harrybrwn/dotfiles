@@ -48,10 +48,24 @@ vim.opt.showmode = false
 
 -- Colors
 local theme = vim.cmd.colorscheme
+local guicursor = {
+	"n-v-c-sm:block-Cursor",
+	"i-ci-ve:block-ver25-Cursor",
+	"r-cr-o:hor20",
+}
+local background = "dark"
 vim.opt.syntax = "on"
-vim.opt.background = "dark"
+vim.opt.background = background
 vim.opt.termguicolors = true
-theme("terafox") -- tokyonight gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
+if background == "dark" then
+	theme("terafox") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
+else
+	-- theme("forestbones")
+	theme("catppuccin")
+	vim.cmd([[hi Cursor guifg=grey guibg=grey blend=20]])
+end
+vim.opt.guicursor = table.concat(guicursor, ",")
+
 vim.cmd("highlight SpellBad guifg=NONE guibg=NONE gui=underline")
 -- vim.cmd("highlight FoldColumn guifg=NONE guibg=NONE gui=NONE")
 

@@ -172,7 +172,7 @@ end
 
 -- on_attach function for gopls only
 ---comment
----@param client lsp.Client
+---@param client vim.lsp.Client
 ---@param _ number
 local function gopls_on_attach(client, _)
 	if client.config.settings.gopls == nil then
@@ -251,6 +251,22 @@ function M.setup(opts)
 	editorconfig.properties.yaml_schema = function(_, val, _)
 		yaml_add_schemas(val)
 	end
+
+	-- editorconfig.properties["build_cmd"] = function(_, val, _)
+	-- 	-- vim.print("setting build command", val)
+	-- 	local cmd = shlex.split(val)
+	-- 	local function on_exit(obj)
+	-- 		-- vim.print(obj.code)
+	-- 		-- vim.print(obj.stdout)
+	-- 	end
+	-- 	vim.keymap.set("n", "<leader>b", function()
+	-- 		-- vim.print("running: " .. val)
+	-- 		vim.system(cmd, {
+	-- 			stdin = false,
+	-- 			text = true,
+	-- 		}, on_exit)
+	-- 	end)
+	-- end
 
 	for name in pairs(DisabledLSPEditorConfig) do
 		editorconfig.properties["lsp_" .. name .. "_disabled"] = function(_, val, _)

@@ -75,5 +75,3 @@
     top   = !git --no-pager log --all --graph --abbrev-commit --decorate --oneline -n
 
     smu = submodule update --init --recursive
-	tiuphorse = !echo \"neigh neight bitch\"
-

@@ -1,64 +1,5 @@
 local lspconfig = require("lspconfig")
 
-local function setup_cmd()
-  local cmp = require("cmp")
-
-  cmp.setup({
-    sources = cmp.config.sources({
-      { name = "nvim_lsp" },
-      { name = "luasnip" },
-      -- { name = "buffer" },
-      -- { name = "path" },
-    }),
-    mapping = cmp.mapping.preset.insert({
-      -- `Enter` key to confirm completion
-      ["<CR>"] = cmp.mapping.confirm({ select = false }),
-      -- `Tab` key to confirm completion
-      ["<Tab>"] = cmp.mapping.confirm({ select = false }),
-      -- ['<C-Space>'] = cmp.mapping.complete(),
-
-      ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-      ["<C-u>"] = cmp.mapping.scroll_docs(4),
-      ["<C-y>"] = cmp.mapping.scroll_docs(-1),
-      ["<C-e>"] = cmp.mapping.scroll_docs(1),
-    }),
-    window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
-    },
-  })
-
-  cmp.setup.filetype("gitignore", {
-    sources = {
-      { name = "path" },
-      { name = "buffer" },
-    },
-  })
-
-  -- `/` cmdline setup.
-  cmp.setup.cmdline("/", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = "buffer" },
-    },
-  })
-
-  -- `:` cmdline setup.
-  cmp.setup.cmdline(":", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = "path" },
-    }, {
-      {
-        name = "cmdline",
-        option = {
-          ignore_cmds = { "w", "wq", "Man", "!" },
-        },
-      },
-    }),
-  })
-end
-
 local function rust_analyzer()
   lspconfig.rust_analyzer.setup({
     settings = {
@@ -178,8 +119,69 @@ end
 
 local M = {}
 
+function M.setup_cmp()
+  local lsp = require("lsp-zero")
+  lsp.extend_cmp()
+  local cmp = require("cmp")
+
+  cmp.setup({
+    sources = cmp.config.sources({
+      { name = "nvim_lsp" },
+      { name = "luasnip" },
+      -- { name = "buffer" },
+      -- { name = "path" },
+    }),
+    mapping = cmp.mapping.preset.insert({
+      -- `Enter` key to confirm completion
+      ["<CR>"] = cmp.mapping.confirm({ select = false }),
+      -- `Tab` key to confirm completion
+      ["<Tab>"] = cmp.mapping.confirm({ select = false }),
+      -- ['<C-Space>'] = cmp.mapping.complete(),
+
+      ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-u>"] = cmp.mapping.scroll_docs(4),
+      ["<C-y>"] = cmp.mapping.scroll_docs(-1),
+      ["<C-e>"] = cmp.mapping.scroll_docs(1),
+    }),
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+  })
+
+  cmp.setup.filetype("gitignore", {
+    sources = {
+      { name = "path" },
+      { name = "buffer" },
+    },
+  })
+
+  -- `/` cmdline setup.
+  cmp.setup.cmdline("/", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = "buffer" },
+    },
+  })
+
+  -- `:` cmdline setup.
+  cmp.setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = "path" },
+    }, {
+      {
+        name = "cmdline",
+        option = {
+          ignore_cmds = { "w", "wq", "Man", "!" },
+        },
+      },
+    }),
+  })
+end
+
 function M.setup(opts)
-  local lsp = require("lsp-zero").preset({})
+  local lsp = require("lsp-zero")
   local fmtgroup = vim.api.nvim_create_augroup("LspFormatting", {})
   local auto_format = opts.auto_format
   local ensure_installed = opts.ensure_installed
@@ -222,8 +224,6 @@ function M.setup(opts)
       function(server_name)
         lspconfig[server_name].setup({})
       end,
-
-      -- this is the "custom handler" for `lua_ls`
       lua_ls = function()
         local lua_opts = lsp.nvim_lua_ls()
         lspconfig.lua_ls.setup(lua_opts)
@@ -235,10 +235,6 @@ function M.setup(opts)
       astro = astro,
     },
   })
-
-  lsp.extend_cmp()
-  require("lsp_signature").setup({})
-  setup_cmd()
 end
 
 return M

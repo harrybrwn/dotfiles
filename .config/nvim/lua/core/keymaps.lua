@@ -7,44 +7,23 @@ vim.g.mapleader = ","
 ---@param action string|function
 ---@param opts table|nil
 local function nset(cmd, action, opts)
-	vim.keymap.set("n", cmd, action, opts)
+  vim.keymap.set("n", cmd, action, opts)
 end
 
 ---create a function that runs tmux split-window
 ---@param size number the size of the new split tmux window
 ---@return function
 local function window_split_fn(size)
-	if not tmux.in_tmux() then
-		return function() end
-	end
-	return function()
-		if tmux.term_is_open() then
-			tmux.select_term()
-		else
-			tmux.open_term(size)
-		end
-	end
-end
-
----Open a popup with the error on the current line.
-local function popup_diagnostics()
-	vim.diagnostic.open_float(0, {
-		scope = "line",
-		format = function(diag)
-			local level = "w"
-			if diag.severity == 1 then
-				level = "e"
-			end
-			return string.format(
-				"[%s] %s (%s)",
-				level,
-				--diag.lnum + 1,
-				--diag.col + 1,
-				diag.message,
-				diag.source
-			)
-		end,
-	})
+  if not tmux.in_tmux() then
+    return function() end
+  end
+  return function()
+    if tmux.term_is_open() then
+      tmux.select_term()
+    else
+      tmux.open_term(size)
+    end
+  end
 end
 
 -- Paste without yanking (visual mode)
@@ -58,7 +37,7 @@ vim.keymap.set("v", "<Leader>p", '"_dP', { noremap = true, desc = "Paste without
 
 -- Faster escape key
 for _, mode in pairs({ "i", "n", "v", "c" }) do
-	vim.keymap.set(mode, "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
+  vim.keymap.set(mode, "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
 end
 
 -- Window resizing
@@ -72,16 +51,16 @@ nset("<C-Home>", "2<C-w><", { noremap = true })
 nset("<C-End>", "2<C-w>>", { noremap = true })
 nset("d=", "kJ")
 nset("<C-I>", function()
-	local bufnr = vim.api.nvim_get_current_buf()
-	vim.lsp.buf.format({ bufnr = bufnr })
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.lsp.buf.format({ bufnr = bufnr })
 end)
 nset("<Leader>F", function()
-	vim.cmd("echo expand('%')")
+  vim.cmd("echo expand('%')")
 end)
 nset("<Leader>ct", vim.cmd.tabclose, { noremap = true })
 
 vim.keymap.set(
-	"v",
-	"<leader>c",
-	":'<,'>yank | put! | '<,'>!sh -c \"perl -pe 'chomp if eof' | xclip -i -selection clipboard\""
+  "v",
+  "<leader>c",
+  ":'<,'>yank | put! | '<,'>!sh -c \"perl -pe 'chomp if eof' | xclip -i -selection clipboard\""
 )

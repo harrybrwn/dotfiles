@@ -28,12 +28,12 @@ vim.opt.softtabstop = indent
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.formatoptions = {
-	t = true, -- autowrap using textwidth
-	c = true, -- autowrap using textwidth and insert comment
-	q = true, -- format comments with "gq"
-	j = true, -- remove comment when joining lines
-	r = true, -- insert comment on <Enter>
-	o = false, -- insert comment on "o" and "O"
+  t = true,  -- autowrap using textwidth
+  c = true,  -- autowrap using textwidth and insert comment
+  q = true,  -- format comments with "gq"
+  j = true,  -- remove comment when joining lines
+  r = true,  -- insert comment on <Enter>
+  o = false, -- insert comment on "o" and "O"
 }
 vim.opt.formatoptions:remove("o")
 vim.opt.textwidth = 80
@@ -49,20 +49,20 @@ vim.opt.showmode = false
 -- Colors
 local theme = vim.cmd.colorscheme
 local guicursor = {
-	"n-v-c-sm:block-Cursor",
-	"i-ci-ve:block-ver25-Cursor",
-	"r-cr-o:hor20",
+  "n-v-c-sm:block-Cursor",
+  "i-ci-ve:block-ver25-Cursor",
+  "r-cr-o:hor20",
 }
 local background = "dark"
 vim.opt.syntax = "on"
 vim.opt.background = background
 vim.opt.termguicolors = true
 if background == "dark" then
-	theme("terafox") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
+  theme("terafox") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
 else
-	-- theme("forestbones")
-	theme("catppuccin")
-	vim.cmd([[hi Cursor guifg=grey guibg=grey blend=20]])
+  -- theme("forestbones")
+  theme("catppuccin")
+  vim.cmd([[hi Cursor guifg=grey guibg=grey blend=20]])
 end
 vim.opt.guicursor = table.concat(guicursor, ",")
 

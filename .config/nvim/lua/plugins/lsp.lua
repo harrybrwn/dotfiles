@@ -3,20 +3,22 @@ return {
   {
     "VonHeikemen/lsp-zero.nvim",
     branch = "v3.x",
+    lazy = false,
     dependencies = {
       -- LSP Support
-      { "neovim/nvim-lspconfig" }, -- Required
-      { "williamboman/mason.nvim" }, -- Optional
+      { "neovim/nvim-lspconfig" },             -- Required
+      { "williamboman/mason.nvim" },           -- Optional
       { "williamboman/mason-lspconfig.nvim" }, -- Optional
       -- Snippets
-      { "L3MON4D3/LuaSnip" }, -- Required
+      { "L3MON4D3/LuaSnip" },                  -- Required
       -- Autocompletion
-      { "hrsh7th/nvim-cmp" }, -- Required
-      { "hrsh7th/cmp-nvim-lsp" }, -- Required
+      { "hrsh7th/nvim-cmp" },                  -- Required
+      { "hrsh7th/cmp-nvim-lsp" },              -- Required
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
     },
+
     config = function(_, _)
       require("core.plugins.lsp").setup({
         auto_format = {
@@ -27,6 +29,7 @@ return {
           tsx = true,
           typescript = true,
           typescriptreact = true,
+          terraform = true,
           -- disabled
           json = false,
           jsonc = false,
@@ -36,40 +39,61 @@ return {
         },
         ensure_installed = {
           -- Languages/Frameworks
-          "pyright", -- python
-          "gopls", -- golang
-          "golangci_lint_ls",
-          "rust_analyzer", -- rust
-          "clangd", -- c/c++
-          "sqlls", -- sql
-          --'rnix', -- nix
-          "nil_ls", -- nix
-          "lua_ls", -- lua
-          "html", -- html
-          "astro", -- astro.js
-          "verible", -- SystemVerilog
-          "asm_lsp", -- GAS/NASM/Go assembly
-          "tsserver", -- typescript
-          "eslint", -- web stuff
-          "cssls", -- css
-          "tailwindcss", -- tailwind
-          "volar", -- vue
+          "pyright",                         -- python
+          "gopls",                           -- golang
+          "golangci_lint_ls",                -- golangci-lint
+          "rust_analyzer",                   -- rust
+          "clangd",                          -- c/c++
+          "sqlls",                           -- sql
+          "nil_ls",                          -- nix
+          "lua_ls",                          -- lua
+          "html",                            -- html
+          "astro",                           -- astro.js
+          "verible",                         -- SystemVerilog
+          "asm_lsp",                         -- GAS/NASM/Go assembly
+          "tsserver",                        -- typescript
+          "eslint",                          -- web stuff
+          "cssls",                           -- css
+          "tailwindcss",                     -- tailwind
+          "volar",                           -- vue
           -- Configuration/Tools
-          "ansiblels", -- ansible
-          "terraformls", -- terraform
-          "dockerls", -- docker
-          "bufls", -- protobuf
+          "ansiblels",                       -- ansible
+          "terraformls",                     -- terraform
+          "dockerls",                        -- docker
+          "bufls",                           -- protobuf
           "docker_compose_language_service", -- docker-compose
-          "yamlls", -- yaml
-          "jsonls", -- json
+          "yamlls",                          -- yaml
+          "jsonls",                          -- json
         },
       })
     end,
   },
 
+  {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    config = function()
+      require("core.plugins.lsp").setup_cmp()
+    end,
+    dependencies = {
+      "L3MON4D3/LuaSnip",
+      "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+    },
+  },
+
+
   -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", opts = {}, lazy = false },
+  { "lvimuser/lsp-inlayhints.nvim", opts = {},          lazy = false },
 
   -- Function signature pop-up
-  { "ray-x/lsp_signature.nvim", event = "VeryLazy", opts = {} },
+  { "ray-x/lsp_signature.nvim",     event = "VeryLazy", opts = {} },
+
+  {
+    "j-hui/fidget.nvim",
+    tag = "v1.4.5",
+    event = "LspAttach",
+    opts = {},
+  },
 }

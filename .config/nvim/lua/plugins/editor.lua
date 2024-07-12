@@ -25,9 +25,7 @@ return {
       local diags = null_ls.builtins.diagnostics
       return {
         sources = {
-          fmt.stylua,
           fmt.nixfmt,
-          fmt.terraform_fmt,
           diags.actionlint,
           diags.buf,
         },
@@ -46,12 +44,13 @@ return {
     event = "BufRead",
     opts = {
       height = 5,
-      auto_preview = true,
-      cycle_results = false,
+      keys = {
+        ["<tab>"] = "jump",
+      }
     },
     keys = {
-      { "<leader>e", "<cmd>Trouble diagnostics toggle<cr>", desc = "[E]rror diagnostics window toggle" },
-      { "<leader>xx", vim.cmd.TroubleToggle, desc = "[E]rror diagnostics window toggle" },
+      { "<leader>e",  "<cmd>Trouble diagnostics toggle focus=true<cr>", desc = "[E]rror diagnostics window toggle" },
+      { "<leader>xx", vim.cmd.TroubleToggle,                            desc = "[E]rror diagnostics window toggle" },
       {
         "<leader>E",
         function()
@@ -75,17 +74,6 @@ return {
         end,
         desc = "Show [E]rror in a popup",
       },
-    },
-  },
-
-  {
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
-    dependencies = {
-      "L3MON4D3/LuaSnip",
-      "hrsh7th/cmp-cmdline",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
     },
   },
 
@@ -189,7 +177,7 @@ return {
   {
     "romgrk/barbar.nvim",
     dependencies = {
-      "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+      "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
       "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
     },
     init = function()

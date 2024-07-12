@@ -15,7 +15,7 @@ return {
         untracked = { text = "┆" },
       },
       signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-      numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+      numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
       word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
       watch_gitdir = {
         follow_files = true,
@@ -33,19 +33,19 @@ return {
       -- current_line_blame_formatter = "<author>, <author_time:%R> - <summary>",
     },
     keys = {
-      { "<leader>gB", "<cmd>Gitsigns blame<cr>", mode = { "n" }, desc = "[G]it [B]lame" },
-      { "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>lh", mode = { "n" }, desc = "[G]it [B]lame" },
-      { "<leader>gdw", "<cmd>Gitsigns toggle_word_diff<cr>", mode = { "n" }, desc = "[G]it [D]iff [W]ord" },
-      { "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", mode = { "v" }, desc = "[G]it [A]dd" },
-      { "<leader>gu", "<cmd>Gitsigns undo_stage_hunk<cr>", mode = { "v" }, desc = "[G]it [U]nstage" },
+      { "<leader>gB",  "<cmd>Gitsigns blame<cr>",                       mode = { "n" }, desc = "[G]it [B]lame" },
+      { "<leader>gb",  "<cmd>Gitsigns toggle_current_line_blame<cr>lh", mode = { "n" }, desc = "[G]it [B]lame" },
+      { "<leader>gdw", "<cmd>Gitsigns toggle_word_diff<cr>",            mode = { "n" }, desc = "[G]it [D]iff [W]ord" },
+      { "<leader>gs",  "<cmd>Gitsigns stage_hunk<cr>",                  mode = { "v" }, desc = "[G]it [A]dd" },
+      { "<leader>gu",  "<cmd>Gitsigns undo_stage_hunk<cr>",             mode = { "v" }, desc = "[G]it [U]nstage" },
     },
   },
 
   {
     "NeogitOrg/neogit",
     dependencies = {
-      "nvim-lua/plenary.nvim", -- required
-      "sindrets/diffview.nvim", -- optional - Diff integration
+      "nvim-lua/plenary.nvim",         -- required
+      "sindrets/diffview.nvim",        -- optional - Diff integration
       -- Only one of these is needed, not both.
       "nvim-telescope/telescope.nvim", -- optional
       --"ibhagwan/fzf-lua", -- optional
@@ -69,7 +69,7 @@ return {
       }
     end,
     keys = {
-      { "<leader>gdo", vim.cmd.DiffviewOpen, desc = "[G]it [D]iff [O]pen" },
+      { "<leader>gdo", vim.cmd.DiffviewOpen,  desc = "[G]it [D]iff [O]pen" },
       { "<leader>gdc", vim.cmd.DiffviewClose, desc = "[G]it [D]iff [C]lose" },
       {
         "<leader>gdh",
@@ -78,17 +78,6 @@ return {
         end,
         desc = "Git [D]iff [H]istory",
       },
-    },
-  },
-
-  -- Git Blame
-  {
-    "f-person/git-blame.nvim",
-    lazy = true,
-    enabled = false,
-    opts = { enabled = false },
-    keys = {
-      { "<leader>gb", vim.cmd.GitBlameToggle },
     },
   },
 }

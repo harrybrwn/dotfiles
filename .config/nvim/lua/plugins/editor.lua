@@ -10,39 +10,28 @@ return {
     opts = {},
   },
 
-  -- Language Server
-  {
-    "VonHeikemen/lsp-zero.nvim",
-    branch = "v2.x",
-    dependencies = {
-      -- LSP Support
-      { "neovim/nvim-lspconfig" }, -- Required
-      { "williamboman/mason.nvim" }, -- Optional
-      { "williamboman/mason-lspconfig.nvim" }, -- Optional
-      -- Snippets
-      { "L3MON4D3/LuaSnip", tag = "v2.0.0" }, -- Required
-      -- Autocompletion
-      { "hrsh7th/nvim-cmp" }, -- Required
-      { "hrsh7th/cmp-nvim-lsp" }, -- Required
-      { "hrsh7th/cmp-buffer" },
-      { "hrsh7th/cmp-path" },
-      { "saadparwaiz1/cmp_luasnip" },
-    },
-  },
-
-  -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", opts = {}, lazy = false },
-
   -- Use treesitter to autoclose html tags
   { "windwp/nvim-ts-autotag", lazy = false },
 
   -- null-ls auto formatting
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     enabled = true,
     event = "BufRead",
-    opts = function()
-      return require("core.plugins.null-ls")
+    opts = function(_, _)
+      -- return require("core.plugins.null-ls")
+      local null_ls = require("null-ls")
+      local fmt = null_ls.builtins.formatting
+      local diags = null_ls.builtins.diagnostics
+      return {
+        sources = {
+          fmt.stylua,
+          fmt.nixfmt,
+          fmt.terraform_fmt,
+          diags.actionlint,
+          diags.buf,
+        },
+      }
     end,
     -- must load after lsp-zero.setup
     dependencies = { "VonHeikemen/lsp-zero.nvim" },
@@ -88,9 +77,6 @@ return {
       },
     },
   },
-
-  -- Function signature pop-up
-  { "ray-x/lsp_signature.nvim", event = "VeryLazy", opts = {} },
 
   {
     "hrsh7th/nvim-cmp",

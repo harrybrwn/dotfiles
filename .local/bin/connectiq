@@ -1,0 +1,77 @@
+#!/usr/bin/bash
+
+set -euo pipefail
+
+usage() {
+  echo 'Helper command for a Monkey C development environment.'
+  echo
+  echo 'Usage'
+  echo '  connectiq [flags...] <command>'
+  echo
+  echo 'Flags'
+  echo '  -h --help    print help message'
+  echo
+  echo 'Commands'
+  echo '  env          setup an environment in the current shell'
+  echo '  list-sdks    list installed sdks'
+}
+
+sdk() {
+  find "$HOME/.Garmin/ConnectIQ/Sdks" \
+    -name "connectiq-sdk-lin-7.3.1-*" \
+    -type d
+}
+
+cmd_env() {
+  local sdk="$(sdk)"
+  echo "Using '${sdk}'"
+  CONNECTIQ_SDK="$sdk"    \
+    PATH="$PATH:$sdk/bin" \
+    bash
+}
+
+main() {
+  local args=()
+  while [ $# -gt 0 ]; do
+    case $1 in
+      -h|--help)
+        usage
+        return 0
+        ;;
+      *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+  done
+  for arg in "${args[@]}"; do
+    case $arg in
+      env)
+        cmd_env
+        return 0
+        ;;
+      sdk)
+        sdk
+        return 0
+        ;;
+      list-devices)
+        ls -1 "$HOME/.Garmin/ConnectIQ/Devices"
+        return 0
+        ;;
+      list-sdk|list-sdks)
+        ls -1 "$HOME/.Garmin/ConnectIQ/Sdks"
+        return 0
+        ;;
+      list-cmd|list-cmds|list-commands)
+        ls -1 "$(sdk)/bin"
+        return 0
+        ;;
+      *)
+        echo "Error: unknown command $arg"
+        return 1
+        ;;
+    esac
+  done
+}
+
+main "$@"

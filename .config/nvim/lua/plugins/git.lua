@@ -52,6 +52,9 @@ return {
     },
     lazy = false,
     config = true,
+    keys = {
+      { "<leader>go", vim.cmd.Neogit, desc = "[G]it [O]pen" },
+    },
   },
 
   -- Git diffs

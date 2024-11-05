@@ -128,11 +128,17 @@ __nix_prompt() {
   fi
 }
 
+__connectiq_sdk() {
+  if [ -n "${CONNECTIQ_SDK}" ]; then
+    printf '\033[93m(garmin:%s)\033[0m ' "$(basename "${CONNECTIQ_SDK}")"
+  fi
+}
+
 # Just saving my original
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)\$ '
 if command -v __git_ps1 > /dev/null; then
-  PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)$(__connectiq_sdk)\$ '
 fi
 
 if command -v gopass > /dev/null 2>&1; then

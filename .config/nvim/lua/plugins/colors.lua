@@ -56,10 +56,14 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      override = {
-        FoldColumn = { fg = "none", bg = "none" },
-        Visual = { bg = 0x111111 },
-      },
+      -- override = {
+      --   FoldColumn = { fg = "none", bg = "none" },
+      --   Visual = { bg = 0x111111 },
+      -- },
+      on_highlight = function(highlights, palette)
+        highlights.FoldColumn = { fg = "none", bg = "none" }
+        highlights.Visual = { bg = 0x111111 }
+      end,
       cursorline = {
         -- Bold font in cursorline.
         bold = false,

@@ -26,6 +26,8 @@ return {
       return {
         sources = {
           fmt.nixfmt,
+          fmt.goimports,
+          fmt.goimports_reviser,
           diags.actionlint,
           diags.buf,
         },
@@ -99,6 +101,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     tag = "v0.9.2",
+    enabled = true,
     -- build = helpers.with_notify_disabled(function()
     -- 	-- pcall(require("nvim-treesitter.install").update({ with_sync = true }))
     -- 	require("nvim-treesitter.install").update({ with_sync = true })()
@@ -127,7 +130,7 @@ return {
           "gowork",
           "gotmpl", -- added in this file
           -- web
-          "html",
+          --"html",   -- commented out because it keeps crashing
           "css",
           "http", -- https://learn.microsoft.com/en-us/aspnet/core/test/http-files
           "javascript",
@@ -161,6 +164,9 @@ return {
           "terraform",
           "markdown",
           "markdown_inline",
+        },
+        ignore_install = {
+          "html", -- don't install because it keeps crashing
         },
         sync_install = false,
         auto_install = true,

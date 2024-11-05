@@ -56,9 +56,11 @@
 
 [alias]
     cho   = checkout
+    co    = checkout
     br    = branch
     ls    = ls-files
     amend = commit --amend --no-edit
+    f     = fetch --all --prune --tags
 
     stat         = !git --no-pager diff --stat
     ignored      = !sh -c 'git check-ignore `find .`'

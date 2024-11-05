@@ -58,6 +58,7 @@ nset("<Leader>F", function()
   vim.cmd("echo expand('%')")
 end)
 nset("<Leader>ct", vim.cmd.tabclose, { noremap = true })
+nset("<C-p>", "<cmd><C-p>")
 
 vim.keymap.set(
   "v",

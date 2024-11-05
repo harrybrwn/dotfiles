@@ -56,7 +56,7 @@ end
 local function tsserver()
   -- See configuration does here:
   -- https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md
-  lspconfig.tsserver.setup({
+  lspconfig.ts_ls.setup({
     -- This on_attach function does *not* override the one setup by lsp-zero at
     -- the top of this file.
     on_attach = function(client)
@@ -90,14 +90,23 @@ local function yamlls()
         -- hover = true,
         -- completion = true,
         schemas = {
-          ["http://json.schemastore.org/github-workflow"] = "/.github/workflows/*",
+          -- kubernetes = {
+          --   "k8s/**/*.{yaml,yml}", -- basically only for my homelab lol
+          --   "hack/**/*.{yaml,yml}",
+          -- },
+          kubernetes = "*.{yaml,yml}",
+          ["http://json.schemastore.org/github-workflow"] = ".github/workflows/**/*.{yaml,yml}",
           ["http://json.schemastore.org/github-action"] = {
             "/.github/actions/**/*.{yaml,yml}",
-            "/.github/action*.{yml,yaml}",
+            -- "/.github/action*.{yml,yaml}",
+            -- "/.github/**/*.{yaml,yml}",
           },
           ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
           ["http://json.schemastore.org/chart.json"] = "Chart.yaml",
-          kubernetes = "**/k8s/**/*.{yaml,yml}",
+          ['https://raw.githubusercontent.com/docker/compose/master/compose/config/compose_spec.json'] =
+          'docker-compose*.{yml,yaml}',
+          -- ["https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/argoproj.io/application_v1alpha1.json"] =
+          -- "argocd-application.yaml",
         },
         schemaDownload = { enable = true },
         validate = true,
@@ -114,6 +123,19 @@ local function astro()
         tsdk = vim.fs.normalize("node_modules/typescript/lib"),
       },
     },
+  })
+end
+
+local function helm_ls()
+  lspconfig.helm_ls.setup({
+    settings = {
+      ['helm-ls'] = {
+        yamlls = {
+          enabled = true,
+          path = "yaml-language-server",
+        }
+      }
+    }
   })
 end
 
@@ -228,10 +250,12 @@ function M.setup(opts)
         local lua_opts = lsp.nvim_lua_ls()
         lspconfig.lua_ls.setup(lua_opts)
       end,
+      helm_ls = helm_ls,
       rust_analyzer = rust_analyzer,
       gopls = gopls,
       yamlls = yamlls,
-      tsserver = tsserver,
+      -- tsserver = tsserver,
+      ts_ls = tsserver,
       astro = astro,
     },
   })

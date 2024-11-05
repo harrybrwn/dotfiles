@@ -54,6 +54,21 @@ main() {
         sdk
         return 0
         ;;
+      build)
+        java \
+          -Xms1g \
+          -Dfile.encoding=UTF-8 \
+          -Dapple.awt.UIElement=true \
+          -jar "$(sdk)/bin/monkeybrains.jar" \
+          -o bin/WatchFaceE.prg \
+          -f "$(pwd)/monkey.jungle" \
+          -y "$(pwd)/developer_key" \
+          -d fenix8solar51mm_sim \
+          -w
+      sim|simulator)
+        "$(sdk)/bin/simulator" "$@"
+        return 0
+        ;;
       list-devices)
         ls -1 "$HOME/.Garmin/ConnectIQ/Devices"
         return 0

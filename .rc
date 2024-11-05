@@ -91,6 +91,7 @@ if command -v nvim > /dev/null; then
   alias vim=nvim
 fi
 alias vi=vim v=vim
+alias pwgen=xkcdpass
 
 export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 
@@ -117,6 +118,8 @@ setup() {
       new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
       new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
       select-window -t 'clerk:1'                                           \;\
+    new-session -d -n website -s website -c ~/dev/web/harrybrwn.github.io  \;\
+      new-window -t 'website:2' -c ~/dev/web/harrybrwn.github.io           \;\
     new-session -d -n homelab -s homelab -c ~/dev/web/hrry.me \;\
       new-window    -t 'homelab:2' -c ~/dev/web/hrry.me       \;\
       new-window    -t 'homelab:3' -c ~/dev/web/hrry.me       \;\

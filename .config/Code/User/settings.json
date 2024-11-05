@@ -280,4 +280,5 @@
 
     "nix.enableLanguageServer": true,
     "nix.serverPath": "/home/harry/.nix-profile/bin/rnix-lsp",
+    "monkeyC.developerKeyPath": "/home/harry/dev/garmin/testing/MiscTesting/developer_key",
 }

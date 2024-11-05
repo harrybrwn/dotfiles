@@ -51,7 +51,8 @@ return {
           "astro",                           -- astro.js
           "verible",                         -- SystemVerilog
           "asm_lsp",                         -- GAS/NASM/Go assembly
-          "tsserver",                        -- typescript
+          --"tsserver",                        -- typescript
+          "ts_ls",                           -- typescrypt
           "eslint",                          -- web stuff
           "cssls",                           -- css
           "tailwindcss",                     -- tailwind
@@ -64,6 +65,7 @@ return {
           "docker_compose_language_service", -- docker-compose
           "yamlls",                          -- yaml
           "jsonls",                          -- json
+          "helm_ls"
         },
       })
     end,
@@ -96,4 +98,6 @@ return {
     event = "LspAttach",
     opts = {},
   },
+
+  { "towolf/vim-helm", enabled = false, config = false, lazy = false },
 }

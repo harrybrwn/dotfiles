@@ -1,9 +1,4 @@
-#!/bin/bash
-
-#host="$(hostname)"
-#if [ "$host" = "harry-yoga920" ]; then
-#    tmux set -g prefix C-f
-#fi
+#!/bin/sh
 
 if [ -n "$SSH_CLIENT" ] && [ -n "$SSH_TTY" ]; then
   tmux set -g prefix C-b

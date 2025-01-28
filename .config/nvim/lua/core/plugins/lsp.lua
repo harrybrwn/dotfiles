@@ -1,4 +1,5 @@
 local lspconfig = require("lspconfig")
+local path = require("core.util.path")
 
 local function rust_analyzer()
   lspconfig.rust_analyzer.setup({
@@ -248,6 +249,17 @@ function M.setup(opts)
       end,
       lua_ls = function()
         local lua_opts = lsp.nvim_lua_ls()
+        local xdg_config_home = os.getenv("XDG_CONFIG_HOME")
+        if xdg_config_home ~= nil then
+          table.insert(
+            lua_opts.settings.Lua.workspace.library,
+            path.join(xdg_config_home, "LuaLS")
+          )
+        end
+        table.insert(
+          lua_opts.settings.Lua.workspace.library,
+          "/usr/share/LuaLS"
+        )
         lspconfig.lua_ls.setup(lua_opts)
       end,
       helm_ls = helm_ls,

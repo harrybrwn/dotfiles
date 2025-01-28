@@ -10,6 +10,7 @@
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+[[ -d /sbin && ":$PATH:" != *":/sbin:"* ]] && PATH="/sbin:$PATH"
 
 export EDITOR=nvim
 export VISUAL=vim
@@ -31,22 +32,18 @@ export AWS_DEFAULT_OUTPUT=json
 # Go
 export GOPATH="$HOME/dev/go"
 export GOROOT="/usr/local/go"
-if [ -z "$TMUX" ]; then
-  PATH="$GOPATH/bin:$PATH"
-  PATH="$GOROOT/bin:$PATH"
-fi
+[[ -d "$GOPATH" && ":${PATH}:" != *":${GOPATH}/bin:"* ]] && PATH="$GOPATH/bin:$PATH"
+[[ -d "$GOROOT" && ":${PATH}:" != *":${GOROOT}/bin:"* ]] && PATH="$GOROOT/bin:$PATH"
 
 [ -f "$HOME/.local/profile.d/profile.sh" ] && source "$HOME/.local/profile.d/profile.sh"
-if [ -z "$TMUX" ] && [ -d "$HOME/.local/bin" ]; then
-  PATH="$HOME/.local/bin:$PATH"
-fi
-if [ -d "$HOME/.local/share/yarn/global" ]; then
-  PATH="$PATH:$HOME/.local/share/yarn/global/node_modules/.bin"
-fi
 
 export THEME_SECONDARY_COLOR='109'
 
-if command -v exa > /dev/null 2>&1; then
+if command -v eza > /dev/null 2>&1; then
+  alias ls='eza --group-directories-first'
+  alias l='ls -la --git'
+  alias la='ls -a --group-directories-first'
+elif command -v exa > /dev/null 2>&1; then
   alias ls='exa --group-directories-first'
   alias l='ls -la --git'
   alias la='ls -a --group-directories-first'
@@ -67,9 +64,7 @@ alias jsonfmt='python3 -m json.tool'
 alias re='perl -pe'
 alias go-test-cover='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 # My Tool aliases
-alias pass=gopass
 alias say=espeak wifi=wavemon
-alias btc=bitcoin-cli
 alias :q=exit q=exit
 alias :e=vim
 alias watchkube="watch 'kubectl get pods -A && printf \"%120s\n\" | sed \"s/ /-/g\" && kubectl top pods -A --sort-by memory'"
@@ -102,6 +97,14 @@ if [ -f /opt/drawio/drawio ]; then
   alias drawio=/opt/drawio/drawio
 fi
 
+# Docker
+export COMPOSE_DOCKER_CLI_BUILD=1
+
+# Node Version Manager (nvm)
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 setup() {
   if [ -n "$TMUX" ]; then
     echo 'environment already setup'
@@ -114,9 +117,9 @@ setup() {
   tmux \
     new-session  -d -n misc -s misc -c ~/    \;\
     new-session  -d -n 'dev' -s dev -c ~/dev \;\
-    new-session  -d -n clerk -s clerk -c ~/dev/finance/statement-viewer    \;\
-      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
-      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/statement-viewer \;\
+    new-session  -d -n clerk -s clerk -c ~/dev/finance/clerk    \;\
+      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/clerk \;\
+      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/clerk \;\
       select-window -t 'clerk:1'                                           \;\
     new-session -d -n website -s website -c ~/dev/web/harrybrwn.github.io  \;\
       new-window -t 'website:2' -c ~/dev/web/harrybrwn.github.io           \;\
@@ -129,43 +132,6 @@ setup() {
       new-window -t 'home:3' -n 'home' -c ~/ \;\
       select-window -t 'home:1'              \;\
     select-window -t 'home:1'
-}
-
-wttr() {
-  local request="https://wttr.in/"
-  local args=()
-  while [ $# -gt 0 ]; do
-    case $1 in
-      -h|--help)
-        request+=':help'
-        shift
-        ;;
-      *)
-        request+="$1"
-        shift
-        ;;
-    esac
-  done
-  #local request="wttr.in/"
-  #local request="wttr.in/?0" # small
-  #local request="wttr.in/?n" # shorter
-  [ "$(tput cols)" -lt 125 ] && request+='?n'
-  #echo "$request"
-  curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
-}
-
-fsizes() {
-  du -bshc $(\ls -A) | sort -rh
-}
-
-mkdircd() {
-  mkdir $1 && cd $1
-}
-
-net() {
-  # lspci -vv -s $(lspci | grep -i wireless | awk '{print $1}')
-  # iwconfig $(iw dev | awk '/Interface /{print $2}')
-  watch -n1 --color nmcli --colors yes device wifi list
 }
 
 # Because i'm scared
@@ -274,20 +240,6 @@ goxxd <file> [options]
   echo "}"
 }
 
-show-colors() {
-  if [ -n "$1" ]; then
-    echo "\x1b[38;5;$1mcolor$1 "
-    return;
-  fi
-  for i in {0..255}; do
-    printf "\x1b[38;5;${i}mcolor%3d " $i
-    if (( i%10==0&&i>0 )); then
-      printf "\n"
-    fi
-  done
-  echo ''
-}
-
 export NOTES="$HOME/.config/notes"
 
 note() {
@@ -341,21 +293,6 @@ py() {
   python3 -c "print($@)"
 }
 
-reset-mouse-speed() {
-  if command -v xinput > /dev/null 2>&1; then
-    xinput set-prop 'MX Master 2S Mouse' 'libinput Accel Speed' 1.0 > /dev/null 2>&1
-    xinput set-prop 'MX Master 2S Mouse' 'Coordinate Transformation Matrix' \
-      1.0 0.0 0.0 \
-      0.0 1.0 0.0 \
-      0.0 0.0 1.0 > /dev/null 2>&1
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'libinput Accel Speed' 1.0
-    xinput set-prop 'SYNA2B31:00 06CB:7F8B Touchpad' 'Coordinate Transformation Matrix' \
-      1.0 0.0 0.0 \
-      0.0 1.0 0.0 \
-      0.0 0.0 1.0
-  fi
-}
-
 wallpaper() {
   if [ ! -f "$1" ]; then
     echo "Error no file"
@@ -366,53 +303,4 @@ wallpaper() {
     picture-uri "file://$(readlink -f "$1")"
 }
 
-ipv6-disable() {
-  echo '$ sudo -v'
-  sudo -v
-  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
-  sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
-  # sudo sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
-}
-
-ipv6-enable() {
-  echo '$ sudo -v'
-  sudo -v
-  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
-  sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
-  # sudo sysctl -w net.ipv6.conf.tun0.disable_ipv6=0
-  sudo sysctl -p
-}
-
-# Docker
-export COMPOSE_DOCKER_CLI_BUILD=1
-
-# Node Version Manager
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Grossness :(
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
-export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
-export CATALINA_BASE="/usr/local/tomcat7"
-export CATALINA_HOME="$CATALINA_BASE"
-export TOMCAT_HOME="$CATALINA_HOME"
-#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
-
-source "$XDG_CONFIG_HOME/cargo/env"
-
-export RUST_BACKTRACE=1 # 0|1|full
-
-# pnpm
-export PNPM_HOME="/home/harry/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-# bun
-export BUN_INSTALL="$XDG_CONFIG_HOME/bun"
-export PATH="$PATH:$BUN_INSTALL/bin"
-
-# vim: syn=sh ts=1 sts=2 sw=2
+# vim: syntax=bash ts=1 sts=2 sw=2

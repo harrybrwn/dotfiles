@@ -107,13 +107,52 @@ battery() {
     if (! $STATUS_BATTERY_BAR) && (! $STATUS_BATTERY_PERCENT); then
         return
     fi
+    local percent
+    local state
 
-    # Find the battery name
-    local bat=$(upower -e | grep -E 'battery' | head -n1)
-    # Get the battery's percentage
-    local percent=$(upower -i $bat | awk '/percentage:/{print $2}' | tr -d '%')
-    # Get the battery's chargine state
-    local state=$(upower -i $bat | awk '/state:/{print $2}')
+    if command -v upower 2>&1 >/dev/null; then
+      # Find the battery name
+      local bat=$(upower -e | grep -E 'battery' | head -n1)
+      # Get the battery's percentage
+      percent=$(upower -i $bat | awk '/percentage:/{print $2}' | tr -d '%')
+      # Get the battery's chargine state
+      state=$(upower -i $bat | awk '/state:/{print $2}')
+    else
+      local p=''
+      if [ -d /sys/class/power_supply/BAT1 ]; then
+        p=/sys/class/power_supply/BAT1
+      fi
+      if [ -d /sys/class/power_supply/BAT0 ]; then
+        p=/sys/class/power_supply/BAT0
+      fi
+      if [ -z "$p" ]; then
+        echo ''
+        echo "no battery" >> "$XDG_CONFIG_HOME/tmux/log"
+        return
+      fi
+      if [ -f "$p/energy_now" ] && [ -f "$p/energy_full" ]; then
+        # echo 'using energy_now' >> $XDG_CONFIG_HOME/tmux/log
+        local now="$(cat $p/energy_now)"
+        local full="$(cat $p/energy_full)"
+        percent="$(echo "scale=2; 100 * ($now / $full)" | bc)"
+      elif [ -f "$p/charge_now" ] && [ -f "$p/charge_full" ]; then
+        # echo 'using charge_now' >> $XDG_CONFIG_HOME/tmux/log
+        local now="$(cat $p/charge_now)"
+        local full="$(cat $p/charge_full)"
+        percent="$(echo "scale=4; 100 * ($now / $full)" | bc)"
+      else
+        echo 'could not find current charge' >> "$XDG_CONFIG_HOME/tmux/log"
+      fi
+      state="$(cat "$p/status" | tr '[:upper:]' '[:lower:]')"
+      case "$state" in
+        'not charging')
+          state=discharging
+          ;;
+        *)
+          ;;
+      esac
+      #echo "bat1 path=${p} $percent% $(cat $p/energy_now) state=$state" >> $XDG_CONFIG_HOME/tmux/log
+    fi
 
     if $STATUS_BATTERY_COLOR; then
         local out="#[fg=$(_percent_hex_range $percent)]"
@@ -135,7 +174,7 @@ battery() {
 
     # If we could not find the percent, output nothing
     if [ -z "$percent" ]; then
-        echo ''
+        echo '<none>'
     else
         # Check to see if the user has
         # disabled the battery bar or not

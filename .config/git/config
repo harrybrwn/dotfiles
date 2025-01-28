@@ -77,3 +77,7 @@
     top   = !git --no-pager log --all --graph --abbrev-commit --decorate --oneline -n
 
     smu = submodule update --init --recursive
+
+    longlog  = log --all --graph --abbrev-commit --decorate \
+        --date='format:%a, %b %0d %l:%M:%S %P %Y' \
+        --pretty='tformat:%C(auto)%h%Creset %Cblue(%cd) (%ad)%Creset%C(auto)%d%Creset %s %C(magenta)[%cn]%Creset'

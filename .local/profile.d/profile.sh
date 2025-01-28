@@ -7,6 +7,8 @@ fi
 LIBFILES=(
     "vars.sh"
     "paths.sh"
+    "keys.sh"
+    "util.sh"
 )
 for f in ${LIBFILES[@]}; do
     if [ -f "$BASEDIR/$f" ]; then

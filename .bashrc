@@ -160,7 +160,15 @@ fi
 complete -C /usr/bin/mc mc
 
 if [ ! -f /usr/local/share/complete_alias/complete_alias ]; then
-  sudo git clone git@github.com:cykerway/complete-alias.git /usr/local/share/complete_alias
+  read -p "Install 'complete-aliases' completion for aliases (y/n): " -n 1 -r
+  case "$REPLY" in
+    y|Y)
+      git clone git@github.com:cykerway/complete-alias.git /tmp/complete-aliases
+      sudo mv /tmp/complete-aliases /usr/local/share/complete_alias
+      ;;
+    *) ;;
+  esac
+  unset REPLY
 fi
 if [ -f /usr/local/share/complete_alias/complete_alias ]; then
   . /usr/local/share/complete_alias/complete_alias
@@ -170,27 +178,3 @@ if [ -f /usr/local/share/complete_alias/complete_alias ]; then
     done
   fi
 fi
-
-# # >>> conda initialize >>>
-# # !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/home/harry/.local/share/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
-#         . "/home/harry/.local/share/anaconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/home/harry/.local/share/anaconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# # <<< conda initialize <<<
-# export PATH="$HOME/.local/share/anaconda3/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/home/harry/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

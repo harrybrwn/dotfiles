@@ -39,18 +39,18 @@ return {
         },
         ensure_installed = {
           -- Languages/Frameworks
-          "pyright",                         -- python
-          "gopls",                           -- golang
-          "golangci_lint_ls",                -- golangci-lint
-          "rust_analyzer",                   -- rust
-          "clangd",                          -- c/c++
-          "sqlls",                           -- sql
-          "nil_ls",                          -- nix
-          "lua_ls",                          -- lua
-          "html",                            -- html
-          "astro",                           -- astro.js
-          "verible",                         -- SystemVerilog
-          "asm_lsp",                         -- GAS/NASM/Go assembly
+          "pyright",          -- python
+          "gopls",            -- golang
+          "golangci_lint_ls", -- golangci-lint
+          "rust_analyzer",    -- rust
+          "clangd",           -- c/c++
+          "sqlls",            -- sql
+          --"nil_ls",           -- nix
+          "lua_ls",           -- lua
+          "html",             -- html
+          "astro",            -- astro.js
+          "verible",          -- SystemVerilog
+          --"asm_lsp",                        -- GAS/NASM/Go assembly
           --"tsserver",                        -- typescript
           "ts_ls",                           -- typescrypt
           "eslint",                          -- web stuff
@@ -61,7 +61,6 @@ return {
           "ansiblels",                       -- ansible
           "terraformls",                     -- terraform
           "dockerls",                        -- docker
-          "bufls",                           -- protobuf
           "docker_compose_language_service", -- docker-compose
           "yamlls",                          -- yaml
           "jsonls",                          -- json

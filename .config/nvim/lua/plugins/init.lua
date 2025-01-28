@@ -7,7 +7,7 @@ return {
     "zbirenbaum/copilot.lua",
     enabled = function()
       local name = vim.fn.hostname()
-      return name ~= "thinkpadx1"
+      return name == "jcadmin-Latitude-9520" and os.getenv("USER") == "hbrown"
     end,
     lazy = false,
     cmd = "Copilot",

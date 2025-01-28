@@ -1,0 +1,4 @@
+*.sh
+!profile.sh
+!util.sh
+!vars.sh

@@ -2,7 +2,7 @@
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_CACHE_HOME"  ] && export XDG_CACHE_HOME="$HOME/.cache"
 [ -z "$XDG_DATA_HOME"   ] && export XDG_DATA_HOME="$HOME/.local/share"
-[ -z "$XDG_STATE_HOME"  ] && export XDG_DATA_HOME="$HOME/.local/state"
+[ -z "$XDG_STATE_HOME"  ] && export XDG_STATE_HOME="$HOME/.local/state"
 #export XDG_RUNTIME_DIR=
 
 # Python stuff
@@ -14,6 +14,8 @@ export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
 # Rust/Cargo
 export CARGO_HOME="$XDG_CONFIG_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export RUST_BACKTRACE=1 # 0|1|full
+[ -f "$CARGO_HOME/env" ] && source "$CARGO_HOME/env"
 
 # Ruby's Gem
 export GEM_HOME="$XDG_CONFIG_HOME/gem"
@@ -24,7 +26,6 @@ export STACK_ROOT="$XDG_CONIFIG_HOME/stack"
 
 # Docker
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
-export MACHINE_STORAGE_PATH="$XDG_DATA_HOME/docker/machine"
 
 # Gpg
 #export GNUPGHOME="$XDG_DATA_HOME/gnupg"
@@ -103,9 +104,35 @@ export MC_CONFIG_DIR="$XDG_CONFIG_HOME/mc"
 #export TF_PLUGIN_CACHE_DIR="$TF_CLI_CONFIG_FILE/plugin-cache"
 
 # Nix
-export PATH="$PATH:$HOME/.local/state/nix/profiles/profile/bin"
-
-# My secret keys
-if [ -f ~/.local/profile.d/keys.sh ]; then
-    . ~/.local/profile.d/keys.sh
+if [ -d "$HOME/.local/state/nix/profiles/profile/bin" ]; then
+  export PATH="$PATH:$HOME/.local/state/nix/profiles/profile/bin"
 fi
+
+# Yarn
+if [[ 
+  -d "$HOME/.local/share/yarn/global" &&
+  ":$PATH:" != *":$HOME/.local/share/yarn/global/node_modules/.bin:"*
+]]; then
+  PATH="$PATH:$HOME/.local/share/yarn/global/node_modules/.bin"
+fi
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) [ -d "$PNPM_HOME" ] && export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# bun
+export BUN_INSTALL="$XDG_CONFIG_HOME/bun"
+export PATH="$PATH:$BUN_INSTALL/bin"
+
+# Grossness :(
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
+export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
+export CATALINA_BASE="/usr/local/tomcat7"
+export CATALINA_HOME="$CATALINA_BASE"
+export TOMCAT_HOME="$CATALINA_HOME"
+#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
+
+# vim: syntax=bash

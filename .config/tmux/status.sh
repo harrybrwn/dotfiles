@@ -37,6 +37,9 @@
 # * STATUS_BATTERY_PERCENT - Enable or disable the battery percentage
 #   type: bool
 #   default: true
+#
+# * STATUS_PREFIX_ON_COLOR
+#   type: string
 
 set -e
 
@@ -47,6 +50,7 @@ low=220
 crit=1
 
 BG=default
+FG=black
 DULL=colour246
 IMPORTANT=colour250
 
@@ -67,7 +71,15 @@ fi
 wifi() {
     local ssid=$(iw dev | sed -En 's/\s*(ssid )(.*$)/\2/p')
     if [ -z "$ssid" ]; then
-        echo 'Not Connected'
+        local net_dev="$(
+          ip address \
+          | awk '/state UP/ { gsub(/:$/, "", $2); print $2 }'
+        )"
+        if [ -z "$net_dev" ]; then
+          echo 'no network'
+        else
+          echo "nic:$net_dev"
+        fi
         return
     fi
 
@@ -152,7 +164,7 @@ date_status() {
 }
 
 time_status() {
-    echo "#[bg=colour240,fg=$IMPORTANT] %l:%M %P #[bg=default]"
+    echo "#[bg=colour240,fg=$IMPORTANT]%l:%M %P #[bg=default]"
 }
 
 # This script
@@ -179,28 +191,28 @@ apply() {
     local WIFI="#[fg=$DULL]#($self wifi -a)"
     local stats=""
     if $STATUS_CPU && [ ! -z "$CPU" ]; then
-        stats="$stats $CPU $sep"
+        stats="$stats$CPU$sep"
     fi
     if $STATUS_MEM && [ ! -z "$MEM" ]; then
-        stats="$stats $MEM $sep"
+        stats="$stats$MEM$sep"
     fi
     if $STATUS_WIFI && [ ! -z "$WIFI" ]; then
-        stats="$stats $WIFI $sep"
+        stats="$stats$WIFI$sep"
     fi
-    # tmux set -g message-fg "$DULL"
-    # tmux set -g message-bg "default"
+    local current_win_color="${STATUS_PANE_COLOR_ACTIVE:-colour247}"
     tmux \
+        set -g status-style bg=default,fg=default \; \
         set -g status-right-length 110    \; \
         set -g status-left-length 50      \; \
         set -g status-bg $BG              \; \
-        set -g message-style fg="$DULL"   \;\
-        set -g message-style bg="default" \;\
+        set -g message-style fg="$DULL"   \; \
+        set -g message-style bg="default" \; \
         set -g status-left \
-"#[bg=$SESSION_BG,fg=default]\
-#{?client_prefix,#[bg=$IMPORTANT]#[fg=$BG] #S ,[#S]}#[bg=$BG,fg=$BG] " \; \
+"#[bg=${STATUS_PREFIX_ON_COLOR:-$SESSION_BG},fg=$FG]\
+#{?client_prefix,#[bg=$IMPORTANT]#[fg=$FG] #S ,[#S]}#[bg=$BG,fg=$BG] " \; \
         setw -g window-status-format '#[bg=colour0,fg=$dull]#[fg=colour7] #W ' \; \
-        setw -g window-status-current-format '#[bg=colour235,fg=colour247,nobold,italics] #W ' \; \
-        set -g status-right "#{?$if_width_lt_110,,$stats }$(date_status) $(time_status) #($lib/battery.sh)"
+        setw -g window-status-current-format "#[bg=colour235,fg=${current_win_color},nobold,italics] #W " \; \
+        set -g status-right "#{?$if_width_lt_110,,$stats}$(date_status) $(time_status) #($lib/battery.sh)"
 }
 
 "$@"

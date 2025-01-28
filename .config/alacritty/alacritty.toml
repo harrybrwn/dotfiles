@@ -1,0 +1,82 @@
+# https://alacritty.org/config-alacritty.html
+
+# Pulled from https://github.com/alacritty/alacritty-theme
+import = [
+    "~/.config/alacritty/themes/terafox.toml",
+    # "~/.config/alacritty/themes/everforest_dark.toml",
+    # "~/.config/alacritty/themes/solarized_dark.toml",
+    # "~/.config/alacritty/themes/gruvbox_dark.toml",
+    # "~/.config/alacritty/themes/nightfox.toml",
+    # "~/.config/alacritty/themes/ayu_mirage.toml",
+]
+
+[cursor]
+style = "Block"
+
+[colors]
+# transparent_background_colors = true
+
+[colors.cursor]
+text = "#000000"
+# text = "#ffffff"
+
+[font]
+size = 11
+
+[font.normal]
+family = "RobotoMono Nerd Font Mono"
+style = "Regular"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "Key0"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ToggleFullscreen"
+key = "F11"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 1000
+
+[window]
+decorations = "full"
+dynamic_padding = false
+opacity = 1.0
+startup_mode = "Windowed"
+title = "lol"
+
+[window.dimensions]
+columns = 138
+lines = 58
+
+[window.padding]
+x = 0
+y = 0
+
+[window.position]
+x = 4600
+y = 60

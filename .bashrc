@@ -159,7 +159,7 @@ fi
 
 complete -C /usr/bin/mc mc
 
-if [ ! -f /usr/local/share/complete_alias/complete_alias ]; then
+if [ ! -f /usr/local/share/complete_alias/complete_alias ] && [ ! -f /usr/share/complete-alias/complete_alias ]; then
   read -p "Install 'complete-aliases' completion for aliases (y/n): " -n 1 -r
   case "$REPLY" in
     y|Y)
@@ -170,11 +170,15 @@ if [ ! -f /usr/local/share/complete_alias/complete_alias ]; then
   esac
   unset REPLY
 fi
-if [ -f /usr/local/share/complete_alias/complete_alias ]; then
-  . /usr/local/share/complete_alias/complete_alias
-  if [ -n "${COMPLETE_ALIASES:-}" ]; then
-    for a in ${COMPLETE_ALIASES}; do
-      complete -F _complete_alias "$a"
-    done
+
+for f in /usr/share/complete-alias/complete_alias /usr/local/share/complete_alias/complete_alias; do
+  if [ -f "$f" ]; then
+    source "$f"
+    if [ -n "${COMPLETE_ALIASES:-}" ]; then
+      for a in ${COMPLETE_ALIASES}; do
+        complete -F _complete_alias "$a"
+      done
+    fi
+    break
   fi
-fi
+done

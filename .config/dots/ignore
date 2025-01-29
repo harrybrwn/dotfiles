@@ -1,21 +1,24 @@
 .dots/repo
 .config/dots/repo
+.config/dots/README.md
 .config/tmux/history
 .config/tmux/log
+.config/python/python_history
 .config/cargo
 .config/go/telemetry
 .config/nvm
 
 .local/share/rustup
+.local/share/nvim
 .local/state/nvim
 
-.cache/go-build
-.cache/gopls
-.cache/nvim
+.cache/
 
 dev/go/pkg
-.npm/
+dev/golang/
+dev/vendor
 .bash_history
+.lesshst
 .sudo_as_admin_successful
 
 !.ssh/config

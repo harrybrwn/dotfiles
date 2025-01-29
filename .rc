@@ -12,6 +12,8 @@
 [[ $- != *i* ]] && return
 [[ -d /sbin && ":$PATH:" != *":/sbin:"* ]] && PATH="/sbin:$PATH"
 
+[ -f "$HOME/.local/profile.d/profile.sh" ] && source "$HOME/.local/profile.d/profile.sh"
+
 export EDITOR=nvim
 export VISUAL=vim
 export PAGER=less
@@ -35,7 +37,8 @@ export GOROOT="/usr/local/go"
 [[ -d "$GOPATH" && ":${PATH}:" != *":${GOPATH}/bin:"* ]] && PATH="$GOPATH/bin:$PATH"
 [[ -d "$GOROOT" && ":${PATH}:" != *":${GOROOT}/bin:"* ]] && PATH="$GOROOT/bin:$PATH"
 
-[ -f "$HOME/.local/profile.d/profile.sh" ] && source "$HOME/.local/profile.d/profile.sh"
+# Rust
+export RUSTC_WRAPPER=/usr/bin/sccache
 
 export THEME_SECONDARY_COLOR='109'
 

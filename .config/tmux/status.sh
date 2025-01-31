@@ -72,8 +72,8 @@ wifi() {
     local ssid=$(iw dev | sed -En 's/\s*(ssid )(.*$)/\2/p')
     if [ -z "$ssid" ]; then
         local net_dev="$(
-          ip address \
-          | awk '/state UP/ { gsub(/:$/, "", $2); print $2 }'
+          ip -oneline -family inet address show up dynamic \
+            | awk '{ print $2 }'
         )"
         if [ -z "$net_dev" ]; then
           echo 'no network'

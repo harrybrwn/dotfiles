@@ -107,6 +107,8 @@ fi
 
 # Docker
 export COMPOSE_DOCKER_CLI_BUILD=1
+export BUILDX_BAKE_ENTITLEMENTS_FS=0
+export DOCKER_BUILDKIT=1
 
 # Node Version Manager (nvm)
 export NVM_DIR="$HOME/.config/nvm"
@@ -115,36 +117,70 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # Python environment
 if [[ -x "$XDG_DATA_HOME/venv/bin/pip" && -x "$XDG_DATA_HOME/venv/bin/python" ]]; then
-  PATH="$XDG_DATA_HOME/venv/bin:$PATH"
+  [[ ":${PATH}:" != *":$XDG_DATA_HOME/venv/bin:"* ]] && PATH="$XDG_DATA_HOME/venv/bin:$PATH"
 fi
 
 setup() {
-  if [ -n "$TMUX" ]; then
-    echo 'environment already setup'
-    exit 1
-  fi
-  if tmux has-session -t 'home' 2>/dev/null; then
-    tmux attach
-    return
-  fi
-  tmux \
-    new-session  -d -n misc -s misc -c ~/    \;\
-    new-session  -d -n 'dev' -s dev -c ~/dev \;\
-    new-session  -d -n clerk -s clerk -c ~/dev/finance/clerk    \;\
-      new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/clerk \;\
-      new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/clerk \;\
-      select-window -t 'clerk:1'                                           \;\
-    new-session -d -n website -s website -c ~/dev/web/harrybrwn.github.io  \;\
-      new-window -t 'website:2' -c ~/dev/web/harrybrwn.github.io           \;\
-    new-session -d -n homelab -s homelab -c ~/dev/web/hrry.me \;\
-      new-window    -t 'homelab:2' -c ~/dev/web/hrry.me       \;\
-      new-window    -t 'homelab:3' -c ~/dev/web/hrry.me       \;\
-      select-window -t 'homelab:1'                            \;\
-    new-session -n 'home' -s home -c ~/      \;\
-      new-window -t 'home:2' -n 'home' -c ~/ \;\
-      new-window -t 'home:3' -n 'home' -c ~/ \;\
-      select-window -t 'home:1'              \;\
-    select-window -t 'home:1'
+  t-new() {
+    declare -a tflags=('-A') # attach only if session already exists
+    declare -a args=()
+    if [ -n "$TMUX" ]; then
+      tflags+=('-d') # detach after creating session
+    fi
+    local s=""
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        -s) s="$2";        shift 2 ;;
+        *)  args+=("$1"); shift   ;;
+      esac
+    done
+    tmux new-session "${tflags[@]}" -s "$s" "${args[@]}"
+    [ -n "$TMUX" ] && tmux switch-client -t "$s"
+  }
+
+  case "$1" in
+    at)
+      t-new -s at -n at -c ~/dev/bsky/at \;\
+        new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
+        new-window    -t 'at:3' -n at -c ~/dev/bsky/at \;\
+        select-window -t 'at:1'
+      ;;
+    dev)
+      t-new -s dev -n dev -c ~/dev
+      ;;
+    homelab|lab)
+      t-new -s homelab -n homelab -c ~/dev/web/hrry.me \;\
+        new-window    -t 'homelab:2' -n homelab -c ~/dev/web/hrry.me \;\
+        new-window    -t 'homelab:3' -n homelab -c ~/dev/web/hrry.me \;\
+        select-window -t 'homelab:1'
+      ;;
+    clerk)
+      t-new -s clerk -n clerk -c ~/dev/finance/clerk \;\
+        new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/clerk \;\
+        new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/clerk \;\
+        select-window -t 'clerk:1'
+      ;;
+    '')
+      if tmux has-session -t 'home' 2>/dev/null; then
+        # echo 'Error: default session was already created' >&2
+        # return 1
+        exec tmux attach -t home
+        return 0
+      fi
+      tmux \
+        new-session -d -n misc   -s misc -c ~    \;\
+        new-session -d -n 'dev'  -s dev -c ~/dev \;\
+        new-session    -n 'home' -s home -c ~    \;\
+          new-window -t 'home:2' -n 'home' -c ~  \;\
+          new-window -t 'home:3' -n 'home' -c ~  \;\
+          select-window -t 'home:1'              \;\
+        select-window -t 'home:1'
+      ;;
+    *)
+      echo "Error: unknown session name \"$1\"" >&2
+      return 1
+      ;;
+  esac
 }
 
 # Because i'm scared
@@ -316,4 +352,4 @@ wallpaper() {
     picture-uri "file://$(readlink -f "$1")"
 }
 
-# vim: syntax=bash ts=1 sts=2 sw=2
+# vim: ft=bash syntax=bash ts=1 sts=2 sw=2

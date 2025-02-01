@@ -1,6 +1,7 @@
 # Private Config Files
 /.apizza
 /.config/apizza
+/.config/wget/cookies
 /.local/share/gnupg
 /.gnupg
 /.vim/viminfo*
@@ -15,6 +16,9 @@
 .config/google-chrome/Default
 .config/BraveSoftware/Brave-Browser/Default
 .config/psql/history
+
+# Data
+/.cache/
 
 # Vim Swapfiles
 [._]*.s[a-v][a-z]

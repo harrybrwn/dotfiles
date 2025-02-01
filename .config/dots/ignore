@@ -8,14 +8,23 @@
 .config/go/telemetry
 .config/nvm
 .config/docker/buildx
+.config/BraveSoftware
+.config/wget/cookies
+.config/wget/wget-hsts
+.config/ibus/
+snap/
 
 .local/share/rustup
 .local/share/nvim
+.local/share/evolution
+.local/share/venv
 .local/state/nvim
+.local/share/delta/lesshst
 
 .cache/
+.pki/
 
-dev/go/pkg
+dev/go/pkg/
 dev/golang/
 dev/vendor
 .bash_history

@@ -1,12 +1,13 @@
 [user]
-    email = harrybrown98@gmail.com
+	email = me@h3y.sh
     name = Harry Brown
     signingkey = 056BB3A269A76794
 
 [core]
     editor = 'nvim'
     excludesFile = ~/.config/git/gitignore # global gitignore
-    pager = less
+    #pager = less
+    pager = delta
 
 [include]
     # include another file in git config
@@ -53,6 +54,15 @@
     plain = white dim
     new = green bold
     old = red bold
+
+# for the 'delta' diff program
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    dark = true
+[merge]
+    conflictstyle = zdiff3
 
 [alias]
     cho   = checkout

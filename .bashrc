@@ -107,9 +107,15 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# See 'man environment.d' and 'man systemd-environment-d-generator'
+if [ -x /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator ]; then
+  eval "$(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)"
+fi
+
 #######################
 ####### My shit #######
 #######################
+
 . ~/.rc
 
 # Prompt

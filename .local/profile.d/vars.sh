@@ -44,13 +44,19 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export NODE_REPL_HISTORY="$XDG_CONFIG_HOME/node/repl_history"
 
 # wget
-export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
 # PostgresQL
 export PSQL_HISTORY="$XDG_CONFIG_HOME/psql/history"
 export PSQLRC="$XDG_CONFIG_HOME/psql/psqlrc"
 export PGPASSFILE="$XDG_CONFIG_HOME/psql/pgpass"
 export PGSERVICEFILE="$XDG_CONFIG_HOME/psql/service.conf"
+
+# SQLite
+export SQLITE_HISTORY="$XDG_CACHE_HOME/sqlite_history"
+
+# Ansible (see https://docs.ansible.com/ansible/latest/reference_appendices/config.html)
+export ANSIBLE_HOME="${XDG_CONFIG_HOME}/ansible"
 
 # vim
 #export VIMINIT=:so $XDG_CONFIG_HOME/vim/vimrc"

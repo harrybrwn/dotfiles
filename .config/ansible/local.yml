@@ -1,0 +1,13 @@
+- name: Setup Laptop
+  hosts: localhost
+  become: false
+  become_method: ansible.builtin.sudo
+  tasks:
+    - name: Use ping without sudo (setcap cap_net_raw+p)
+      ansible.builtin.capabilities:
+        capability: cap_net_raw+p
+        path: /bin/ping
+        state: present
+      become: true
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

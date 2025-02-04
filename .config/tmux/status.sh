@@ -183,22 +183,30 @@ if [ -z "$SESSION_BG" ]; then
     SESSION_BG=magenta
 fi
 
+
+status_right() {
+  local sep="#[fg=colour240]$BAR#[fg=default]"
+  local stats=""
+  local CPU="#($self cpu_and_temp)"
+  local MEM="#($self mem)"
+  local WIFI="#[fg=$DULL]#($self wifi -a)"
+  if $STATUS_CPU && [ ! -z "$CPU" ]; then
+      stats="$stats$CPU$sep"
+  fi
+  if $STATUS_MEM && [ ! -z "$MEM" ]; then
+      stats="$stats$MEM$sep"
+  fi
+  if $STATUS_WIFI && [ ! -z "$WIFI" ]; then
+      stats="$stats$WIFI$sep"
+  fi
+  if "$STATUS_SHOW_HOST" = true || [ -n "$SSH_CLIENT" -a -n "$SSH_TTY" ]; then
+    stats="${USER}@$(hostname)$sep$stats"
+  fi
+  local if_width_lt_90='#(test ! #{window_width} -lt 90; echo $?)'
+  printf "%s\n" "#{?$if_width_lt_90,,$stats}$(date_status) $(time_status) #($lib/battery.sh)"
+}
+
 apply() {
-    local sep="#[fg=colour240]$BAR#[fg=default]"
-    local if_width_lt_110='#(test ! #{window_width} -lt 110; echo $?)'
-    local CPU="#($self cpu_and_temp)"
-    local MEM="#($self mem)"
-    local WIFI="#[fg=$DULL]#($self wifi -a)"
-    local stats=""
-    if $STATUS_CPU && [ ! -z "$CPU" ]; then
-        stats="$stats$CPU$sep"
-    fi
-    if $STATUS_MEM && [ ! -z "$MEM" ]; then
-        stats="$stats$MEM$sep"
-    fi
-    if $STATUS_WIFI && [ ! -z "$WIFI" ]; then
-        stats="$stats$WIFI$sep"
-    fi
     local current_win_color="${STATUS_PANE_COLOR_ACTIVE:-colour247}"
     tmux \
         set -g status-style bg=default,fg=default \; \
@@ -212,7 +220,7 @@ apply() {
 #{?client_prefix,#[bg=$IMPORTANT]#[fg=$FG] #S ,[#S]}#[bg=$BG,fg=$BG] " \; \
         setw -g window-status-format '#[bg=colour0,fg=$dull]#[fg=colour7] #W ' \; \
         setw -g window-status-current-format "#[bg=colour235,fg=${current_win_color},nobold,italics] #W " \; \
-        set -g status-right "#{?$if_width_lt_110,,$stats}$(date_status) $(time_status) #($lib/battery.sh)"
+        set -g status-right "$(status_right)"
 }
 
 "$@"

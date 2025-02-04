@@ -90,6 +90,7 @@ alias nix-tree='nix run github:utdemir/nix-tree'
 alias clear-buildkit-cache='docker buildx prune --filter=type=exec.cachemount --force'
 alias hm=home-manager
 alias fish=asciiquarium
+alias nvidia-xconfig='echo "do not use that trash"'
 if command -v nvim > /dev/null; then
   alias vim=nvim
 fi
@@ -139,6 +140,20 @@ setup() {
   }
 
   case "$1" in
+    help|--help|-h)
+      cat <<-EOF
+setup [target|command]
+
+Targets
+  at
+  dev
+  homelab
+  clerk
+
+Commands
+  help    print this help message
+EOF
+      ;;
     at)
       t-new -s at -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
@@ -162,10 +177,13 @@ setup() {
       ;;
     '')
       if tmux has-session -t 'home' 2>/dev/null; then
-        # echo 'Error: default session was already created' >&2
-        # return 1
-        exec tmux attach -t home
-        return 0
+        if [ -n "$TMUX" ]; then
+          echo 'Error: already inside the default session' >&2
+          return 1
+        else
+          exec tmux attach -t home
+          return 0
+        fi
       fi
       tmux \
         new-session -d -n misc   -s misc -c ~    \;\

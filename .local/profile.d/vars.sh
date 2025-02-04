@@ -1,4 +1,6 @@
 # XDG Config File Vars
+#
+# For a collection of guides on migrating to xdg dirs, see https://wiki.archlinux.org/title/XDG_Base_Directory
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_CACHE_HOME"  ] && export XDG_CACHE_HOME="$HOME/.cache"
 [ -z "$XDG_DATA_HOME"   ] && export XDG_DATA_HOME="$HOME/.local/share"
@@ -10,6 +12,7 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
 export PYLINTHOME="$XDG_CONFIG_HOME/pylint"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
+export MYPY_CACHE_DIR="$XDG_CACHE_HOME/mypy"
 
 # Rust/Cargo
 export CARGO_HOME="$XDG_CONFIG_HOME/cargo"
@@ -57,6 +60,8 @@ export SQLITE_HISTORY="$XDG_CACHE_HOME/sqlite_history"
 
 # Ansible (see https://docs.ansible.com/ansible/latest/reference_appendices/config.html)
 export ANSIBLE_HOME="${XDG_CONFIG_HOME}/ansible"
+export ANSIBLE_CONFIG="${XDG_CONFIG_HOME}/ansible.cfg"
+export ANSIBLE_GALAXY_CACHE_DIR="${XDG_CACHE_HOME}/ansible/galaxy_cache"
 
 # vim
 #export VIMINIT=:so $XDG_CONFIG_HOME/vim/vimrc"
@@ -139,6 +144,21 @@ export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
 export CATALINA_BASE="/usr/local/tomcat7"
 export CATALINA_HOME="$CATALINA_BASE"
 export TOMCAT_HOME="$CATALINA_HOME"
+export LEIN_HOME="$XDG_DATA_HOME/lein"
 #export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/oracle/instantclient_19_10"
+
+# ollama
+export OLLAMA_MODELS="$XDG_DATA_HOME/ollama/models"
+
+# minikube
+export MINIKUBE_HOME="$XDG_DATA_HOME/minikube"
+
+# k9s
+export K9SCONFIG="$XDG_CONFIG_HOME"/k9s
+
+export IPFS_PATH="$XDG_DATA_HOME"/ipfs
+export DISCORD_USER_DATA_DIR="${XDG_DATA_HOME}"
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
 
 # vim: syntax=bash

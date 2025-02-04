@@ -16,17 +16,45 @@ snap/
 
 .local/share/rustup
 .local/share/nvim
+.local/share/fonts/
 .local/share/evolution
-.local/share/venv
+.local/share/venv/
+.local/share/Trash/
+.local/share/k9s/
+.local/share/xorg/
+.local/share/yelp/
 .local/state/nvim
 .local/share/delta/lesshst
 
 .cache/
 .pki/
+.kube/
+.ansible/
+
+.minecraft/assets/
+.minecraft/bin/
+.minecraft/launcher/
+.minecraft/libraries/
+.minecraft/downloads/
+.minecraft/logs/
+.minecraft/runtime/
+.minecraft/saves/
+.minecraft/versions/
+.minecraft/webcache2/
+.minecraft/*_log*.txt
+.minecraft/*_state.json
+
+Pictures/
+Videos/
+Music/
+Downloads/
+Documents/
 
 dev/go/pkg/
 dev/golang/
-dev/vendor
+dev/vendor/
+dev/web/
+dev/misc/
 .bash_history
 .lesshst
 .sudo_as_admin_successful

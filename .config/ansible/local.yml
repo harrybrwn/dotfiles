@@ -9,5 +9,13 @@
         path: /bin/ping
         state: present
       become: true
+    - name: Setup backups cronjob
+      ansible.builtin.cron:
+        name: "home dir backup"
+        job: "/usr/bin/bash $HOME/.local/share/cronjobs/backup.sh | tee -a $HOME/.local/share/cronjobs/log/cron-$LOGNAME.log"
+        minute: '0'
+        # 1am,6am,10pm,12pm,5pm,9pm
+        hour: '1,6,10,12,17,21'
+        weekday: '*'
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

@@ -17,5 +17,15 @@
         # 1am,6am,10pm,12pm,5pm,9pm
         hour: '1,6,10,12,17,21'
         weekday: '*'
+    - name: Workbench Installation
+      ansible.builtin.package_facts:
+    - alternatives:
+        name: x-terminal-emulator
+        state: selected
+        path: /usr/bin/alacritty
+        link: /usr/bin/x-terminal-emulator
+        priority: 30
+      when: '"workbench" in ansible_facts.packages'
+      become: true
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

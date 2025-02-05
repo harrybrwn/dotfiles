@@ -134,7 +134,7 @@ battery() {
         # echo 'using energy_now' >> $XDG_CONFIG_HOME/tmux/log
         local now="$(cat $p/energy_now)"
         local full="$(cat $p/energy_full)"
-        percent="$(echo "scale=2; 100 * ($now / $full)" | bc)"
+        percent="$(echo "scale=0; 100 * ($now / $full)" | bc)"
       elif [ -f "$p/charge_now" ] && [ -f "$p/charge_full" ]; then
         # echo 'using charge_now' >> $XDG_CONFIG_HOME/tmux/log
         local now="$(cat $p/charge_now)"

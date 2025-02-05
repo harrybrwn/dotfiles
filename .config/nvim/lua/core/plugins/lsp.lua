@@ -95,7 +95,7 @@ local function yamlls()
           --   "k8s/**/*.{yaml,yml}", -- basically only for my homelab lol
           --   "hack/**/*.{yaml,yml}",
           -- },
-          kubernetes = "*.{yaml,yml}",
+          -- kubernetes = "*.{yaml,yml}",
           ["http://json.schemastore.org/github-workflow"] = ".github/workflows/**/*.{yaml,yml}",
           ["http://json.schemastore.org/github-action"] = {
             "/.github/actions/**/*.{yaml,yml}",

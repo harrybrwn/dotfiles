@@ -68,13 +68,37 @@ if [ -z "$STATUS_WIFI" ]; then
     STATUS_WIFI=true
 fi
 
+_find_eth() {
+  # Notes
+  # plugged in => cat /sys/class/net/<dev>/carrier
+  # device type => cat /sys/class/net/<dev>/device/class
+  for d in $*; do
+    if [ -f "/sys/class/net/$d/device/class" -a "$(cat /sys/class/net/$d/device/class)" = "0x020000" ]; then
+      return 0
+    fi
+  done
+}
+
+_is_usb_eth() {
+  test "$(. /sys/class/net/$1/device/uevent && echo -n "$DEVTYPE")" = "usb_interface"
+}
+
+_is_wireless() {
+  test "$(. /sys/class/net/$1/uvent && echo -n "$DEVTYPE")" = "wlan"
+}
+
 wifi() {
+    local net_dev="$(
+      ip -oneline -family inet address show up dynamic \
+        | awk '{ print $2 }'
+    )"
     local ssid=$(iw dev | sed -En 's/\s*(ssid )(.*$)/\2/p')
     if [ -z "$ssid" ]; then
         local net_dev="$(
           ip -oneline -family inet address show up dynamic \
             | awk '{ print $2 }'
         )"
+        echo "$net_dev"
         if [ -z "$net_dev" ]; then
           echo 'no network'
         else
@@ -190,6 +214,11 @@ status_right() {
   local CPU="#($self cpu_and_temp)"
   local MEM="#($self mem)"
   local WIFI="#[fg=$DULL]#($self wifi -a)"
+  local HOST=""
+  if "$STATUS_SHOW_HOST" = true || [ -n "$SSH_CLIENT" -a -n "$SSH_TTY" ]; then
+    # stats="$stats${USER}@$(hostname)$sep"
+    HOST="${USER}@$(hostname)$sep"
+  fi
   if $STATUS_CPU && [ ! -z "$CPU" ]; then
       stats="$stats$CPU$sep"
   fi
@@ -199,11 +228,8 @@ status_right() {
   if $STATUS_WIFI && [ ! -z "$WIFI" ]; then
       stats="$stats$WIFI$sep"
   fi
-  if "$STATUS_SHOW_HOST" = true || [ -n "$SSH_CLIENT" -a -n "$SSH_TTY" ]; then
-    stats="${USER}@$(hostname)$sep$stats"
-  fi
   local if_width_lt_90='#(test ! #{window_width} -lt 90; echo $?)'
-  printf "%s\n" "#{?$if_width_lt_90,,$stats}$(date_status) $(time_status) #($lib/battery.sh)"
+  printf "%s\n" "#{?$if_width_lt_90,,$stats}$HOST$(date_status) $(time_status) #($lib/battery.sh)"
 }
 
 apply() {

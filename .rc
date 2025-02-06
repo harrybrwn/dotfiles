@@ -370,4 +370,8 @@ wallpaper() {
     picture-uri "file://$(readlink -f "$1")"
 }
 
+libc_versions() {
+  objdump -T "$1" | grep GLIBC | sed 's/.*GLIBC_\([.0-9]*\).*/\1/g' | sort -Vu
+}
+
 # vim: ft=bash syntax=bash ts=1 sts=2 sw=2

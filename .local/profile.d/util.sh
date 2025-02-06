@@ -36,8 +36,10 @@ net() {
 }
 
 show-colors() {
-  if [ -n "$1" ]; then
-    echo "\x1b[38;5;$1mcolor$1 "
+  if [ -n "$*" ]; then
+    for n in $*; do
+      printf "\x1b[38;5;${n}mcolor%d\n" "$n"
+    done
     return;
   fi
   for i in {0..255}; do

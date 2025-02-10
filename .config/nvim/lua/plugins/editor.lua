@@ -27,7 +27,7 @@ return {
         sources = {
           fmt.nixfmt,
           fmt.goimports,
-          fmt.goimports_reviser,
+          -- fmt.goimports_reviser,
           diags.actionlint,
           diags.buf,
         },

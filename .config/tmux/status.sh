@@ -188,7 +188,7 @@ date_status() {
 }
 
 time_status() {
-    echo "#[bg=colour240,fg=$IMPORTANT]%l:%M %P #[bg=default]"
+    echo "#[bg=colour240,fg=$IMPORTANT] %l:%M %P #[bg=default]"
 }
 
 # This script

@@ -8,6 +8,7 @@ LIBFILES=(
     "vars.sh"
     "paths.sh"
     "keys.sh"
+    "secrets.sh"
     "util.sh"
 )
 for f in ${LIBFILES[@]}; do

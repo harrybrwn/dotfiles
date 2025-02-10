@@ -158,6 +158,7 @@ EOF
       t-new -s at -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:3' -n at -c ~/dev/bsky/at \;\
+        new-window    -t 'at:4' -n atproto -c ~/dev/bsky/atproto \;\
         select-window -t 'at:1'
       ;;
     dev)

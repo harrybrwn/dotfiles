@@ -2,6 +2,10 @@
 /.cache/
 /.sudo_as_admin_successful
 /.ansible/
+/.zoom/
+/.steam/
+/.steampath
+/.steampid
 
 /.config/BraveSoftware/
 /.config/cargo/
@@ -10,15 +14,23 @@
 /.config/bun/
 /.config/go/telemetry/
 /.config/ansible/password.txt
+/.config/Slack/
+/.config/discord/
 
 /.local/share/nvim/
 /.local/share/rustup/
 /.local/share/venv/
 /.local/share/fonts/
 /.local/state/
+/.local/pnpm/
+/.local/share/Steam/
 
 /.kube/cache/
 /.kube/http-cache/
+
+/.minecraft/webcache2/
+
+/Downloads/*.deb
 
 /dev/vendor/
 /dev/golang/vendor/
@@ -37,3 +49,7 @@
 
 /dev/bsky/atproto/
 /dev/bsky/indigo/
+/dev/bsky/rsky/
+/dev/bsky/bsky-experiments/
+/dev/bsky/did-method-plc/
+/dev/bsky/gopath/

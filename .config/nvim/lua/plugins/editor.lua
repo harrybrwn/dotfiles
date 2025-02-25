@@ -24,6 +24,7 @@ return {
       local fmt = null_ls.builtins.formatting
       local diags = null_ls.builtins.diagnostics
       return {
+        default_timeout = 50000,
         sources = {
           fmt.nixfmt,
           fmt.goimports,

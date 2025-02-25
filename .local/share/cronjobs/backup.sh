@@ -43,14 +43,14 @@ flags=(
   --links
   --whole-file
   --delete-excluded
-  --delete
   --exclude='*/node_modules/'
 )
 
 check_logfile
 
-mid="$(cat /etc/machine-id)"
-os="$(. /etc/os-release && echo "$ID")"
+MACHINE_ID="$(cat /etc/machine-id)"
+OS="$(. /etc/os-release && echo "$ID")"
+HNAME="$(hostname)"
 
 host="$(ssh -G backup-server | awk '/^hostname/ { print $2 }')"
 port="$(ssh -G backup-server | awk '/^port/ { print $2 }')"
@@ -63,17 +63,17 @@ if ! nc -z "$host" "$port"; then
   exit 1
 fi
 
-DST="/mnt/big-boi-0/backups/$(hostname)-$os-$mid/"
+DST="/mnt/big-boi-0/backups/${HNAME}-${OS}-${MACHINE_ID}/"
 
-if ! ssh backup-server "mkdir -p '${DST}'" 2>&1; then
-  log error "failed to create backup dir ${DST}"
-fi
+#if ! ssh backup-server "mkdir -p '${DST}'" 2>&1; then
+#  log error "failed to create backup dir ${DST}"
+#fi
 
 log info "starting rsync ${flags[@]} ${HOME} ${DST}"
 rsync \
+	--rsync-path "mkdir -p ${DST} && rsync" \
   "${flags[@]}" --verbose \
   --exclude-from <(sed -E "s/^\//${LOGNAME}\//g" "${BASECAMP}/backup.exclude") \
   "$HOME" \
   "backup-server:${DST}" 2>&1
 log info 'done.'
-

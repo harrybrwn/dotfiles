@@ -84,7 +84,6 @@ return {
     },
   },
 
-
   -- Use LSP for inlay hints.
   { "lvimuser/lsp-inlayhints.nvim", opts = {},          lazy = false },
 

@@ -12,6 +12,9 @@
 .config/wget/cookies
 .config/wget/wget-hsts
 .config/ibus/
+.config/Slack/
+.config/discord/
+.config/mc/config.json
 snap/
 
 .local/share/rustup

@@ -84,3 +84,27 @@ reset-mouse-speed() {
       0.0 0.0 1.0
   fi
 }
+
+brightness() {
+  local f='/sys/class/backlight/intel_backlight/brightness'
+  if [ ! -f "$f" ]; then
+    echo 'Error: /sys/class/backlight/intel_backlight/brightness not found' 1>&2
+    return 1
+  fi
+
+  case "$1" in
+    help|-h|-help|--help)
+      echo 'Usage brightness [on|off|help]'
+      return 0
+      ;;
+    on)
+      cat /sys/class/backlight/intel_backlight/max_brightness | sudo tee "$f"
+      ;;
+    off)
+      echo '0' | sudo tee "$f"
+      ;;
+    *)
+      cat "$f"
+      ;;
+  esac
+}

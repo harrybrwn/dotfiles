@@ -152,7 +152,7 @@ if command -v __git_ps1 > /dev/null; then
   else
     __HOSTNAME_COLOR="${THEME_SECONDARY_COLOR}"
   fi
-  PS1='${debian_chroot:+($debian_chroot)}\[\033[38;5;${THEME_SECONDARY_COLOR};1m\]\u@\033[0m\]\033[38;5;${__HOSTNAME_COLOR};1m\]\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(__git_ps1) \[\033[00m\]$(__nix_prompt)$(__connectiq_sdk)\$ '
+  PS1="\[\033[38;5;\${THEME_SECONDARY_COLOR};1m\]\u@\[\033[38;5;\${__HOSTNAME_COLOR};1m\]\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]\$(__git_ps1)\[\033[00m\] \$ "
 fi
 
 if command -v gopass > /dev/null 2>&1; then

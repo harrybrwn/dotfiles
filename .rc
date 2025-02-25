@@ -96,6 +96,8 @@ if command -v nvim > /dev/null; then
 fi
 alias vi=vim v=vim
 alias pwgen=xkcdpass
+alias brightness-off='echo 0 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+alias brightness-on='echo /sys/class/backlight/intel_backlight/max_brightness | sudo tee /sys/class/backlight/intel_backlight/brightness'
 
 export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 
@@ -149,6 +151,7 @@ Targets
   dev
   homelab
   clerk
+  website
 
 Commands
   help    print this help message
@@ -159,6 +162,7 @@ EOF
         new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:3' -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:4' -n atproto -c ~/dev/bsky/atproto \;\
+        new-window    -t 'at:5' -n indigo -c ~/dev/bsky/indigo \;\
         select-window -t 'at:1'
       ;;
     dev)
@@ -175,6 +179,10 @@ EOF
         new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/clerk \;\
         new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/clerk \;\
         select-window -t 'clerk:1'
+      ;;
+    site|website)
+      t-new -s website -n hrry.me -c ~/dev/web/harrybrwn.github.io \;\
+        select-window -t 'website:1'
       ;;
     '')
       if tmux has-session -t 'home' 2>/dev/null; then

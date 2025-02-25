@@ -15,7 +15,7 @@ import = [
 style = "Block"
 
 [colors]
-# transparent_background_colors = true
+transparent_background_colors = true
 
 [colors.cursor]
 text = "#000000"
@@ -70,14 +70,6 @@ opacity = 1.0
 startup_mode = "Windowed"
 title = "lol"
 
-[window.dimensions]
-columns = 138
-lines = 58
-
 [window.padding]
 x = 0
 y = 0
-
-[window.position]
-x = 4600
-y = 60

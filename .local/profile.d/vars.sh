@@ -162,8 +162,8 @@ export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
 export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
 
 # CUDA
-if [ -d /usr/local/cuda/bin ]; then
-  export PATH="$PATH:/usr/local/cuda/bin"
-fi
+#if [ -d /usr/local/cuda/bin ]; then
+#  export PATH="$PATH:/usr/local/cuda/bin"
+#fi
 
 # vim: syntax=bash

@@ -1,0 +1,12 @@
+[Unit]
+Description=A simple rsync backup job.
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# see https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+ExecStart=%h/.local/share/cronjobs/backup.sh
+
+[Install]
+WantedBy=default.target

@@ -17,7 +17,3 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-
-if [ -d "$HOME/.config/cargo" ] && [ -f "$HOME/.config/cargo/env" ]; then
-    . "$HOME/.config/cargo/env"
-fi

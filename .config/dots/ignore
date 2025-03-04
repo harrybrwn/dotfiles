@@ -26,8 +26,12 @@ snap/
 .local/share/k9s/
 .local/share/xorg/
 .local/share/yelp/
-.local/state/nvim
 .local/share/delta/lesshst
+.local/share/Steam/
+.local/share/pnpm/
+.local/share/stig/
+.local/share/gnome-shell/
+.local/state/nvim/
 
 .cache/
 .pki/

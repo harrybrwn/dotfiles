@@ -2,30 +2,37 @@
   hosts: localhost
   become: false
   become_method: ansible.builtin.sudo
+
+  roles:
+    - backup
+
   tasks:
+    - name: Packages
+      ansible.builtin.package:
+        name:
+          - python3-venv
+          - xclip
+          - ffmpeg
+        state: present
+
     - name: Use ping without sudo (setcap cap_net_raw+p)
-      ansible.builtin.capabilities:
+      community.general.capabilities:
         capability: cap_net_raw+p
         path: /bin/ping
         state: present
       become: true
-    - name: Setup backups cronjob
-      ansible.builtin.cron:
-        name: "home dir backup"
-        job: "/usr/bin/bash $HOME/.local/share/cronjobs/backup.sh | tee -a $HOME/.local/share/cronjobs/log/cron-$LOGNAME.log"
-        minute: '0'
-        # 1am,6am,10pm,12pm,5pm,9pm
-        hour: '1,6,10,12,17,21'
-        weekday: '*'
-    - name: Workbench Installation
-      ansible.builtin.package_facts:
-    - alternatives:
-        name: x-terminal-emulator
-        state: selected
-        path: /usr/bin/alacritty
-        link: /usr/bin/x-terminal-emulator
-        priority: 30
-      when: '"workbench" in ansible_facts.packages'
-      become: true
+
+    - name: Python Virtual Env
+      ansible.builtin.command:
+        cmd: python3 -m venv {{ ansible_facts.user_dir }}/.local/share/venv
+        creates: '{{ ansible_facts.user_dir }}/.local/share/venv/pyvenv.cfg'
+    - name: Install Pip Utilities
+      ansible.builtin.pip:
+        name:
+          - gpustat
+          - yt-dlp[default,curl-cffi]
+          - stig
+        state: present
+        virtualenv: '{{ ansible_facts.user_dir }}/.local/share/venv'
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

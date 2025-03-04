@@ -1,0 +1,11 @@
+[Unit]
+Description=Run backup.service on a timer.
+
+[Timer]
+OnBootSec=5min
+# Test with systemd-analyze calendar [spec]
+OnCalendar=01,06,10,12,14,17,21:00:00
+Unit=backup.service
+
+[Install]
+WantedBy=timers.target

@@ -17,13 +17,15 @@
 /.config/Slack/
 /.config/discord/
 
-/.local/share/nvim/
+/.local/share/Steam/
 /.local/share/rustup/
+/.local/share/pnpm/
+/.local/share/nvim/
 /.local/share/venv/
 /.local/share/fonts/
+/.local/share/yelp/
+/.local/share/gnome-shell/application_state
 /.local/state/
-/.local/pnpm/
-/.local/share/Steam/
 
 /.kube/cache/
 /.kube/http-cache/

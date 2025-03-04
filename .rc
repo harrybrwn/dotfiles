@@ -30,7 +30,10 @@ set -o ignoreeof
 export LESS="--RAW-CONTROL-CHARS"
 
 # Kubernetes
-export KUBE_EDITOR="nvim"
+export KUBE_EDITOR="$EDITOR"
+
+# systemd
+export SYSTEMD_EDITOR="$EDITOR"
 
 # AWS cli
 export AWS_PAGER=less
@@ -65,7 +68,7 @@ fi
 alias g=git m=make mi='make install'
 alias cl=clear
 alias dk=docker dkc='docker compose'
-alias k=kubectl ku=kubectl kube=kubectl
+alias k=kubectl ku=kubectl kube=kubectl kns=kubens kcx=kubectx
 alias tf=terraform
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 alias jsonfmt='python3 -m json.tool'
@@ -114,7 +117,7 @@ export BUILDX_BAKE_ENTITLEMENTS_FS=0
 export DOCKER_BUILDKIT=1
 
 # Node Version Manager (nvm)
-export NVM_DIR="$HOME/.config/nvm"
+export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 

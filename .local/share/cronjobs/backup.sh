@@ -5,6 +5,10 @@ set -euo pipefail
 if [ -z "${LOGNAME:-}" ]; then
   INCRON=false
   LOGNAME="$USER"
+elif [ -n "${SYSTEMD_EXEC_PID}" ]; then
+  # see systemd.exec(1)
+  INCRON=false
+  IN_SYSTEMD=true
 else
   INCRON=true
 fi
@@ -27,10 +31,38 @@ check_logfile() {
   fi
 }
 
+to_logs() {
+  local cmd="$@"
+  $cmd | tee -a "${LOGFILE}"
+}
+
+in-term() {
+  local name="$(basename "$(readlink -f /usr/bin/x-terminal-emulator)")"
+  case "$name" in
+    mlterm)
+      x-terminal-emulator -e $*
+      ;;
+    gnome-terminal.wrapper|gnome-terminal)
+      x-terminal-emulator -- $*
+      ;;
+    alacritty)
+      x-terminal-emulator --command sh -c "$*"
+      ;;
+    *)
+      log error "Don't know how to run terminal \"$name\""
+      ;;
+  esac
+}
+
+notify() {
+  notify-send --app-name='backup.sh' --urgency=normal "$@"
+}
+
 log() {
   local level="$1"
   shift
-  echo "[$(date -Is) $level] $*"
+  local d="$(date -Is)"
+  echo "[${d} $level] $*" | tee -a "${LOGFILE}"
 }
 
 flags=(
@@ -42,7 +74,7 @@ flags=(
   --times
   --links
   --whole-file
-  --delete-excluded
+  # --delete-excluded
   --exclude='*/node_modules/'
 )
 
@@ -69,11 +101,29 @@ DST="/mnt/big-boi-0/backups/${HNAME}-${OS}-${MACHINE_ID}/"
 #  log error "failed to create backup dir ${DST}"
 #fi
 
-log info "starting rsync ${flags[@]} ${HOME} ${DST}"
+log info "starting rsync ${flags[@]} --verbose ${HOME} backup-server:${DST}"
 rsync \
 	--rsync-path "mkdir -p ${DST} && rsync" \
   "${flags[@]}" --verbose \
   --exclude-from <(sed -E "s/^\//${LOGNAME}\//g" "${BASECAMP}/backup.exclude") \
   "$HOME" \
-  "backup-server:${DST}" 2>&1
-log info 'done.'
+  "backup-server:${DST}" 2>&1 | tee -a "${LOGFILE}"
+
+log info 'done'
+action="$(notify-send --app-name='backup.sh' --urgency=critical \
+  'Backup Job Done' \
+  "backup finished" \
+  --action=logs="Open logs" \
+  --action=dismiss="Dismiss")"
+case "$action" in
+  logs)
+    in-term less +G "${LOGFILE}"
+    ;;
+  dismiss)
+    ;;
+  "")
+    ;;
+  *)
+    echo "Error: unknown action \"$action\""
+    ;;
+esac

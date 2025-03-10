@@ -1,5 +1,19 @@
 local lspconfig = require("lspconfig")
+local configs = require("lspconfig.configs")
 local path = require("core.util.path")
+
+if not configs.copilot_ollama then
+  -- TODO auto install with
+  -- go install -trimpath -ldflags '-s -w' github.com/bernardo-bruning/ollama-copilot@latest
+  configs.copilot_ollama = {
+    default_config = {
+      name = 'copilot_ollama',
+      cmd = { "ollama-copilot" },
+      filetypes = { "lua", "go", "typescript", "typescriptreact", "javascript", "yaml" },
+      root_dir = vim.fn.getcwd(),
+    },
+  }
+end
 
 local function rust_analyzer()
   lspconfig.rust_analyzer.setup({
@@ -271,6 +285,11 @@ function M.setup(opts)
       astro = astro,
     },
   })
+
+  if not require("core.plugins.custom-editorconfig").lsp_disabled.copilot_ollama then
+    print("copilot_ollama.setup")
+    lspconfig.copilot_ollama.setup({})
+  end
 end
 
 return M

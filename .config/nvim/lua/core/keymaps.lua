@@ -60,8 +60,9 @@ end)
 nset("<Leader>ct", vim.cmd.tabclose, { noremap = true })
 nset("<C-p>", "<cmd><C-p>")
 
-vim.keymap.set(
-  "v",
-  "<leader>c",
-  ":'<,'>yank | put! | '<,'>!sh -c \"perl -pe 'chomp if eof' | xclip -i -selection clipboard\""
-)
+-- vim.keymap.set(
+--   "v",
+--   "<leader>c",
+--   ":'<,'>yank | put! | '<,'>!sh -c \"perl -pe 'chomp if eof' | xclip -i -selection clipboard\"<CR>"
+-- )
+vim.keymap.set("v", "<leader>c", '"+yank', { desc = "Copy selection to clipboard" })

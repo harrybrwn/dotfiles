@@ -16,6 +16,9 @@
 /.config/ansible/password.txt
 /.config/Slack/
 /.config/discord/
+/.config/spotify/Users/
+/.config/tiling-assistant/
+/.config/dconf/user
 
 /.local/share/Steam/
 /.local/share/rustup/
@@ -25,6 +28,7 @@
 /.local/share/fonts/
 /.local/share/yelp/
 /.local/share/gnome-shell/application_state
+/.local/share/gvfs-metadata/
 /.local/state/
 
 /.kube/cache/

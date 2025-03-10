@@ -35,7 +35,9 @@ return {
   event = "VeryLazy",
   opts = {
     -- theme = 'nord',
-    extentions = { "nvim-tree" },
+    extentions = {
+      "nvim-tree"
+    },
     options = {
       icons_enabled = true,
       theme = "auto",

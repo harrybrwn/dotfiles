@@ -10,6 +10,7 @@ LIBFILES=(
     "keys.sh"
     "secrets.sh"
     "util.sh"
+    "completions.sh"
 )
 for f in ${LIBFILES[@]}; do
     if [ -f "$BASEDIR/$f" ]; then

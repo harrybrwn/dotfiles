@@ -21,6 +21,8 @@ if DisabledLSPEditorConfig == nil then
   DisabledLSPEditorConfig = {
     gopls = false,
     yamlls = false,
+    copilot = false,
+    copilot_ollama = true,
   }
 end
 
@@ -49,7 +51,7 @@ local gopls_analyses_attrs = {
   "nilfunc",
   "nilness", -- disabled by default
   "printf",
-  "shadow", -- disabled by default
+  "shadow",  -- disabled by default
   "shift",
   "simplifycompositelit",
   "simplifyrange",
@@ -66,7 +68,7 @@ local gopls_analyses_attrs = {
   "unsafeptr",
   "unusedparams", -- disabled by default
   "unusedresult",
-  "unusedwrite", -- disabled by default
+  "unusedwrite",  -- disabled by default
   "useany",
   "fillreturns",
   "nonewvars",
@@ -281,6 +283,11 @@ end
 ---@param bufnr number
 function M.lsp_on_attach(client, bufnr)
   local name = client.config.name
+  -- if DisabledLSPEditorConfig[name] then
+  --   vim.lsp.stop_client(client.id, false)
+  --   print(string.format("stopped %s on client: %d", name, client.id))
+  --   return
+  -- end
   if name == "gopls" then
     gopls_on_attach(client, bufnr)
   elseif name == "lua_ls" then
@@ -289,5 +296,7 @@ function M.lsp_on_attach(client, bufnr)
     --
   end
 end
+
+M.lsp_disabled = DisabledLSPEditorConfig
 
 return M

@@ -386,4 +386,25 @@ libc_versions() {
   objdump -T "$1" | grep GLIBC | sed 's/.*GLIBC_\([.0-9]*\).*/\1/g' | sort -Vu
 }
 
+llm_vram() {
+  local params="$1"
+  local q="$2"
+  # python -c "print((1e9 * $params) * ($q / 8.0) * 1.2)"
+  python <<-EOT
+size = float("${params}".rstrip("Bb"))
+q = ${q}
+vram = size * (q / 8.0) * 1.2
+print(f"{vram}G")
+EOT
+}
+
+open-webui() {
+  docker run -d --network=host \
+    -e OLLAMA_BASE_URL=http://127.0.0.1:11434 \
+    -v open-webui:/app/backend/data \
+    --name open-webui \
+    --restart always \
+    ghcr.io/open-webui/open-webui:main
+}
+
 # vim: ft=bash syntax=bash ts=1 sts=2 sw=2

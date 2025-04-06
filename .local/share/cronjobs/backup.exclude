@@ -29,6 +29,10 @@
 /.local/share/yelp/
 /.local/share/gnome-shell/application_state
 /.local/share/gvfs-metadata/
+/.local/share/icc/
+/.local/share/nautilus/tags/
+/.local/share/xorg/*.log
+/.local/share/chatterino/Cache/
 /.local/state/
 
 /.kube/cache/

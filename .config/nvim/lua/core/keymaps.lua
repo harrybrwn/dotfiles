@@ -65,4 +65,6 @@ nset("<C-p>", "<cmd><C-p>")
 --   "<leader>c",
 --   ":'<,'>yank | put! | '<,'>!sh -c \"perl -pe 'chomp if eof' | xclip -i -selection clipboard\"<CR>"
 -- )
-vim.keymap.set("v", "<leader>c", '"+yank', { desc = "Copy selection to clipboard" })
+vim.keymap.set("v", "<leader>c", '"+y', { desc = "Copy selection to clipboard" })
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy selection to clipboard" })
+vim.keymap.set("n", "<leader>R", ":LspRestart<CR>", { desc = "[R]estart the current LSP" })

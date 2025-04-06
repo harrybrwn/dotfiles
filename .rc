@@ -78,6 +78,7 @@ alias go-test-cover='echo "" > gocoverage.txt && go test ./... -v -cover -coverp
 alias say=espeak wifi=wavemon
 alias :q=exit q=exit
 alias :e=vim
+alias trash='gio trash'
 alias watchkube="watch 'kubectl get pods -A && printf \"%120s\n\" | sed \"s/ /-/g\" && kubectl top pods -A --sort-by memory'"
 alias paths='sed "s/:/\n/g" <<< "$PATH"'
 alias copy="perl -pe 'chomp if eof' | xclip -i -selection clipboard" paste="xclip -o -selection clipboard"
@@ -101,6 +102,8 @@ alias vi=vim v=vim
 alias pwgen=xkcdpass
 alias brightness-off='echo 0 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias brightness-on='echo /sys/class/backlight/intel_backlight/max_brightness | sudo tee /sys/class/backlight/intel_backlight/brightness'
+alias cal='ncal -b'
+alias disassemble='objdump --visualize-jumps=color --disassembler-color=on --inlines --show-all-symbols -d'
 
 export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 
@@ -150,11 +153,11 @@ setup() {
 setup [target|command]
 
 Targets
-  at
-  dev
-  homelab
-  clerk
-  website
+  at             atproto project
+  dev            dev folder
+  homelab|lab    homelab
+  clerk          financial data project
+  website|site   personal website
 
 Commands
   help    print this help message
@@ -214,8 +217,8 @@ EOF
 }
 
 # Because i'm scared
-rm() {
-  for f in "$*"; do
+_rm() {
+  for f in "${@@Q}"; do
     if
       [ "$f" = $HOME ] ||
       [ "$f" = '~' ] ||
@@ -398,7 +401,7 @@ print(f"{vram}G")
 EOT
 }
 
-open-webui() {
+start-open-webui() {
   docker run -d --network=host \
     -e OLLAMA_BASE_URL=http://127.0.0.1:11434 \
     -v open-webui:/app/backend/data \

@@ -163,6 +163,6 @@ rsync \
   "backup-server:${DST}" 2>&1 | tee -a "${LOGFILE}"
 
 log info 'done'
-notify_options 'Backup Job Done' --expire-time=5000
+# notify_options 'Backup Job Done' --expire-time=5000
 
 # vim: ft=bash sw=2 ts=2

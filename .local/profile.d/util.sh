@@ -91,7 +91,6 @@ brightness() {
     echo 'Error: /sys/class/backlight/intel_backlight/brightness not found' 1>&2
     return 1
   fi
-
   case "$1" in
     help|-h|-help|--help)
       echo 'Usage brightness [on|off|help]'
@@ -107,4 +106,57 @@ brightness() {
       cat "$f"
       ;;
   esac
+}
+
+download-site() {
+  local dir_mode=false
+  local ua='Mozilla/5.0 (iPhone; CPU iPhone OS 17_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/134.0.6998.99 Mobile/15E148 Safari/604.1'
+  local flags=(
+    # Don't check robots.txt
+    -e robots=off
+    --user-agent="$ua"
+    # Don't send caching headers to the server.
+    --no-cache
+    # Crawl all links on each page
+    --recursive
+    --continue
+    --no-clobber
+    --page-requisites
+    # Don't crawl pages above the one supplied
+    --no-parent
+    # Print out status code and response headers
+    --server-response
+    --wait=5
+  )
+  local host
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -h|-help|--help|help)
+        echo "download-site [args...] <url>"
+        return 0
+        ;;
+      -d)
+        shift
+        flags+=(--adjust-extension --convert-file-only)
+        ;;
+      -*)
+        flags+=("$1")
+        shift
+        ;;
+      *)
+        if [ -n "${host:-}" ]; then
+          echo "Error: unknown argument"
+          return 1
+        fi
+        host="$1"
+        shift
+        ;;
+    esac
+  done
+  # Get robots.txt so it looks like we're being good if a site admin looks at
+  # their logs.
+  wget --user-agent="$ua" -O /dev/null "$host/robots.txt" || true
+  echo "wget ${flags[@]}" "$host" > ./download.script
+  # Crawl the site.
+  wget "${flags[@]}" "$host"
 }

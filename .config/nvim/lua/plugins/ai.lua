@@ -13,7 +13,7 @@ return {
     },
     keys = {
       -- { "<C-a><C-i>",  function() vim.cmd("CodeCompanionAction") end },
-      { "<C-a>", function() vim.cmd("CodeCompanionAction") end },
+      { "<leader><C-a>", function() vim.cmd("CodeCompanionAction") end },
     },
     init = function()
       require("core.plugins.codecompanion.spinner"):init()

@@ -2,6 +2,7 @@ return {
   -- Language Server
   {
     "VonHeikemen/lsp-zero.nvim",
+    -- TODO upgrade to "v4.x". Check the repo, there's a migration guide.
     branch = "v3.x",
     lazy = false,
     dependencies = {
@@ -85,17 +86,13 @@ return {
   },
 
   -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", opts = {},          lazy = false },
+  { "lvimuser/lsp-inlayhints.nvim", opts = {},           lazy = false },
 
   -- Function signature pop-up
-  { "ray-x/lsp_signature.nvim",     event = "VeryLazy", opts = {} },
+  { "ray-x/lsp_signature.nvim",     event = "VeryLazy",  opts = {} },
 
-  {
-    "j-hui/fidget.nvim",
-    tag = "v1.4.5",
-    event = "LspAttach",
-    opts = {},
-  },
+  -- Display temporary LSP info in the corner.
+  { "j-hui/fidget.nvim",            event = "LspAttach", opts = {},      tag = "v1.6.1" },
 
-  { "towolf/vim-helm", enabled = false, config = false, lazy = false },
+  { "towolf/vim-helm",              enabled = false,     config = false, lazy = false },
 }

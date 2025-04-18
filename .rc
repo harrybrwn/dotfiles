@@ -158,6 +158,7 @@ Targets
   homelab|lab    homelab
   clerk          financial data project
   website|site   personal website
+  interviewing   interview studying
 
 Commands
   help    print this help message
@@ -189,6 +190,23 @@ EOF
     site|website)
       t-new -s website -n hrry.me -c ~/dev/web/harrybrwn.github.io \;\
         select-window -t 'website:1'
+      ;;
+    interviewing|interview|interviews)
+      t-new -s interviewing -n interviewing -c ~/dev/jobs/interviewing \;\
+        select-window -t 'interviewing:1'
+      ;;
+    remora)
+      t-new -s "$1" -n "$1" -c "$HOME/dev/golang/cmd/$1" \;\
+        select-window -t "$1:1"
+      ;;
+    dir|tmp)
+      shift 1
+      local dir="$1"
+      if [ -z "$dir" ]; then
+        echo "Error: no directory in first argument" 1>&2
+        exit 1
+      fi
+      t-new -s tmp -n tmp -c "$dir"
       ;;
     '')
       if tmux has-session -t 'home' 2>/dev/null; then

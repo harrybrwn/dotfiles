@@ -20,3 +20,25 @@ def move_history(new_hist):
         os.remove(python_history)
 
 atexit.register(move_history, config_history)
+
+# For easy use when in the python repl
+import math
+from math import sqrt, log, log10, log2, exp, exp2, e as E, pi as PI
+from math import e, pi
+
+from string import ascii_letters, ascii_lowercase, ascii_uppercase
+from string import ascii_lowercase as lowercase_letters, ascii_uppercase as uppercase_letters
+
+from pprint import pprint
+
+
+_fib = [1, 1]
+
+def fib(n):
+    if n < len(_fib):
+        return _fib[n]
+    a = fib(n-2)
+    b = fib(n-1)
+    res = a + b
+    _fib.append(res)
+    return res

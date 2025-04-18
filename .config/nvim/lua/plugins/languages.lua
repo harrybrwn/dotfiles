@@ -4,7 +4,7 @@ local version = vim.version()
 if version.major == 0 and version.minor >= 10 then
   table.insert(plugins, {
     "OXY2DEV/markview.nvim",
-    enabled = false,
+    enabled = true,
     lazy = false,
     ft = { "md", "markdown" },
     dependencies = {
@@ -16,5 +16,9 @@ if version.major == 0 and version.minor >= 10 then
     -- end,
   })
 end
+
+table.insert(plugins, {
+  { "sevko/vim-nand2tetris-syntax", lazy = false },
+})
 
 return plugins

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=WhatsApp
+Comment=WhatsApp Messenger
+# Only works with chromium browsers
+Exec=x-www-browser --app="https://web.whatsapp.com" --name=WhatsApp --class=Whatsapp
+Terminal=false
+Type=Application
+Icon=whatsapp
+Categories=GTK;
+MimeType=text/html;text/xml;application/xhtml_xml;
+StartupNotify=true

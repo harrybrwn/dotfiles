@@ -33,6 +33,9 @@ return {
           -- fmt.goimports_reviser,
           diags.actionlint,
           diags.buf,
+          fmt.prettier.with({
+            filetypes = { "html", "svg" },
+          })
         },
       }
     end,

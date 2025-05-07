@@ -139,7 +139,7 @@ setup() {
     local s=""
     while [ $# -gt 0 ]; do
       case "$1" in
-        -s) s="$2";        shift 2 ;;
+        -s) s="$2";       shift 2 ;;
         *)  args+=("$1"); shift   ;;
       esac
     done
@@ -159,11 +159,13 @@ Targets
   clerk          financial data project
   website|site   personal website
   interviewing   interview studying
+  remora         web crawler project
 
 Commands
   help    print this help message
 EOF
       ;;
+
     at)
       t-new -s at -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
@@ -199,6 +201,7 @@ EOF
       t-new -s "$1" -n "$1" -c "$HOME/dev/golang/cmd/$1" \;\
         select-window -t "$1:1"
       ;;
+
     dir|tmp)
       shift 1
       local dir="$1"
@@ -208,6 +211,21 @@ EOF
       fi
       t-new -s tmp -n tmp -c "$dir"
       ;;
+
+    find|f)
+      shift 1
+      selected="$(
+        find \
+          ~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools \
+          -mindepth 1 \
+          -maxdepth 3 \
+          -type d \
+        | fzf
+      )"
+      name="$(basename $selected)"
+      t-new -s "$(echo $name | tr -d .)" -n "$name" -c "$selected"
+      ;;
+
     '')
       if tmux has-session -t 'home' 2>/dev/null; then
         if [ -n "$TMUX" ]; then
@@ -227,6 +245,7 @@ EOF
           select-window -t 'home:1'              \;\
         select-window -t 'home:1'
       ;;
+
     *)
       echo "Error: unknown session name \"$1\"" >&2
       return 1

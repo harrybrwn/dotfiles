@@ -7,6 +7,7 @@ Exec=x-www-browser --app="https://web.whatsapp.com" --name=WhatsApp --class=What
 Terminal=false
 Type=Application
 Icon=whatsapp
-Categories=GTK;
+# https://specifications.freedesktop.org/menu-spec/latest/category-registry.html
+Categories=Network;GTK;
 MimeType=text/html;text/xml;application/xhtml_xml;
 StartupNotify=true

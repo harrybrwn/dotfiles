@@ -1,13 +1,4 @@
 return {
-  -- Commenting utility
-  {
-    -- "gc" and "gcc" to comment lines and regions
-    "numToStr/Comment.nvim",
-    tag = "v0.8.0",
-    lazy = false,
-    opts = {},
-  },
-
   -- Use treesitter to autoclose html tags
   { "windwp/nvim-ts-autotag", lazy = false },
 

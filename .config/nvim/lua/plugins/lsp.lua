@@ -3,7 +3,7 @@ return {
   {
     "VonHeikemen/lsp-zero.nvim",
     -- TODO upgrade to "v4.x". Check the repo, there's a migration guide.
-    branch = "v3.x",
+    branch = "v4.x",
     lazy = false,
     dependencies = {
       -- LSP Support
@@ -86,7 +86,7 @@ return {
   },
 
   -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", opts = {},           lazy = false },
+  { "lvimuser/lsp-inlayhints.nvim", enabled = false,     opts = {},      lazy = false },
 
   -- Function signature pop-up
   { "ray-x/lsp_signature.nvim",     event = "VeryLazy",  opts = {} },

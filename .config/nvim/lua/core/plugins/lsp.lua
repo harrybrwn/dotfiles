@@ -130,6 +130,23 @@ local function yamlls()
   })
 end
 
+local function lua_ls()
+  local lsp = require("lsp-zero")
+  local lua_opts = lsp.nvim_lua_ls()
+  local xdg_config_home = os.getenv("XDG_CONFIG_HOME")
+  if xdg_config_home ~= nil then
+    table.insert(
+      lua_opts.settings.Lua.workspace.library,
+      path.join(xdg_config_home, "LuaLS")
+    )
+  end
+  table.insert(
+    lua_opts.settings.Lua.workspace.library,
+    "/usr/share/LuaLS"
+  )
+  lspconfig.lua_ls.setup(lua_opts)
+end
+
 local function astro()
   lspconfig.astro.setup({
     init_options = {
@@ -227,8 +244,8 @@ function M.setup(opts)
   ---@param bufnr number
   lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings to learn the available actions
-    require("core.plugins.custom-editorconfig").lsp_on_attach(client, bufnr)
-    require("lsp-inlayhints").on_attach(client, bufnr)
+    --require("core.plugins.custom-editorconfig").lsp_on_attach(client, bufnr)
+    --require("lsp-inlayhints").on_attach(client, bufnr)
 
     lsp.default_keymaps({ buffer = bufnr })
     vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { buffer = bufnr })
@@ -261,21 +278,7 @@ function M.setup(opts)
       function(server_name)
         lspconfig[server_name].setup({})
       end,
-      lua_ls = function()
-        local lua_opts = lsp.nvim_lua_ls()
-        local xdg_config_home = os.getenv("XDG_CONFIG_HOME")
-        if xdg_config_home ~= nil then
-          table.insert(
-            lua_opts.settings.Lua.workspace.library,
-            path.join(xdg_config_home, "LuaLS")
-          )
-        end
-        table.insert(
-          lua_opts.settings.Lua.workspace.library,
-          "/usr/share/LuaLS"
-        )
-        lspconfig.lua_ls.setup(lua_opts)
-      end,
+      lua_ls = lua_ls,
       helm_ls = helm_ls,
       rust_analyzer = rust_analyzer,
       gopls = gopls,

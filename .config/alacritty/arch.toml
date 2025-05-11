@@ -1,0 +1,18 @@
+[general]
+
+# Pulled from https://github.com/alacritty/alacritty-theme
+import = [
+    "~/.config/alacritty/base.toml",
+    "~/.config/alacritty/keybindings.toml",
+    # "~/.config/alacritty/themes/terafox.toml",
+    # "~/.config/alacritty/themes/everforest_dark.toml",
+    # "~/.config/alacritty/themes/marine_dark.toml",
+    # "~/.config/alacritty/themes/moonfly.toml",
+    "~/.config/alacritty/themes/monokai_charcoal.toml",
+    # "~/.config/alacritty/themes/dark_pride.toml",
+    # "~/.config/alacritty/themes/one_dark.toml",
+]
+
+[window]
+padding = { x = 5, y = 3 }
+opacity = 0.8

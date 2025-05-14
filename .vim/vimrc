@@ -1,4 +1,3 @@
-
 if has("syntax")
   syntax on
 endif
@@ -203,43 +202,43 @@ let g:netrw_liststyle = 3    " tree
 " let g:netrw_altv = 1
 let g:netrw_sizestyle = "H"
 
-" Go
-" :GoInstallBinaries
-" :GoUpdateBinaries
-if util#PluginExists('vim-go')
-  let g:go_fmt_command = "goimports"
-  let g:go_highlight_variable_assignments = 0
-  let g:go_highlight_variable_declarations = 0
-
-  let g:go_highlight_functions = 1
-  let g:go_highlight_function_calls = 1
-  let g:go_highlight_function_parameters = 1
-
-  let g:go_highlight_types = 0
-  let g:go_highlight_structs = 0
-  let g:go_highlight_fields = 1
-  let g:go_highlight_extra_types = 1
-  let g:go_highlight_operators = 1
-  let g:go_highlight_format_strings = 1
-
-  let g:go_highlight_diagnostic_errors = 1
-  let g:go_highlight_diagnostic_warnings = 1
-
-  nmap <C-g> :GoDef<Cr>
-endif
-
-if util#PluginExists('goyo.vim')
-  " let g:goyo_width = 120
-  " let g:goyo_margin_top = 10
-  " let g:goyo_margin_bottom = 10
-endif
-
-if util#PluginExists('vim-pandoc')
-  " au FileType pandoc set syn=markdown
-  au FileType pandoc set syn=pandoc
-  au FileType pandoc set textwidth=80
-  let g:pandoc#modules#disabled = ["folding"]
-  " Todo files
-  au BufNewFile TODO set filetype=pandoc
-endif
-
+"" Go
+"" :GoInstallBinaries
+"" :GoUpdateBinaries
+"if util#PluginExists('vim-go')
+"  let g:go_fmt_command = "goimports"
+"  let g:go_highlight_variable_assignments = 0
+"  let g:go_highlight_variable_declarations = 0
+"
+"  let g:go_highlight_functions = 1
+"  let g:go_highlight_function_calls = 1
+"  let g:go_highlight_function_parameters = 1
+"
+"  let g:go_highlight_types = 0
+"  let g:go_highlight_structs = 0
+"  let g:go_highlight_fields = 1
+"  let g:go_highlight_extra_types = 1
+"  let g:go_highlight_operators = 1
+"  let g:go_highlight_format_strings = 1
+"
+"  let g:go_highlight_diagnostic_errors = 1
+"  let g:go_highlight_diagnostic_warnings = 1
+"
+"  nmap <C-g> :GoDef<Cr>
+"endif
+"
+"if util#PluginExists('goyo.vim')
+"  " let g:goyo_width = 120
+"  " let g:goyo_margin_top = 10
+"  " let g:goyo_margin_bottom = 10
+"endif
+"
+"if util#PluginExists('vim-pandoc')
+"  " au FileType pandoc set syn=markdown
+"  au FileType pandoc set syn=pandoc
+"  au FileType pandoc set textwidth=80
+"  let g:pandoc#modules#disabled = ["folding"]
+"  " Todo files
+"  au BufNewFile TODO set filetype=pandoc
+"endif
+"

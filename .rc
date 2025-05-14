@@ -41,7 +41,11 @@ export AWS_DEFAULT_OUTPUT=json
 
 # Go
 export GOPATH="$HOME/dev/go"
-export GOROOT="/usr/local/go"
+if [ -d /usr/local/go ]; then
+  export GOROOT="/usr/local/go"
+elif [ -d /usr/lib/go ]; then
+  export GOROOT=/usr/lib/go
+fi
 [[ -d "$GOPATH" && ":${PATH}:" != *":${GOPATH}/bin:"* ]] && PATH="$GOPATH/bin:$PATH"
 [[ -d "$GOROOT" && ":${PATH}:" != *":${GOROOT}/bin:"* ]] && PATH="$GOROOT/bin:$PATH"
 
@@ -102,8 +106,11 @@ alias vi=vim v=vim
 alias pwgen=xkcdpass
 alias brightness-off='echo 0 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias brightness-on='echo /sys/class/backlight/intel_backlight/max_brightness | sudo tee /sys/class/backlight/intel_backlight/brightness'
-alias cal='ncal -b'
 alias disassemble='objdump --visualize-jumps=color --disassembler-color=on --inlines --show-all-symbols -d'
+alias fetch=fastfetch
+if command -v ncal > /dev/null; then
+  alias cal='ncal -b'
+fi
 
 export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 
@@ -120,9 +127,13 @@ export BUILDX_BAKE_ENTITLEMENTS_FS=0
 export DOCKER_BUILDKIT=1
 
 # Node Version Manager (nvm)
-export NVM_DIR="$XDG_CONFIG_HOME/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ -d /usr/share/nvm ]; then
+  source /usr/share/nvm/nvm.sh
+else
+  export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 # Python environment
 if [[ -x "$XDG_DATA_HOME/venv/bin/pip" && -x "$XDG_DATA_HOME/venv/bin/python" ]]; then

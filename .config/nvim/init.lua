@@ -58,7 +58,9 @@ vim.opt.syntax = "on"
 vim.opt.background = background
 vim.opt.termguicolors = true
 if background == "dark" then
-  theme("terafox") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
+  --theme("monokai") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
+  --theme("onedark")
+  theme("evergarden")
 else
   -- theme("forestbones")
   theme("catppuccin")

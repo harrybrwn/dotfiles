@@ -5,6 +5,10 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+if [ -f ~/.cache/wal/sequences ]; then
+	(cat ~/.cache/wal/sequences &)
+fi
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -37,6 +41,16 @@ fi
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
+
+
+ID="$(. /etc/os-release && echo $ID)"
+case "$ID" in
+  arch)
+    # Not automatically source in arch
+    source /usr/share/git/git-prompt.sh
+    ;;
+esac
+unset ID
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
@@ -111,6 +125,8 @@ fi
 if [ -x /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator ]; then
   eval "$(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)"
 fi
+
+PATH="$PATH:$HOME/.local/bin"
 
 #######################
 ####### My shit #######

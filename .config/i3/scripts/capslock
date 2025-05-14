@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+
+status="$(xset -q | grep Caps | awk '{ print $4 }')"
+if [ "${status}" = "on" ]; then
+	printf '%s' " 󰪛 "
+fi

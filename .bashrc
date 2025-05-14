@@ -196,3 +196,5 @@ for f in /usr/share/complete-alias/complete_alias /usr/local/share/complete_alia
     break
   fi
 done
+
+source ~/.local/profile.d/xfce.sh

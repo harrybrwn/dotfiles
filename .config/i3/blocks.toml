@@ -1,0 +1,63 @@
+[caps-lock]
+command=$SCRIPTS/capslock
+interval=once
+signal=10
+
+[terminal]
+full_text=  
+color=#ffcc00
+command=xfce4-terminal
+
+[browser]
+full_text=  
+color=#ff6611
+command=brave-browser > /dev/null
+
+[spotify]
+full_text=  
+color=#1DB954
+command=spotify
+
+# Guess the weather hourly
+# See https://wttr.in/:help
+#[weather]
+#command=$SCRIPTS/weather
+#interval=3600
+#color=#A4C2F4
+
+# Query my default IP address only on startup
+#[ip]
+#command=hostname -i | awk '{ print "IP:" $1 }'
+#interval=once
+#color=#91E78B
+
+[bluetooth]
+full_text=  
+# color=#186cf2
+color=#1881f2
+command=blueman-manager
+
+[wifi]
+command=~/.config/tmux/status.sh wifi
+label=net:
+interval=60
+
+[volume]
+command=$SCRIPTS/volume
+interval=5
+signal=11
+
+[time]
+command=date +'%I:%M %P'
+interval=5
+
+[date]
+command=date +'%b %d'
+interval=3600
+
+[battery]
+#label=⚡
+command=$SCRIPTS/battery
+interval=5
+
+# vim: ft=toml

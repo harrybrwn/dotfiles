@@ -1,0 +1,22 @@
+- name: Setup "cascadia" Laptop
+  hosts: localhost
+  become: false
+  become_method: ansible.builtin.sudo
+
+  roles:
+    - backup
+
+  tasks:
+    - name: Packages
+      become: true
+      ansible.builtin.package:
+        name:
+          - ffmpeg
+          - physlock # lockscreen
+          - brightnessctl
+          - i3-wm
+          - i3blocks
+          - feh
+          - rofi
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

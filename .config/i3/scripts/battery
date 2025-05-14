@@ -1,0 +1,65 @@
+#!/usr/bin/bash
+
+set -euo pipefail
+
+readonly BAT_10="󰁺"
+readonly BAT_20="󰁻"
+readonly BAT_30="󰁼"
+readonly BAT_40="󰁽"
+readonly BAT_50="󰁾"
+readonly BAT_60="󰁿"
+readonly BAT_70="󰁿"
+readonly BAT_80="󰁿"
+readonly BAT_90="󰁿"
+readonly BAT_100="󰁹"
+readonly BAT_CHARGING="󰂄"
+
+readonly YELLOW=#ffeb14
+readonly RED=#fcc603
+readonly GREEN=#14fc03
+
+readonly INFO="$(acpi)"
+readonly PERCENT="$(awk -F, '{
+	sub(/%/, "", $2)
+	sub(/^[ \t\r\n]+/, "", $2)
+	print $2
+}' <<< "$INFO")"
+readonly STATUS="$(awk -F, '{
+	sub(/.*: /, "", $1)
+	print tolower($1)
+}' <<< "$INFO")"
+ICON=""
+COLOR="$GREEN"
+
+if [ $PERCENT -le 10 ]; then
+	ICON="$BAT_10"
+	COLOR="$RED"
+elif [ $PERCENT -le 20 ]; then
+	ICON="$BAT_20"
+	COLOR="$YELLOW"
+elif [ $PERCENT -le 30 ]; then
+	ICON="$BAT_30"
+elif [ $PERCENT -le 40 ]; then
+	ICON="$BAT_40"
+elif [ $PERCENT -le 50 ]; then
+	ICON="$BAT_50"
+elif [ $PERCENT -le 60 ]; then
+	ICON="$BAT_60"
+elif [ $PERCENT -le 70 ]; then
+	ICON="$BAT_70"
+elif [ $PERCENT -le 80 ]; then
+	ICON="$BAT_80"
+elif [ $ PERCENT -le 90 ]; then
+	ICON="$BAT_90"
+else
+	ICON="$BAT_100"
+fi
+
+if [ "${STATUS}" = "charging" ]; then
+	ICON="${BAT_CHARGING}"
+	COLOR=""
+fi
+
+echo "${ICON} ${PERCENT}%"
+echo "${ICON} ${PERCENT}%"
+echo "$COLOR"

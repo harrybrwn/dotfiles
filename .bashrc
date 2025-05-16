@@ -42,11 +42,10 @@ case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
-
 ID="$(. /etc/os-release && echo $ID)"
 case "$ID" in
   arch)
-    # Not automatically source in arch
+    # Not automatically sourced in arch
     source /usr/share/git/git-prompt.sh
     ;;
 esac

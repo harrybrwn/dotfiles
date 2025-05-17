@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -eu
+
+killall waybar || true
+killall hyprpaper || true
+killall hypridle || true
+waybar &
+hyprpaper &
+hypridle &
+
+if [ -f ~/.cache/wal/wal ]; then
+	WAL="$(cat ~/.cache/wal/wal)"
+	echo "$WAL" >> ~/.cache/wal/pywal.log
+	while ! hyprctl hyprpaper preload "$WAL"; do
+		sleep 0.05
+		:
+	done
+	hyprctl hyprpaper wallpaper ",$WAL"
+fi

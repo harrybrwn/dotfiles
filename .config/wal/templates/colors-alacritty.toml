@@ -1,0 +1,70 @@
+# generated with pywal
+# wallpaper /{wallpaper.strip}
+
+[colors.primary]
+background = "#{background.strip}"
+foreground = "#{foreground.strip}"
+dim_foreground = "#{foreground.strip}"
+bright_foreground = "#{foreground.strip}"
+
+[colors.cursor]
+# text = "#e6eaea"
+cursor = "#cbd9d8"
+
+[colors.vi_mode_cursor]
+text = "#e6eaea"
+cursor = "#a1cdd8"
+
+[colors.search.matches]
+foreground = "#{foreground.strip}"
+background = "#{background.strip}"
+
+[colors.search.focused_match]
+foreground = "#{foreground.strip}"
+background = "#{background.strip}"
+
+[colors.footer_bar]
+foreground = "#{foreground.strip}"
+background = "#{background.strip}"
+
+[colors.hints.start]
+foreground = "#{foreground.strip}"
+background = "#{background.strip}"
+
+[colors.hints.end]
+foreground = "#{foreground.strip}"
+background = "#{background.strip}"
+
+[colors.selection]
+text = "#e6eaea"
+background = "#293e40"
+
+[colors.normal]
+black = "#{color0.strip}"
+red = "#{color1.strip}"
+green = "#{color2.strip}"
+yellow = "#{color3.strip}"
+blue = "#{color4.strip}"
+magenta = "#{color5.strip}"
+cyan = "#{color6.strip}"
+white = "#{color7.strip}"
+
+[colors.bright]
+black = "#{color0.strip}"
+red = "#{color1.strip}"
+green = "#{color2.strip}"
+yellow = "#{color3.strip}"
+blue = "#{color4.strip}"
+magenta = "#{color5.strip}"
+cyan = "#{color6.strip}"
+white = "#{color7.strip}"
+
+[colors.dim]
+black = "#{color0.strip}"
+red = "#{color1.strip}"
+green = "#{color2.strip}"
+yellow = "#{color3.strip}"
+blue = "#{color4.strip}"
+magenta = "#{color5.strip}"
+cyan = "#{color6.strip}"
+white = "#{color7.strip}"

@@ -1,0 +1,8 @@
+term=alacritty
+width=30%
+key_down=Ctrl-n
+key_up=Ctrl-p
+key_exit=Ctrl-bracketleft
+key_expand=Tab
+key_pgdn=Ctrl-d
+key_pgup=Ctrl-u

@@ -1,0 +1,10 @@
+/* @define-color background #000000; */
+/* @define-color foreground #ffffff; */
+/* @define-color color7 #e3e3e3; */
+/* pink */
+/* @define-color color8 #fcb203; */
+/* workspace numbers */
+/* @define-color color9 #ffffff; */
+
+@import "../../.cache/wal/colors-waybar.css";
+@import "./themes/elifouts.css";

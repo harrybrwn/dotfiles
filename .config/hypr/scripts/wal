@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+DIR="$HOME/Pictures/wallpapers"
+WAL="$(ls -A "$DIR" | wofi --show dmenu)"
+
+hyprctl hyprpaper preload "$DIR/$WAL"
+hyprctl hyprpaper wallpaper ",$DIR/$WAL"
+
+wal -i "$DIR/$WAL"
+
+killall waybar || true
+waybar &
+disown

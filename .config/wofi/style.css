@@ -1,0 +1,45 @@
+@import "/home/harry/.cache/wal/colors-waybar.css";
+
+/* @define-color background #2e3440; */
+/* @define-color foreground #d8dee9; */
+/* @define-color color11 #f31777; */
+
+window {
+  margin: 0px;
+  border: 1px solid @color11;
+  background-color: @background;
+}
+
+#input {
+  margin: 5px;
+  border: none;
+  color: @foreground;
+  background-color: @background;
+}
+
+#inner-box {
+  margin: 5px;
+  border: none;
+  background-color: @background;
+}
+
+#outer-box {
+  margin: 5px;
+  border: none;
+  background-color: @background;
+}
+
+#scroll {
+  margin: 0px;
+  border: none;
+}
+
+#text {
+  margin: 5px;
+  border: none;
+  color: @foreground;
+}
+
+#entry:selected {
+  background-color: @color11;
+}

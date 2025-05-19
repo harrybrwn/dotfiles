@@ -5,6 +5,7 @@
 
   roles:
     - backup
+    - paru
 
   tasks:
     - name: Packages
@@ -18,17 +19,16 @@
           - unzip
           - rsync
           - rustup
-          - go
           - nvm
           - fzf
-          - fx
-          - git-delta
+          - fx # process json
+          - git-delta # does file diffs
           - jq
-          - tokei
+          - tokei # count lines of code
           - kubectl
           - k9s
           - gnu-netcat
-          - eza
+          - eza # ls drop-in
           # Desktop/ricing
           - brightnessctl
           - hyprpaper
@@ -39,6 +39,17 @@
           - wofi
           - eog
           - bluez
-          - python-pywal
+          - discord
+
+    # TODO install from AUR: python-pywal
+
     - name: discord | Add Ozone Flags
-      # TODO add `Exec=/usr/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland`
+      become: true
+      ansible.builtin.lineinfile:
+        path: /opt/discord/discord.desktop
+        regexp: '^Exec=/usr/bin/discord'
+        line: 'Exec=/usr/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland'
+        #validate: desktop-file-validate %s
+        owner: root
+        group: root
+

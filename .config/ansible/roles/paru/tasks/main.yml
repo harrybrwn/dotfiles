@@ -1,0 +1,19 @@
+- name: Check if paru is installed
+  stat:
+    path: "/sbin/paru"
+  register: "paru_check"
+- debug: var=paru_check
+- name: Install
+  when: paru_check.stat.exists and paru_check.stat.executable
+  block:
+    - name: Clone repo
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/paru.git
+        dest: /tmp/paru
+        depth: 1
+    - name: Build
+      become: no
+      ansible.builtin.command:
+        cmd: makepkg --noconfirm --install --syncdeps
+        creates: /tmp/paru/pkg/paru/.PKGINFO
+        chdir: /tmp/paru

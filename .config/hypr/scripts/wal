@@ -1,15 +1,40 @@
 #!/bin/bash
 
-set -euo pipefail
+set -uo pipefail
+
+log() {
+	systemd-cat --identifier=hypr-script-wal "$@"
+}
 
 DIR="$HOME/Pictures/wallpapers"
-WAL="$(ls -A "$DIR" | wofi --show dmenu)"
+WAL="$(
+	find "$DIR" \
+		-type f -printf '%f\n' \
+		-not -name '*.txt' \
+	| grep -v -f "$DIR/.gitignore" \
+	| grep \
+		--extended-regexp \
+		--invert-match \
+		'(ignore|\.gitignore)' \
+	| xargs -I{} echo "img:$DIR/{}:text:{}" \
+	| wofi --show dmenu --prompt "Select a Wallpaper" --allow-images \
+	| awk -F: '{ print $2 }'
+)"
+if [ $? -ne 0 ]; then
+	echo "wallpaper request cancelled" | log --priority=info
+	exit 0
+fi
 
-hyprctl hyprpaper preload "$DIR/$WAL"
-hyprctl hyprpaper wallpaper ",$DIR/$WAL"
+if [ ! -f "$WAL" ]; then
+	echo "wallpaper \"$WAL\" does not exist" | log --priority=err
+	exit 1
+fi
 
-wal -i "$DIR/$WAL"
+set -e
+hyprctl hyprpaper preload "$WAL"
+hyprctl hyprpaper wallpaper ",$WAL"
 
-killall waybar || true
-waybar &
-disown
+wal -i "$WAL"
+# Reload waybar
+killall -SIGUSR2 waybar
+echo "set $WAL as wallpaper" | log --priority=info

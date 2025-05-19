@@ -4,6 +4,8 @@
 /.ansible/
 /.zoom/
 /.steam/
+/.rustup/
+/.cargo/
 /.steampath
 /.steampid
 
@@ -63,3 +65,5 @@
 /dev/bsky/bsky-experiments/
 /dev/bsky/did-method-plc/
 /dev/bsky/gopath/
+
+/code/vendor/

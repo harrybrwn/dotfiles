@@ -2,3 +2,6 @@
   hosts: localhost
   become: false
   become_method: ansible.builtin.sudo
+
+  roles:
+    - backup

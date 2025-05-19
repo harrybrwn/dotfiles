@@ -8,6 +8,7 @@
     // Choose the order of the modules
     "modules-left": [
         "clock",
+        "tray",
         "hyprland/window",
     ],
     "modules-center": [
@@ -24,7 +25,6 @@
         "keyboard-state",
         "battery",
         // "battery#bat2",
-        "tray",
         "custom/power",
     ],
     "hyprland/workspaces": {
@@ -142,7 +142,6 @@
         "format-icons": ["", "", ""]
     },
     "backlight": {
-        // "device": "acpi_video1",
         "format": "{percent}% {icon}",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
@@ -154,12 +153,14 @@
         },
         "format": "{capacity}% {icon}",
         "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
+        "format-charging": "{capacity}% 󰂄",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-full": "󰁹",
+        // "format-icons": ["", "", "", "", ""]
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "interval": 5, // default 60
     },
     "battery#bat2": {
         "bat": "BAT2"
@@ -229,7 +230,7 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "custom/power": {
-        "format": "  ",
+        "format": "",
 		"tooltip": false,
 		"menu": "on-click",
 		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder

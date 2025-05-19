@@ -1,11 +1,10 @@
 #!/bin/bash
 
 set -eu
+killall -SIGUSR2 waybar
 
-killall waybar || true
 killall hyprpaper || true
 killall hypridle || true
-waybar &
 hyprpaper &
 hypridle &
 

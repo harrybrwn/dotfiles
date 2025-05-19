@@ -5,7 +5,7 @@ set -euo pipefail
 if [ -z "${LOGNAME:-}" ]; then
   INCRON=false
   LOGNAME="$USER"
-elif [ -n "${SYSTEMD_EXEC_PID}" ]; then
+elif [ -n "${SYSTEMD_EXEC_PID:-}" ]; then
   # see systemd.exec(1)
   INCRON=false
   IN_SYSTEMD=true
@@ -19,6 +19,9 @@ if [ -z "${BASECAMP}" ]; then
 fi
 
 LOGFILE="${BASECAMP}/log/cron-$LOGNAME.log"
+
+mkdir -p "$(basename "${LOGFILE}")"
+touch "$LOGFILE"
 
 check_logfile() {
   if [ ! -d "${BASECAMP}/log" ]; then
@@ -134,7 +137,7 @@ check_logfile
 
 MACHINE_ID="$(cat /etc/machine-id)"
 OS="$(. /etc/os-release && echo "$ID")"
-HNAME="$(hostname)"
+HNAME="$(command -v hostname >/dev/null && hostname || cat /etc/hostname)"
 
 host="$(ssh -G backup-server | awk '/^hostname/ { print $2 }')"
 port="$(ssh -G backup-server | awk '/^port/ { print $2 }')"

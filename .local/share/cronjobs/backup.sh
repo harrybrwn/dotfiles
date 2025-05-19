@@ -20,7 +20,7 @@ fi
 
 LOGFILE="${BASECAMP}/log/cron-$LOGNAME.log"
 
-mkdir -p "$(basename "${LOGFILE}")"
+mkdir -p "$(dirname "${LOGFILE}")"
 touch "$LOGFILE"
 
 check_logfile() {

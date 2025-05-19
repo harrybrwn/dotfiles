@@ -10,9 +10,11 @@
     - name: Packages
       ansible.builtin.package:
         name:
+          - apt-file # find the package the owns a file (apt-file search)
           - python3-venv
           - xclip
           - ffmpeg
+          - gnome-shell-extension-manager
         state: present
 
     - name: Use ping without sudo (setcap cap_net_raw+p)

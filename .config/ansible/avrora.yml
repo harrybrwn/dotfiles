@@ -5,3 +5,40 @@
 
   roles:
     - backup
+
+  tasks:
+    - name: Packages
+      become: true
+      ansible.builtin.package:
+        name:
+          - git
+          - alacritty
+          - neovim
+          - bash-completion
+          - unzip
+          - rsync
+          - rustup
+          - go
+          - nvm
+          - fzf
+          - fx
+          - git-delta
+          - jq
+          - tokei
+          - kubectl
+          - k9s
+          - gnu-netcat
+          - eza
+          # Desktop/ricing
+          - brightnessctl
+          - hyprpaper
+          - hyprlock
+          - hypridle
+          - waybar
+          - gnome-keyring
+          - wofi
+          - eog
+          - bluez
+          - python-pywal
+    - name: discord | Add Ozone Flags
+      # TODO add `Exec=/usr/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland`

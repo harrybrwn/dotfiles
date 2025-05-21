@@ -1,4 +1,4 @@
-- name: Setup "cascadia" Laptop
+- name: Setup "avrora" Laptop
   hosts: localhost
   become: false
   become_method: ansible.builtin.sudo
@@ -6,42 +6,65 @@
   roles:
     - backup
     - paru
+    - role: nerdfont
+      font: RobotoMono
+      version: 3.4.0
 
   tasks:
     - name: Packages
       become: true
       ansible.builtin.package:
         name:
+          # Fonts and font packages to make chromium emojis work.
+          - noto-fonts
+          - noto-fonts-emoji
+          - noto-fonts-cjk
+          - noto-fonts-extra
+          - ttf-roboto-mono-nerd # I like RobotoMono Nerd Font
+
+          # Tools
           - git
           - alacritty
           - neovim
           - bash-completion
           - unzip
           - rsync
-          - rustup
-          - nvm
+          - rustup     # rust
+          - nvm        # Node Version Manager
           - fzf
-          - fx # process json
-          - git-delta # does file diffs
-          - jq
-          - tokei # count lines of code
+          - fx         # process json in a tui
+          - git-delta  # does file diffs
+          - jq         # scriptable json processing
+          - tokei      # count lines of code
           - kubectl
           - k9s
-          - gnu-netcat
+          - gnu-netcat # nc command
           - eza # ls drop-in
-          # Desktop/ricing
-          - brightnessctl
+
+          # Desktop
+          - uwsm        # wayland session manager
+          - qt5-wayland
+          - qt6-wayland
+          - polkit-kde-agent
+          - hyprland
           - hyprpaper
           - hyprlock
           - hypridle
-          - waybar
+          - xdg-desktop-portal-hyprland
+          - dunst  # notifications
+          - grim   # screenshots
+          - slurp  # select area of screen
+          - waybar # status bar
           - gnome-keyring
-          - wofi
-          - eog
-          - bluez
+          - brightnessctl
+          - nautilus # file browser
+          - wofi     # app launcher (for wayland)
+          - eog      # image viewer
+          - bluez    # bluetooth
           - discord
+          - gwenview # cropping images
 
-    # TODO install from AUR: python-pywal
+    # TODO install from AUR: python-pywal brave-bin bash-complete-alias
 
     - name: discord | Add Ozone Flags
       become: true
@@ -52,4 +75,3 @@
         #validate: desktop-file-validate %s
         owner: root
         group: root
-

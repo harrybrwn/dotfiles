@@ -57,7 +57,6 @@ end)
 nset("<Leader>F", function()
   vim.cmd("echo expand('%')")
 end)
-nset("<Leader>ct", vim.cmd.tabclose, { noremap = true })
 nset("<C-p>", "<cmd><C-p>")
 
 -- vim.keymap.set(
@@ -69,3 +68,10 @@ vim.keymap.set("v", "<leader>c", '"+y', { desc = "Copy selection to clipboard" }
 vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy selection to clipboard" })
 vim.keymap.set("n", "<leader>R", ":LspRestart<CR>", { desc = "[R]estart the current LSP" })
 vim.keymap.set("n", "<leader>D", "<cmd>read!node -e 'console.log(new Date)'<cr>")
+
+-- Tab shortcuts
+vim.keymap.set("n", "<leader>ct", vim.cmd.tabclose, { desc = "[C]lose [T]ab", noremap = true })
+vim.keymap.set("n", "<A-.>", "gt", { desc = "Prev tab", noremap = true, silent = true })
+vim.keymap.set("n", "<A-,>", "gT", { desc = "Prev tab", noremap = true, silent = true })
+vim.keymap.set("n", "<A->>", "<cmd>tabmove +1<cr>", { desc = "Move tab up", noremap = true, silent = true })
+vim.keymap.set("n", "<A-<>", "<cmd>tabmove -1<cr>", { desc = "Move tab back", noremap = true, silent = true })

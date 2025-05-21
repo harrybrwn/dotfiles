@@ -68,6 +68,10 @@ return {
       -- insert_at_start = true,
       -- …etc.
     },
+    --keys = {
+    --  { "<A-,>", "<Cmd>BufferPrevious<CR>", mode = { "n" }, desc = "Prev tab", noremap = true,  silent = true },
+    --  { "<A-.>", "<Cmd>BufferNext<CR>",     mode = { "n" }, desc = "Next tab", noremap = true,  silent = true },
+    --},
     version = "^1.0.0", -- optional: only update when a new 1.x version is released
   },
 }

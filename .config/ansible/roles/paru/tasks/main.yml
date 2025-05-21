@@ -2,9 +2,9 @@
   stat:
     path: "/sbin/paru"
   register: "paru_check"
-- debug: var=paru_check
+
 - name: Install
-  when: paru_check.stat.exists and paru_check.stat.executable
+  when: not paru_check.stat.exists and not paru_check.stat.executable
   block:
     - name: Clone repo
       ansible.builtin.git:

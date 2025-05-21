@@ -1,0 +1,38 @@
+# See https://www.nerdfonts.com/font-downloads
+
+- name: Set Default Version
+  ansible.builtin.set_fact:
+    version: 3.4.0
+  when: version is not defined
+
+- name: Set base url
+  ansible.builtin.set_fact:
+    nerdfont_base_url: 'https://github.com/ryanoasis/nerd-fonts/releases/download'
+  when: nerdfont_base_url is not defined
+
+- name: Check Variables
+  ansible.builtin.debug:
+    msg: "Variable check: role parameter 'font' is required"
+  failed_when: font is not defined
+
+- name: Fonts directory info
+  ansible.builtin.stat:
+    path: "{{ ansible_facts.user_dir }}/.local/share/fonts"
+  register: fonts_dir
+
+- name: Create fonts directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts.user_dir }}/{{ item }}"
+    state: directory
+  loop:
+    - .local
+    - .local/share
+    - .local/share/fonts
+  when: not fonts_dir.stat.exists
+
+- name: Download and Unpack
+  ansible.builtin.unarchive:
+    src: "{{ nerdfont_base_url }}/v{{ version }}/{{ font }}.tar.xz"
+    dest: "{{ ansible_facts.user_dir }}/.local/share/fonts"
+    remote_src: true
+    creates: "{{ ansible_facts.user_dir }}/.local/share/fonts/{{ font }}NerdFont-Regular.ttf"

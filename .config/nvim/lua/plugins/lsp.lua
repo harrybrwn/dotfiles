@@ -53,11 +53,11 @@ return {
           "verible",          -- SystemVerilog
           --"asm_lsp",                        -- GAS/NASM/Go assembly
           --"tsserver",                        -- typescript
-          "ts_ls",                           -- typescrypt
-          "eslint",                          -- web stuff
-          "cssls",                           -- css
-          "tailwindcss",                     -- tailwind
-          "volar",                           -- vue
+          "ts_ls",       -- typescrypt
+          "eslint",      -- web stuff
+          "cssls",       -- css
+          "tailwindcss", -- tailwind
+          --"volar",                           -- vue
           -- Configuration/Tools
           "ansiblels",                       -- ansible
           "terraformls",                     -- terraform

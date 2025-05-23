@@ -29,7 +29,9 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
   pattern = "*",
   callback = function()
     vim.opt_local.formatoptions:remove("o")
-    require('core.util.highlight').transparent_background()
+    if vim.fn.hostname() == "avrora" then
+      require('core.util.highlight').transparent_background()
+    end
   end,
 })
 

@@ -1,0 +1,60 @@
+# Example
+#
+# roles:
+#   - role: fastfetch
+#     version: 2.44.0
+
+- name: Set Default Version
+  ansible.builtin.set_fact:
+    version: 2.44.0
+  when: version is not defined
+
+- name: Install Build deps
+  become: true
+  ansible.builtin.package:
+    state: present
+    name:
+      - cmake
+      - pkg-config
+
+- name: Clone Repo
+  become: false
+  ansible.builtin.git:
+    repo: git@github.com:fastfetch-cli/fastfetch.git
+    dest: /tmp/fastfetch
+    depth: 1
+    version: '{{ version }}'
+
+- name: Create Build Dir
+  become: false
+  ansible.builtin.file:
+    path: /tmp/fastfetch/build
+    state: directory
+    mode: '0755'
+
+- name: Setup Buildsystem
+  become: false
+  ansible.builtin.command:
+    cmd: cmake ..
+    chdir: /tmp/fastfetch/build
+    creates: /tmp/fastfetch/build/Makefile
+
+- name: Build
+  become: false
+  ansible.builtin.command:
+    cmd: cmake --build .
+    chdir: /tmp/fastfetch/build
+    creates: /tmp/fastfetch/build/fastfetch
+
+- name: Install
+  become: false
+  ansible.builtin.command:
+    cmd: cmake --install . --strip --prefix '{{ ansible_facts.user_dir }}/.local'
+    chdir: /tmp/fastfetch/build
+    creates: '{{ ansible_facts.user_dir }}/.local/bin/fastfetch'
+
+- name: Save Install List
+  become: false
+  ansible.builtin.command:
+    cmd: cp /tmp/fastfetch/build/install_manifest.txt {{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt
+    creates: '{{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt'

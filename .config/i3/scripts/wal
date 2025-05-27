@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+
+set -uo pipefail
+
+log() {
+	systemd-cat --identifier=i3-script-wal "$@"
+}
+
+DIR="$HOME/Pictures/wallpapers"
+WAL="$(
+	find "$DIR" \
+		-type f -printf '%f\n' \
+		-not -name '*.txt' \
+	| xargs -I{} echo -e "{}\0icon\x1f$DIR/{}" \
+	| rofi -dmenu -show-icons -p "Select a Wallpaper" \
+)"
+if [ $? -ne 0 ]; then
+	echo "wallpaper request cancelled" | log --priority=info
+	exit 0
+fi
+set -e
+
+if [ ! -f "$DIR/$WAL" ]; then
+	echo "wallpaper \"$WAL\" does not exist" | log --priority=err
+	exit 1
+fi
+
+flags=()
+case "$WAL" in
+    tatoo-girl-wouter-gort-3-bright-small.jpg|tatoo-girl-blue.jpg)
+        flags+=("--bg-tile")
+        ;;
+    *)
+        flags+=("--bg-fill")
+        ;;
+esac
+
+feh "${flags[@]}" "$DIR/$WAL"
+$HOME/.local/share/venv/bin/wal -n -i "$DIR/$WAL"

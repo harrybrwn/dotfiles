@@ -1,0 +1,13 @@
+[general]
+
+import = [
+    "~/.config/alacritty/base.toml",
+    "~/.config/alacritty/keybindings.toml",
+]
+
+[font]
+size = 8
+
+[window]
+padding = { x = 5, y = 3 }
+opacity = 0.85

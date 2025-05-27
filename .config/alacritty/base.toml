@@ -3,7 +3,6 @@
 
 [font]
 size = 11.25
-# size = 10
 #normal = { family = "FiraMono Nerd Font Mono", style = "Medium" }
 #noraml = { family = "Iosevka Nerd Font Mono", style = "Bold" }
 normal = { family = "RobotoMono Nerd Font Mono" }

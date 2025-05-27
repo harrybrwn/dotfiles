@@ -8,9 +8,15 @@ full_text= 
 color=#ffcc00
 command=xfce4-terminal
 
+
 [browser]
-full_text=  
-color=#ff6611
+# full_text=  
+# color=#ff6611
+full_text=  
+# color=#dd5144
+# full_text= 󰖟 
+# color=#4c8bf5
+color=#cccccc
 command=brave-browser > /dev/null
 
 [spotify]
@@ -47,13 +53,13 @@ command=$SCRIPTS/volume
 interval=5
 signal=11
 
-[time]
-command=date +'%I:%M %P'
-interval=5
-
 [date]
 command=date +'%b %d'
 interval=3600
+
+[time]
+command=date +'%I:%M %P'
+interval=5
 
 [battery]
 #label=⚡

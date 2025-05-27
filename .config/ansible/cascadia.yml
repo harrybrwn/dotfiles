@@ -5,18 +5,30 @@
 
   roles:
     - backup
+    - role: nerdfont
+      font: Lilex
+      version: 3.4.0
+    - role: nerdfont
+      font: JetBrainsMono
+      version: 3.4.0
 
   tasks:
     - name: Packages
       become: true
       ansible.builtin.package:
         name:
-          - ffmpeg
-          - physlock # lockscreen
           - brightnessctl
           - i3-wm
-          - i3blocks
-          - feh
+          - xss-lock
+          - picom
+          - i3blocks # status bar
+          - polybar  # status bar
+          - physlock # lockscreen
+          - feh      # image view and wallpaper setter
+          - ffmpeg
           - rofi
+          - pamixer
+          - fonts-noto # fix emojis
+          - curl
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

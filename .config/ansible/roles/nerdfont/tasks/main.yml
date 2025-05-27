@@ -1,4 +1,10 @@
 # See https://www.nerdfonts.com/font-downloads
+#
+# Example:
+# roles:
+#   - role: nerdfont
+#     font: JetBrainsMono
+#     version: 3.4.0
 
 - name: Set Default Version
   ansible.builtin.set_fact:

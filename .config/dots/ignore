@@ -15,6 +15,7 @@
 .config/Slack/
 .config/discord/
 .config/chromium/
+.config/heroic/
 .config/mc/config.json
 snap/
 

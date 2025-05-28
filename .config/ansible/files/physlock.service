@@ -1,0 +1,13 @@
+[Unit]
+Description=Lock consoles using physlock
+Before=sleep.target
+Before=suspend.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/physlock -ds
+Restart=on-failure
+
+[Install]
+WantedBy=sleep.target
+WantedBy=suspend.target

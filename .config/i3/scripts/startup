@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+
+if [ -f ~/.fehbg ]; then
+	sh ~/.fehbg
+else
+	W="$HOME/Pictures/wallpapers/yellow-computer-anime.jpg"
+	feh --bg-fill "$W"
+	$HOME/.local/share/venv/bin/wal -i "$W"
+fi

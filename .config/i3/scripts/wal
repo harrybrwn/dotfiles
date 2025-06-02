@@ -2,6 +2,10 @@
 
 set -uo pipefail
 
+wallust() {
+	"$HOME/.config/cargo/bin/wallust" "$@"
+}
+
 log() {
 	systemd-cat --identifier=i3-script-wal "$@"
 }
@@ -18,8 +22,8 @@ if [ $? -ne 0 ]; then
 	echo "wallpaper request cancelled" | log --priority=info
 	exit 0
 fi
-set -e
 
+set -e
 if [ ! -f "$DIR/$WAL" ]; then
 	echo "wallpaper \"$WAL\" does not exist" | log --priority=err
 	exit 1
@@ -27,13 +31,23 @@ fi
 
 flags=()
 case "$WAL" in
-    tatoo-girl-wouter-gort-3-bright-small.jpg|tatoo-girl-blue.jpg)
-        flags+=("--bg-tile")
-        ;;
-    *)
-        flags+=("--bg-fill")
-        ;;
+	tatoo-girl-wouter-gort-3-bright-small.jpg|tatoo-girl-blue.jpg)
+		flags+=("--bg-tile")
+		;;
+	*)
+		flags+=("--bg-fill")
+		;;
 esac
 
+#if [ -x "$HOME/.local/share/venv/bin/wal" ]; then
+#	$HOME/.local/share/venv/bin/wal -n -i "$DIR/$WAL"
+#elif command -v wallust >/dev/null; then
+#	wallust pywal -i "$DIR/$WAL"
+#fi
+
+rm -f "$HOME/.cache/wallust/theme"
+wallust run "$DIR/$WAL"
+
+polybar-msg cmd restart
+i3-msg reload
 feh "${flags[@]}" "$DIR/$WAL"
-$HOME/.local/share/venv/bin/wal -n -i "$DIR/$WAL"

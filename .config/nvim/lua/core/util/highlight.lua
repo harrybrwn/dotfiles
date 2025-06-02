@@ -13,6 +13,9 @@ function M.transparent_background()
   vim.api.nvim_set_hl(0, 'NvimTreeNormal', { bg = 'none' })
   vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', { bg = 'none' })
   vim.api.nvim_set_hl(0, 'NvimTreeEndOfBuffer', { bg = 'none' })
+  -- Figlet (temporary lsp messages)
+  vim.api.nvim_set_hl(0, 'FidgetTitle', { bg = 'none' })
+  vim.api.nvim_set_hl(0, 'FidgetTask', { bg = 'none' })
 end
 
 return M

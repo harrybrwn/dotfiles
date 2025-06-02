@@ -36,9 +36,6 @@ if [ -z "$STATUS_CHARGING_SYMBOL_COLOR" ]; then
     STATUS_CHARGING_SYMBOL_COLOR=$STATUS_BATTERY_COLOR
 fi
 
-# This is just here so I don't have to look it up again
-_bat_symb='ϟ'
-
 # Get the hex battery color on a
 # range from 0 to 100
 #
@@ -164,7 +161,7 @@ battery() {
         "discharging")
             ;;
         "charging")
-            out="$out$STATUS_CHARGING_SYMBOL"
+            out="$out$STATUS_CHARGING_SYMBOL "
             ;;
         "fully-charged")
             ;;

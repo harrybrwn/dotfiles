@@ -86,13 +86,22 @@ return {
   },
 
   -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", enabled = false,     opts = {},      lazy = false },
+  { "lvimuser/lsp-inlayhints.nvim", enabled = false,    opts = {}, lazy = false },
 
   -- Function signature pop-up
-  { "ray-x/lsp_signature.nvim",     event = "VeryLazy",  opts = {} },
+  { "ray-x/lsp_signature.nvim",     event = "VeryLazy", opts = {} },
 
-  -- Display temporary LSP info in the corner.
-  { "j-hui/fidget.nvim",            event = "LspAttach", opts = {},      tag = "v1.6.1" },
+  -- Display temporary LSP messages in the corner.
+  {
+    "j-hui/fidget.nvim",
+    event = "LspAttach",
+    tag = "v1.6.1",
+    opts = {
+      notification = {
+        window = { winblend = 0 },
+      },
+    },
+  },
 
-  { "towolf/vim-helm",              enabled = false,     config = false, lazy = false },
+  { "towolf/vim-helm", enabled = false, config = false, lazy = false },
 }

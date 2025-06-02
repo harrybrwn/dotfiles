@@ -5,7 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-if [ -f ~/.cache/wal/sequences ]; then
+if [ -f ~/.cache/wallust/sequences ]; then
+	(cat ~/.cache/wallust/sequences &)
+elif [ -f ~/.cache/wal/sequences ]; then
 	(cat ~/.cache/wal/sequences &)
 fi
 
@@ -68,19 +70,12 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [[ "$color_prompt" = yes ]]; then
-    # git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
-    #git_branch='`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`'
-    #PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] $git_branch\[\033[34m\]\$\[\033[00m\] "
-    PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[31m\] \$(__git_ps1)\[\033[34m\]\$\[\033[00m\] "
-    #PS1='butts \x1b[01;32m\u@\x1b[01;32m\h:\x1b[01;34m\w\x1b[31m $(__git_ps1)\x1b[34m$\x1b[00m '
-    :
+    PS1="\[\033[01;32m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\w\[\033[0m\]\$(__git_ps1)\[\033[34m\]\$\[\033[00m\] "
 else
-    git_branch=
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w \$ '
-    :
 fi
 
-unset color_prompt force_color_prompt git_branch
+unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 #case "$TERM" in

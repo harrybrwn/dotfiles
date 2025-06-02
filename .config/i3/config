@@ -11,18 +11,14 @@ exec --no-startup-id picom -b
 exec --no-startup-id dex --autostart --environment i3
 
 set $locker physlock -sm
-set $term alacritty --config-file /home/harry/.config/alacritty/i3.toml
-#set $term i3-sensible-terminal
-#set $term xterm
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
+#set $locker xsecurelock
+set $term alacritty --config-file ~/.config/alacritty/i3.toml
 
 # xss-lock grabs a logind suspend inhibit lock and will use physlock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-# set $locker xsecurelock
 exec --no-startup-id xss-lock --transfer-sleep-lock -- $locker
 exec --no-startup-id xset r rate 300 80
+
 # HACK: Attempt to stop the black blobs from showing up in fullscreen
 #
 # (See https://www.reddit.com/r/archcraft/comments/1ihp5ex/i3wm_screen_goes_dark_even_on_full_screen/)
@@ -48,13 +44,14 @@ tiling_drag modifier titlebar
 bindsym $mod+q kill
 
 # Applications
-bindsym $mod+d exec --no-startup-id rofi -show drun
-bindsym $mod+semicolon exec --no-startup-id rofi -show drun
-bindsym $mod+e exec --no-startup-id thunar
-bindsym $mod+b exec --no-startup-id x-www-browser
-bindsym $mod+Return exec $term
-bindsym $mod+Shift+w exec ~/.config/i3/scripts/wal
-bindsym $mod+z exec $locker
+bindsym $mod+d       exec --no-startup-id ~/.config/rofi/scripts/app-launcher.sh
+bindsym $mod+e       exec --no-startup-id thunar
+bindsym $mod+b       exec --no-startup-id x-www-browser
+bindsym $mod+Return  exec --no-startup-id $term
+bindsym $mod+Shift+w exec --no-startup-id ~/.config/i3/scripts/wal
+bindsym $mod+Shift+t exec --no-startup-id ~/.config/i3/scripts/theme
+bindsym $mod+z       exec --no-startup-id $locker
+bindsym $mod+p       exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 2
 
 # change focus
 bindsym $mod+h focus left
@@ -63,9 +60,9 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
 bindsym $mod+Right focus right
 
 # move focused window
@@ -75,9 +72,9 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
@@ -91,12 +88,12 @@ bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-#bindsym $mod+e layout toggle split
+bindsym $mod+t layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+space floating toggle
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
@@ -133,18 +130,17 @@ bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # Use pactl or pamixer to adjust volume in PulseAudio.
 set $refresh_i3status true
-set $vol pactl set-sink-volume @DEFAULT_SINK@
 set $unmute pactl set-sink-mute @DEFAULT_SINK@ 0
 bindsym XF86AudioRaiseVolume exec --no-startup-id       $unmute && pamixer --increase 5
 bindsym XF86AudioLowerVolume exec --no-startup-id       $unmute && pamixer --decrease 5
 bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id $unmute && pamixer --increase 1
 bindsym Shift+XF86AudioLowerVolume exec --no-startup-id $unmute && pamixer --decrease 1
-bindsym XF86AudioMute    exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMute    exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
-bindsym XF86MonBrightnessDown exec brightnessctl set +5%- --min-value=1
+bindsym XF86MonBrightnessUp   exec --no-startup-id brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set +5%- --min-value=1
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -164,35 +160,30 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-#bindsym --release Caps_Lock exec pkill -SIGRTMIN+10 i3blocks
 
-bindsym $mod+Control+h resize shrink width 2 px or 2 ppt
-bindsym $mod+Control+j resize grow height 2 px or 2 ppt
+bindsym $mod+Control+h resize shrink width  2 px or 2 ppt
+bindsym $mod+Control+j resize grow   height 2 px or 2 ppt
 bindsym $mod+Control+k resize shrink height 2 px or 2 ppt
-bindsym $mod+Control+l resize grow width 2 px or 2 ppt
-bindsym $mod+Alt+h resize shrink width 2 px or 2 ppt
-bindsym $mod+Alt+j resize grow height 2 px or 2 ppt
-bindsym $mod+Alt+k resize shrink height 2 px or 2 ppt
-bindsym $mod+Alt+l resize grow width 2 px or 2 ppt
+bindsym $mod+Control+l resize grow   width  2 px or 2 ppt
+bindsym $mod+Alt+h     resize shrink width  2 px or 2 ppt
+bindsym $mod+Alt+j     resize grow   height 2 px or 2 ppt
+bindsym $mod+Alt+k     resize shrink height 2 px or 2 ppt
+bindsym $mod+Alt+l     resize grow   width  2 px or 2 ppt
 
 # bar {
 #     position bottom
 #     status_command SCRIPTS=~/.config/i3/scripts i3blocks -c ~/.config/i3/blocks.toml
 # }
 
-gaps inner 5
-gaps outer 5
+gaps inner 10
+gaps outer 2
 smart_gaps off
-default_border pixel 1
+#default_border pixel 1
 
 # Disable boarders for brave
-for_window [class="Brave-browser" instance="brave-browser"] border pixel 0
-for_window [class="rofi"] border pixel 10
+for_window [class="Brave-browser" instance="brave-browser"] border pixel 1
+for_window [class="rofi"] border pixel 0
+for_window [class="Alacritty"] border pixel 0
+include theme.conf
 
-# class                 border  backgr. text    indicator child_border
-#client.focused          #2c2f3e #2c2f3e #F5C2E7 #8c8c8c   #8c8c8c
-client.focused          #2c2f3e #2c2f3e #F5C2E7 #555555   #8c8c8c
-client.focused_inactive #2c2f3e #2c2f3e #F5C2E7 #333333   #333333
-client.unfocused        #121317 #121317 #D9E0EE #333333   #333333
-client.urgent           #f28fad #f28fad #000000 #333333   #f28fad
-client.placeholder      #333333 #333333 #000000 #333333   #333333
+# vim: ts=4 sw=4 sts=4 noexpandtab

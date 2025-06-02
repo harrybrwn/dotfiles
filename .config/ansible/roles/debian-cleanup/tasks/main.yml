@@ -18,6 +18,7 @@
       - task-brazilian-portuguese
       - task-bulgarian
       - task-catalan
+      - task-spanish
       - task-chinese-s
       - task-chinese-t
       - task-croatian
@@ -83,6 +84,7 @@
       - iportuguese
       - irussian
       - iswiss
+      - ispanish
       - wbrazilian
       - wbulgarian
       - wcatalan
@@ -95,6 +97,7 @@
       - wpolish
       - wportuguese
       - wswedish
+      - wspanish
       - manpages-ja-dev
       - hunspell-hu # should be removed when removing task-hungarian
 

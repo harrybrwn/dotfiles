@@ -23,7 +23,7 @@
         { "key": "term  ", "type": "terminal" },
         // { "key": "cpu   ", "type": "cpu", "format": "{vendor} ({cores-online} @ {freq-max})" },
         // { "key": "memory", "type": "memory" },
-        // { "key": "editor", "type": "editor" },
+        { "key": "editor", "type": "editor" },
         "break",
         "colors"
     ]

@@ -4,7 +4,10 @@
   become_method: ansible.builtin.sudo
 
   roles:
+    - debian-cleanup
     - backup
+    - role: fastfetch
+      version: 2.44.0
     - role: nerdfont
       font: Lilex
       version: 3.4.0
@@ -16,19 +19,90 @@
     - name: Packages
       become: true
       ansible.builtin.package:
+        state: present
         name:
-          - brightnessctl
-          - i3-wm
-          - xss-lock
-          - picom
-          - i3blocks # status bar
-          - polybar  # status bar
-          - physlock # lockscreen
-          - feh      # image view and wallpaper setter
-          - ffmpeg
-          - rofi
-          - pamixer
-          - fonts-noto # fix emojis
+          # System
           - curl
+          - wget
+          - zip
+          - nmap
+          - vim
+          - ncal
+          - bind9-dnsutils
+          - smbclient
+          - systemd-timesyncd
+
+          # Desktop
+          - xorg
+          - dbus-x11
+          - i3-wm
+          - picom
+          - pipewire
+          - pipewire-audio
+          - pavucontrol
+          - blueman
+          - xss-lock
+          - brightnessctl
+          - polybar    # status bar
+          - physlock   # lockscreen (alt. xsecurelock)
+          - feh        # image view and wallpaper setter
+          - rofi       # app runner
+          - pamixer    # audio controls
+          - fonts-noto # fix emojis
+          - firefox-esr
+          - evince
+          - xclip
+          - ffmpeg
+          - cava # dumb audio visualization
+          - eog  # nicer image viewer
+          - vlc
+          - vlc-plugin-pipewire
+          - vlc-plugin-samba
+          - thunar-volman
+
+          # Dev
+          - python3
+          - python3-pip
+          - ansible-lint
+          - pkg-config
+          - cmake
+
+          # QEMU
+          - qemu-system
+          - qemu-utils
+          - qemu-kvm
+          - libvirt-clients
+          - libvirt-daemon-system
+          - bridge-utils
+          - virtinst
+          - libvirt-daemon
+          - virt-manager
+
+    - name: Removed Packages
+      become: true
+      ansible.builtin.package:
+        state: absent
+        name:
+          - i3blocks # old status bar
+          - xterm
+          - w3m-img
+          - w3m
+          - chafa
+          - jp2a
+          - caca-utils
+          - chromium
+          - zathura    # document viewer
+          # dev libraries
+          - libxkbcommon-dev   # from alacritty
+          - libfontconfig1-dev # from alacritty
+          - libxcb-xfixes0-dev
+          - libxcb-xkb-dev
+          - libxcb1-dev
+
+    - name: Remove dependencies that are no longer required
+      become: true
+      ansible.builtin.apt:
+        autoremove: true
+        purge: true
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

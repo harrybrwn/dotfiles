@@ -1,0 +1,49 @@
+# How the image is parse, in order to get the colors:
+#   full|resized|wal|thumb|fastresize|kmeans
+backend = "fastresize"
+
+# What color space to use to produce and select the most prominent colors:
+#   lab|labmixed|lch|lchmixed
+#color_space = "lch"
+color_space = "labmixed"
+
+# Use the most prominent colors in a way that makes sense, a scheme color palette:
+#   dark|dark16|darkcomp|darkcomp16
+#   light|light16|lightcomp|lightcomp16
+#   harddark|harddark16|harddarkcomp|harddarkcomp16
+#   softdark|softdark16|softdarkcomp|softdarkcomp16
+#   softlight|softlight16|softlightcomp|softlightcomp16
+palette = "dark"
+
+# Ensures a "readable contrast" (OPTIONAL, disabled by default)
+# Should only be enabled when you notice an unreadable contrast frequently happening
+# with your images. The reference color for the contrast is the background color.
+#check_contrast = true
+
+# Color saturation, between [1% and 100%] (OPTIONAL, disabled by default)
+# usually something higher than 50 increases the saturation and below
+# decreases it (on a scheme with strong and vivid colors)
+#saturation = 35
+
+# Alpha value for templating, by default 100 (no other use whatsoever)
+#alpha = 100
+
+[templates]
+# NOTE: prefer '' over "" for paths, avoids escaping.
+# template: A RELATIVE path that points to `~/.config/wallust/template` (depends on platform)
+# target: ABSOLUTE path in which to place a file with generated templated values.
+# ¡ If either one is a directory, then both SHOULD be one. !
+# zathura = { template = 'zathura', target = '~/.config/zathura/zathurarc' }
+
+wal       = { src = 'wal',                      dst = '~/.cache/wal/wal' }
+rofi      = { src = 'colors-rofi-dark.rasi',    dst = '~/.cache/wal/colors-rofi-dark.rasi' }
+polybar   = { src = 'colors-polybar-alpha.ini', dst = '~/.cache/wal/colors-polybar-transparent.ini' }
+alacritty = { src = 'alacritty-colors.toml',    dst = '~/.cache/wal/colors-alacritty.toml' }
+rasi      = { src = 'wal.rasi',                 dst = '~/.config/rofi/colors/wal.rasi'}
+
+#rofi    = { template = 'colors-rofi-dark.rasi', target = '~/.cache/wallust/colors-rofi-dark.rasi' }
+#css = { src = 'colors.css', dst = '~/.config/colors.css' }
+#alacritty = { template = 'alacritty-colors.toml', target = '~/.config/alacritty/colors.toml' }
+#polybar = { src = 'colors-polybar-transparent.ini', dst = '~/.config/polybar/colors.ini' }
+##polybar = { src = 'colors-polybar.ini', dst = '~/.config/polybar/colors.ini' }
+#wal = { src = 'wal', dst = '~/.cache/wallust/wal' }

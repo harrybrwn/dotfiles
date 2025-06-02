@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+
+set -eu
+
+wallust() {
+	"$HOME/.config/cargo/bin/wallust" "$@"
+}
+
+THEMES=($(wallust theme list | awk '/^-/ { print $2 }'))
+THEMES+=($(ls -1 ~/.config/wallust/themes | sed 's/.json$//g;'))
+#echo "${THEMES[@]}"
+# printf '%s\n' "${THEMES[@]}"
+# exit 0
+THEME="$(printf '%s\n' "${THEMES[@]}" | rofi -dmenu -p "Select a theme")"
+if [ "${THEME}" == "list" ]; then
+	i3-nagbar -t warning -m 'Cannot switch theme to "list"'
+	exit 1
+fi
+
+# THEME="$(
+# 	wallust theme list \
+# 		| awk '/^-/ { print $2 }' \
+# 		| rofi -dmenu -p "Select a theme"
+# )"
+
+OUT="$(wallust theme "$THEME")"
+if [ "$THEME" == "random" ]; then
+	echo "$OUT" | grep 'randomly selected' | awk '{print $5}' > "$HOME/.cache/wallust/theme"
+else
+	echo "$THEME" >	"$HOME/.cache/wallust/theme"
+fi
+polybar-msg cmd restart
+i3-msg reload

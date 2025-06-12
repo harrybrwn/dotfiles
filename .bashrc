@@ -182,3 +182,13 @@ if command -v helm > /dev/null 2>&1; then
 fi
 
 complete -C /usr/bin/mc mc
+
+# pnpm
+export PNPM_HOME="/home/harry/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+. "$HOME/.local/share/../bin/env"

@@ -44,7 +44,8 @@ tiling_drag modifier titlebar
 bindsym $mod+q kill
 
 # Applications
-bindsym $mod+d       exec --no-startup-id ~/.config/rofi/scripts/app-launcher.sh
+#bindsym $mod+d       exec --no-startup-id ~/.config/rofi/scripts/app-launcher.sh
+bindsym $mod+d       exec --no-startup-id rofi -show drun
 bindsym $mod+e       exec --no-startup-id thunar
 bindsym $mod+b       exec --no-startup-id x-www-browser
 bindsym $mod+Return  exec --no-startup-id $term

@@ -10,27 +10,39 @@ log() {
 	systemd-cat --identifier=i3-script-wal "$@"
 }
 
-DIR="$HOME/Pictures/wallpapers"
-WAL="$(
-	find "$DIR" \
-		-type f -printf '%f\n' \
-		-not -name '*.txt' \
-	| xargs -I{} echo -e "{}\0icon\x1f$DIR/{}" \
-	| rofi -dmenu -show-icons -p "Select a Wallpaper" \
-)"
-if [ $? -ne 0 ]; then
-	echo "wallpaper request cancelled" | log --priority=info
-	exit 0
+capture() {
+	if [ $1 -ne 0 ]; then
+		shift
+		systemd-cat --identifier=i3-script-wal "$@"
+	fi
+}
+
+if [ -n "${1:-}" ]; then
+	WAL="${1}"
+else
+	DIR="$HOME/Pictures/wallpapers"
+	NAME="$(
+		find "$DIR" \
+			-type f -printf '%f\n' \
+			-not -name '*.txt' \
+		| xargs -I{} echo -e "{}\0icon\x1f$DIR/{}" \
+		| rofi -dmenu -show-icons -p "Select a Wallpaper"
+	)"
+	if [ $? -ne 0 ]; then
+		echo "wallpaper request cancelled" | log --priority=info
+		exit 0
+	fi
+	WAL="$DIR/$NAME"
 fi
 
 set -e
-if [ ! -f "$DIR/$WAL" ]; then
+if [ ! -f "$WAL" ]; then
 	echo "wallpaper \"$WAL\" does not exist" | log --priority=err
 	exit 1
 fi
 
 flags=()
-case "$WAL" in
+case "${NAME:-}" in
 	tatoo-girl-wouter-gort-3-bright-small.jpg|tatoo-girl-blue.jpg)
 		flags+=("--bg-tile")
 		;;
@@ -46,8 +58,8 @@ esac
 #fi
 
 rm -f "$HOME/.cache/wallust/theme"
-wallust run "$DIR/$WAL"
+wallust run "$WAL"
 
 polybar-msg cmd restart
 i3-msg reload
-feh "${flags[@]}" "$DIR/$WAL"
+feh "${flags[@]}" "$WAL"

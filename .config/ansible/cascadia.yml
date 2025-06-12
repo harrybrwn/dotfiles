@@ -31,6 +31,7 @@
           - bind9-dnsutils
           - smbclient
           - systemd-timesyncd
+          - powertop # power usage tuning
 
           # Desktop
           - xorg
@@ -45,6 +46,8 @@
           - brightnessctl
           - polybar    # status bar
           - physlock   # lockscreen (alt. xsecurelock)
+          #- xtrlock
+          - light-locker
           - feh        # image view and wallpaper setter
           - rofi       # app runner
           - pamixer    # audio controls
@@ -93,16 +96,23 @@
           - chromium
           - zathura    # document viewer
           # dev libraries
-          - libxkbcommon-dev   # from alacritty
-          - libfontconfig1-dev # from alacritty
-          - libxcb-xfixes0-dev
-          - libxcb-xkb-dev
-          - libxcb1-dev
+          #- libxkbcommon-dev   # from alacritty
+          #- libfontconfig1-dev # from alacritty
+          #- libxcb-xfixes0-dev
+          #- libxcb-xkb-dev
+          #- libxcb1-dev
 
     - name: Remove dependencies that are no longer required
       become: true
       ansible.builtin.apt:
         autoremove: true
         purge: true
+
+    - name: Enable powertop unit
+      become: true
+      ansible.builtin.systemd_service:
+        name: powertop.service
+        scope: system
+        enabled: true
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

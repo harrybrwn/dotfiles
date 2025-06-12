@@ -17,44 +17,52 @@
       - cmake
       - pkg-config
 
-- name: Clone Repo
-  become: false
-  ansible.builtin.git:
-    repo: git@github.com:fastfetch-cli/fastfetch.git
-    dest: /tmp/fastfetch
-    depth: 1
-    version: '{{ version }}'
+- name: Check for Installation
+  ansible.builtin.stat:
+    path: '{{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt'
+  register: manifest
 
-- name: Create Build Dir
-  become: false
-  ansible.builtin.file:
-    path: /tmp/fastfetch/build
-    state: directory
-    mode: '0755'
+- name: Install fastfetch
+  when: not manifest.stat.exists
+  block:
+    - name: Clone Repo
+      become: false
+      ansible.builtin.git:
+        repo: git@github.com:fastfetch-cli/fastfetch.git
+        dest: /tmp/fastfetch
+        depth: 1
+        version: '{{ version }}'
 
-- name: Setup Buildsystem
-  become: false
-  ansible.builtin.command:
-    cmd: cmake ..
-    chdir: /tmp/fastfetch/build
-    creates: /tmp/fastfetch/build/Makefile
+    - name: Create Build Dir
+      become: false
+      ansible.builtin.file:
+        path: /tmp/fastfetch/build
+        state: directory
+        mode: '0755'
 
-- name: Build
-  become: false
-  ansible.builtin.command:
-    cmd: cmake --build .
-    chdir: /tmp/fastfetch/build
-    creates: /tmp/fastfetch/build/fastfetch
+    - name: Setup Buildsystem
+      become: false
+      ansible.builtin.command:
+        cmd: cmake ..
+        chdir: /tmp/fastfetch/build
+        creates: /tmp/fastfetch/build/Makefile
 
-- name: Install
-  become: false
-  ansible.builtin.command:
-    cmd: cmake --install . --strip --prefix '{{ ansible_facts.user_dir }}/.local'
-    chdir: /tmp/fastfetch/build
-    creates: '{{ ansible_facts.user_dir }}/.local/bin/fastfetch'
+    - name: Build
+      become: false
+      ansible.builtin.command:
+        cmd: cmake --build .
+        chdir: /tmp/fastfetch/build
+        creates: /tmp/fastfetch/build/fastfetch
 
-- name: Save Install List
-  become: false
-  ansible.builtin.command:
-    cmd: cp /tmp/fastfetch/build/install_manifest.txt {{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt
-    creates: '{{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt'
+    - name: Install
+      become: false
+      ansible.builtin.command:
+        cmd: cmake --install . --strip --prefix '{{ ansible_facts.user_dir }}/.local'
+        chdir: /tmp/fastfetch/build
+        creates: '{{ ansible_facts.user_dir }}/.local/bin/fastfetch'
+
+    - name: Save Install List
+      become: false
+      ansible.builtin.command:
+        cmd: cp /tmp/fastfetch/build/install_manifest.txt {{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt
+        creates: '{{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt'

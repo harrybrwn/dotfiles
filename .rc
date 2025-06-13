@@ -125,6 +125,7 @@ fi
 export COMPOSE_DOCKER_CLI_BUILD=1
 export BUILDX_BAKE_ENTITLEMENTS_FS=0
 export DOCKER_BUILDKIT=1
+export COMPOSE_BAKE=true
 
 # Node Version Manager (nvm)
 if [ -d /usr/share/nvm ]; then

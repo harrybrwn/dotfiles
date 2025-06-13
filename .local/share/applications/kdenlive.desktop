@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=kdenlive
+Comment=Video Editor
+Exec=/home/harry/.local/bin/kdenlive-25.04.2-x86_64.AppImage
+Terminal=false
+Type=Application
+Icon=kdenlive
+MimeType=text/xml
+StartupNotify=true

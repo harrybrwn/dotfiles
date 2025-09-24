@@ -64,43 +64,45 @@ return {
         },
 
         adapters = {
-          deepseek_r1 = function()
-            return require("codecompanion.adapters").extend("ollama", {
-              name = "deepseek-r1",
-              schema = {
-                model = {
-                  -- default = "deepseek-r1:8b-llama-distill-q4_K_M",
-                  default = "deepseek-r1:7b-qwen-distill-q4_K_M",
+          http = {
+            deepseek_r1 = function()
+              return require("codecompanion.adapters").extend("ollama", {
+                name = "deepseek-r1",
+                schema = {
+                  model = {
+                    -- default = "deepseek-r1:8b-llama-distill-q4_K_M",
+                    default = "deepseek-r1:7b-qwen-distill-q4_K_M",
+                  },
+                  num_ctx = {
+                    default = 131072,
+                  },
+                  num_predict = {
+                    default = -1,
+                  },
+                }
+              })
+            end,
+            llama3 = function()
+              return require("codecompanion.adapters").extend("ollama", {
+                name = "llama3", -- Give this adapter a different name to differentiate it from the default ollama adapter
+                schema = {
+                  model = {
+                    -- default = "llama3:latest",
+                    -- default = "llama3.2:3b-instruct-q4_K_M",
+                    -- default = "llama3.1:8b-instruct-q4_K_M",
+                    -- default = "llama3.1:8b-instruct-q6_K"
+                    default = "deepseek-r1:7b-qwen-distill-q4_K_M",
+                  },
+                  num_ctx = {
+                    default = 131072,
+                  },
+                  num_predict = {
+                    default = -1,
+                  },
                 },
-                num_ctx = {
-                  default = 131072,
-                },
-                num_predict = {
-                  default = -1,
-                },
-              }
-            })
-          end,
-          llama3 = function()
-            return require("codecompanion.adapters").extend("ollama", {
-              name = "llama3", -- Give this adapter a different name to differentiate it from the default ollama adapter
-              schema = {
-                model = {
-                  -- default = "llama3:latest",
-                  -- default = "llama3.2:3b-instruct-q4_K_M",
-                  -- default = "llama3.1:8b-instruct-q4_K_M",
-                  -- default = "llama3.1:8b-instruct-q6_K"
-                  default = "deepseek-r1:7b-qwen-distill-q4_K_M",
-                },
-                num_ctx = {
-                  default = 131072,
-                },
-                num_predict = {
-                  default = -1,
-                },
-              },
-            })
-          end,
+              })
+            end,
+          },
         },
 
         display = {

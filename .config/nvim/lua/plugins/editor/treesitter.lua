@@ -8,8 +8,12 @@ return {
     -- 	-- pcall(require("nvim-treesitter.install").update({ with_sync = true }))
     -- 	require("nvim-treesitter.install").update({ with_sync = true })()
     -- end),
-    lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+    -- lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+    event = { "BufReadPre", "BufNewFile" },
     build = ":TSUpdate",
+    -- dependencies = {
+    --   { "windwp/nvim-ts-autotag" },
+    -- },
     config = function()
       local configs = require("nvim-treesitter.configs")
       local ts_parsers = require("nvim-treesitter.parsers")

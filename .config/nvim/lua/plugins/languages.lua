@@ -8,9 +8,17 @@ if version.major == 0 and version.minor >= 10 then
     lazy = false,
     ft = { "md", "markdown" },
     dependencies = {
-      "nvim-tree/nvim-web-devicons",
       "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
     },
+    opts = {
+      experimental = {
+        -- Ignore warning message about loading treesitter before markview
+        check_rtp_message = false,
+      }
+    },
+    -- init = function(plugin)
+    -- end,
     -- config = function()
     --   require("markview").setup()
     -- end,

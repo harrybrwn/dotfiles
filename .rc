@@ -111,6 +111,9 @@ alias fetch=fastfetch
 if command -v ncal > /dev/null; then
   alias cal='ncal -b'
 fi
+alias cd..='cd ..'
+alias cd...='cd ../..'
+alias cd....='cd ../../..'
 
 export COMPLETE_ALIASES="ls la l dk dkc tf k ku kube g vi vim v k"
 
@@ -162,9 +165,9 @@ setup() {
   case "$1" in
     help|--help|-h)
       cat <<-EOF
-setup [target|command]
+setup [alias|command]
 
-Targets
+Aliases
   at             atproto project
   dev            dev folder
   homelab|lab    homelab
@@ -175,6 +178,8 @@ Targets
 
 Commands
   help    print this help message
+  find    search dirs and setup session with selected
+
 EOF
       ;;
 
@@ -259,7 +264,7 @@ EOF
       ;;
 
     *)
-      echo "Error: unknown session name \"$1\"" >&2
+      echo "Error: unknown command or alias \"$1\"" >&2
       return 1
       ;;
   esac

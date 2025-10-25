@@ -17,7 +17,7 @@ case "${1:-}" in
 
 	status)
 		if bluetoothctl show | grep -q 'Powered: yes'; then
-			if echo info | bluetoothctl | grep -q '^Device'; then
+			if echo info | bluetoothctl | grep -Eq '^Device ([A-F0-9]{2}:){5}[A-F0-9]{2}'; then
 				#echo "%{F#2193ff}󰂱"
 				echo "%{F#1079de}󰂱"
 			else

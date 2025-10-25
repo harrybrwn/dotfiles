@@ -9,6 +9,8 @@ exec --no-startup-id picom -b
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+# Add ssh keys to ssh-agent
+exec --no-startup-id ssh-add
 
 set $locker physlock -sm
 #set $locker xsecurelock
@@ -45,14 +47,15 @@ bindsym $mod+q kill
 
 # Applications
 #bindsym $mod+d       exec --no-startup-id ~/.config/rofi/scripts/app-launcher.sh
-bindsym $mod+d       exec --no-startup-id rofi -show drun
+bindsym $mod+d       exec --no-startup-id rofi -show drun -show-icons
 bindsym $mod+e       exec --no-startup-id thunar
 bindsym $mod+b       exec --no-startup-id x-www-browser
 bindsym $mod+Return  exec --no-startup-id $term
 bindsym $mod+Shift+w exec --no-startup-id ~/.config/i3/scripts/wal
 bindsym $mod+Shift+t exec --no-startup-id ~/.config/i3/scripts/theme
 bindsym $mod+z       exec --no-startup-id $locker
-bindsym $mod+p       exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 2
+bindsym $mod+p       exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 7
+bindsym $mod+Shift+p exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 2
 
 # change focus
 bindsym $mod+h focus left
@@ -143,6 +146,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 bindsym XF86MonBrightnessUp   exec --no-startup-id brightnessctl set +5%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set +5%- --min-value=1
 
+bindsym Print exec xfce4-screenshooter
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
     bindsym j resize shrink width 2 px or 2 ppt
@@ -161,6 +166,18 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+
+set $mode_launcher Open [b]browser [f]iles [s]potify [d]iscord
+bindsym $mod+o mode "$mode_launcher"
+mode "$mode_launcher" {
+	bindsym b mode "default" exec x-www-browser
+	bindsym f mode "default" exec thunar
+	bindsym s mode "default" exec spotify
+	bindsym d mode "default" exec discord
+	bindsym Escape mode "default"
+	bindsym Return mode "default"
+	bindsym $mod+o mode "default"
+}
 
 bindsym $mod+Control+h resize shrink width  2 px or 2 ppt
 bindsym $mod+Control+j resize grow   height 2 px or 2 ppt

@@ -24,10 +24,16 @@ fi
 # )"
 
 OUT="$(wallust theme "$THEME")"
+THEME_NAME="${THEME}"
 if [ "$THEME" == "random" ]; then
-	echo "$OUT" | grep 'randomly selected' | awk '{print $5}' > "$HOME/.cache/wallust/theme"
-else
-	echo "$THEME" >	"$HOME/.cache/wallust/theme"
+	#echo "$OUT" | grep 'randomly selected' | awk '{print $5}' > "$HOME/.cache/wallust/theme"
+	THEME_NAME="$(echo "$OUT" | grep 'randomly selected' | awk '{print $5}')"
+# else
+# 	echo "$THEME" >	"$HOME/.cache/wallust/theme"
 fi
+
+echo "${THEME_NAME}" >	"$HOME/.cache/wallust/theme"
+echo "${THEME_NAME}" >>	"$HOME/.cache/wallust/themes.log"
+
 polybar-msg cmd restart
 i3-msg reload

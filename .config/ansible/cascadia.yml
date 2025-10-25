@@ -1,3 +1,7 @@
+# TODO:
+#   - Download iwlwifi-QuZ-a0-hr-b0-77.ucode from https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/intel/iwlwifi
+#     and place it in /usr/lib/firmware
+
 - name: Setup "cascadia" Laptop
   hosts: localhost
   become: false
@@ -14,6 +18,9 @@
     - role: nerdfont
       font: JetBrainsMono
       version: 3.4.0
+
+  # TODO:
+  # - add Heroic Games Launcher (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
 
   tasks:
     - name: Packages
@@ -47,7 +54,6 @@
           - polybar    # status bar
           - physlock   # lockscreen (alt. xsecurelock)
           #- xtrlock
-          - light-locker
           - feh        # image view and wallpaper setter
           - rofi       # app runner
           - pamixer    # audio controls
@@ -56,12 +62,14 @@
           - evince
           - xclip
           - ffmpeg
-          - cava # dumb audio visualization
-          - eog  # nicer image viewer
+          - cava    # dumb audio visualization
+          - eog     # nicer image viewer
+          - foliate # ebook reader
           - vlc
           - vlc-plugin-pipewire
           - vlc-plugin-samba
           - thunar-volman
+          - system-config-printer # printer GUI
 
           # Dev
           - python3
@@ -69,6 +77,7 @@
           - ansible-lint
           - pkg-config
           - cmake
+          - apt-file # find the package file belongs to
 
           # QEMU
           - qemu-system
@@ -80,6 +89,17 @@
           - virtinst
           - libvirt-daemon
           - virt-manager
+
+          # build deps (chatterino)
+          #- qt6-base-dev
+          #- qt6-5compat-dev
+          #- qt6-svg-dev
+          #- qt6-image-formats-plugins
+          #- libboost1.81-dev
+          #- libnotify-dev
+          #- libssl-dev
+
+          - python3-venv
 
     - name: Removed Packages
       become: true
@@ -114,5 +134,12 @@
         name: powertop.service
         scope: system
         enabled: true
+    - name: Install Python Packages
+      ansible.builtin.pip:
+        name:
+          - stig[setproctitle,proxy]
+          - yt-dlp[default,curl-cffi]
+        state: present
+        virtualenv: '~/.local/share/venv'
 
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

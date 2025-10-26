@@ -28,8 +28,6 @@ end
 
 -- Paste without yanking (visual mode)
 nset("<leader>f", vim.cmd.NvimTreeFindFileToggle, { desc = "[F]iletree toggle" })
--- nset("<leader>e", vim.cmd.TroubleToggle, { desc = "[E]rror diagnostics window toggle" })
--- nset("<leader>E", popup_diagnostics, { desc = "Show [E]rror in a popup" })
 nset("<leader>t", vim.cmd.tabnew, { desc = "[T]ab create" })
 -- Misc
 nset('<C-w>"', window_split_fn(30), { desc = "Open a tmux window below vim." })

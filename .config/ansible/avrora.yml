@@ -21,6 +21,7 @@
           - noto-fonts-cjk
           - noto-fonts-extra
           - ttf-roboto-mono-nerd # I like RobotoMono Nerd Font
+          - ttf-lilex-nerd
 
           # Tools
           - git
@@ -63,6 +64,7 @@
           - bluez    # bluetooth
           - discord
           - gwenview # cropping images
+          - blueman  # bluetooth gui and applet
 
     # TODO install from AUR: python-pywal brave-bin bash-complete-alias
 

@@ -33,7 +33,7 @@
         name:
           - gpustat
           - yt-dlp[default,curl-cffi]
-          - stig
+          - stig[setproctitle,proxy]
           - gallery-dl
         state: present
         virtualenv: '{{ ansible_facts.user_dir }}/.local/share/venv'

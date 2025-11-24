@@ -184,6 +184,12 @@ EOF
       ;;
 
     at)
+      if [ ! -d ~/dev/bsky/at ]; then
+        mkdir -p ~/dev/bsky/at
+        pushd ~/dev/bsky/
+        git clone git@github.com:harrybrwn/at.git
+        popd
+      fi
       t-new -s at -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
         new-window    -t 'at:3' -n at -c ~/dev/bsky/at \;\

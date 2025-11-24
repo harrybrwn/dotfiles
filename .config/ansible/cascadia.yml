@@ -1,6 +1,7 @@
 # TODO:
 #   - Download iwlwifi-QuZ-a0-hr-b0-77.ucode from https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/intel/iwlwifi
 #     and place it in /usr/lib/firmware
+#   - add Heroic Games Launcher (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
 
 - name: Setup "cascadia" Laptop
   hosts: localhost
@@ -18,9 +19,6 @@
     - role: nerdfont
       font: JetBrainsMono
       version: 3.4.0
-
-  # TODO:
-  # - add Heroic Games Launcher (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
 
   tasks:
     - name: Packages
@@ -78,6 +76,7 @@
           - pkg-config
           - cmake
           - apt-file # find the package file belongs to
+          - awscli
 
           # QEMU
           - qemu-system
@@ -90,6 +89,21 @@
           - libvirt-daemon
           - virt-manager
 
+          # Dev Build Deps
+          - python3-venv
+          - libssl-dev         # for building python
+          - libffi-dev         # for building python
+          - libncurses-dev     # for building python
+          - libgdbm-dev        # for building python
+          - libgdbm-compat-dev # for building python
+          - liblzma-dev        # for building python
+          - tk-dev             # for building python
+          - uuid-dev           # for building python
+          - libbz2-dev         # for building python
+          - libzstd-dev        # for building python
+          - libreadline-dev    # for building python
+          - libsqlite3-dev     # for building python
+
           # build deps (chatterino)
           #- qt6-base-dev
           #- qt6-5compat-dev
@@ -98,8 +112,6 @@
           #- libboost1.81-dev
           #- libnotify-dev
           #- libssl-dev
-
-          - python3-venv
 
     - name: Removed Packages
       become: true

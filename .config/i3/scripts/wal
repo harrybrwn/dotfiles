@@ -59,7 +59,28 @@ esac
 
 rm -f "$HOME/.cache/wallust/theme"
 wallust run "$WAL"
+if [ $? -ne 0 ]; then
+	notify-send -u normal -a 'i3/wallpaper' \
+		"Failed to run wallust" \
+		"Failed to set wallpaper with 'wallust run $WAL'"
+	exit 1
+fi
 
 polybar-msg cmd restart
 i3-msg reload
 feh "${flags[@]}" "$WAL"
+if [ $? -ne 0 ]; then
+	notify-send \
+		-u normal \
+		-a 'i3/wallpaper' \
+		-t 10000 \
+		"Failed to set wallpaper" \
+		"Failed to set wallpaper with 'feh ${flags[@]} $WAL'"
+fi
+
+notify-send \
+	-u normal \
+	-a 'i3/wallpaper' \
+	-t 3000 \
+	"Wallpaper Set" \
+	"Set wallpaper to $WAL"

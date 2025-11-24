@@ -4,7 +4,7 @@ local version = vim.version()
 if version.major == 0 and version.minor >= 10 then
   table.insert(plugins, {
     "OXY2DEV/markview.nvim",
-    enabled = true,
+    enabled = false,
     lazy = false,
     ft = { "md", "markdown" },
     dependencies = {

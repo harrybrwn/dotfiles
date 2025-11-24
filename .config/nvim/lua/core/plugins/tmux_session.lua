@@ -9,7 +9,25 @@ function M.in_tmux()
 end
 
 function M.term_is_open()
-  return vim.g.tmux_session_term_pane_id ~= nil
+  local pane = vim.g.tmux_session_term_pane_id
+  if pane == nil then
+    return false
+  end
+  local pane = vim.g.tmux_session_term_pane_id
+  local cmd = string.format('tmux has-session -t %s 2>&1', pane)
+  local handle = io.popen(cmd, "r")
+  if handle == nil then
+    return false
+  end
+  local raw_output = handle:read("*a")
+  local output = string.gsub(raw_output, '^%s*(.-)%s*$', '%1')
+  local ok = handle:close()
+  if ok and output ~= string.format("can't find pane: %s", pane) then
+    return true
+  else
+    vim.g.tmux_session_term_pane_id = nil
+    return false
+  end
 end
 
 function M.select_term()

@@ -4,6 +4,8 @@ local path = require("core.util.path")
 return {
   {
     "olimorris/codecompanion.nvim",
+    version = "^17.33.0",
+    pin = true,
     enabled = true,
     lazy = false,
     dependencies = {
@@ -22,6 +24,7 @@ return {
     config = function()
       local adapter = "deepseek_r1"
       require("codecompanion").setup {
+        ignore_warnings = true,
         strategies = {
           chat = {
             adapter = adapter,

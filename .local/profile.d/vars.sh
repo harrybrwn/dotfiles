@@ -139,7 +139,7 @@ export BUN_INSTALL="$XDG_CONFIG_HOME/bun"
 export PATH="$PATH:$BUN_INSTALL/bin"
 
 # Grossness :(
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
+#export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
 export AXIS2_HOME="$HOME/dev/claresco/tools/axis2-1.8.0"
 export CATALINA_BASE="/usr/local/tomcat7"
 export CATALINA_HOME="$CATALINA_BASE"

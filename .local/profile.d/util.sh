@@ -156,7 +156,94 @@ download-site() {
   # Get robots.txt so it looks like we're being good if a site admin looks at
   # their logs.
   wget --user-agent="$ua" -O /dev/null "$host/robots.txt" || true
-  echo "wget ${flags[@]}" "$host" > ./download.script
+  echo "wget ${flags[*]}" "$host" > ./download.script
   # Crawl the site.
   wget "${flags[@]}" "$host"
+}
+
+profile() {
+	local flags=()
+	local name=""
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			-h|-help|--help)
+				cat<<EOF
+Usage
+  profile [options...] <profile>
+
+Options
+  -h --help   print help message
+
+Profiles
+  work
+  home
+EOF
+				return 0
+				;;
+			*)
+				if [ -z "$name" ]; then
+					name="$1"
+					shift
+				else
+					echo -e "\e[031mError\e[0m: Unknown flag \"$1\"" 1>&2
+					return 1
+				fi
+				;;
+		esac
+	done
+
+	case "$name" in
+		work)
+			if [ -z "$WORK_GIT_EMAIL" ]; then
+				echo -e "\e[031mError\e[0m: \$WORK_GIT_EMAIL is not set" 1>&2
+				return 1
+			fi
+			if [[ -z "$(go env GOPRIVATE)" && -n "${WORK_GO_PRIVATE}" ]]; then
+				go env -w GOPRIVATE="${WORK_GO_PRIVATE}"
+			fi
+			xdg-settings set default-web-browser 'chromium_chromium.desktop'
+			git config --global user.email "$WORK_GIT_EMAIL"
+			;;
+		home)
+			go env -w GOPRIVATE=''
+			xdg-settings set default-web-browser 'brave-browser.desktop'
+			git config --global user.email 'me@h3y.sh'
+			;;
+		'')
+			local browser="$(xdg-settings get default-web-browser)"
+			case "$browser" in
+				chromium_chromium.desktop)
+					name='work'
+					;;
+				brave-browser.desktop|com.brave.Browser.desktop)
+					name='home'
+					;;
+				*)
+					echo -e "\e[031mError\e[0m: Unknown profile" 1>&2
+					;;
+			esac
+			local github_user="$(ssh -T git@github.com | sed 's/^Hi \([^!]*\)!.*$/\1/')"
+			if [[ "$github_user" == 'harrybrwn' && "$name" == 'work' ]]; then
+				echo -e "\e[031mError\e[0m: Invalid profile state. Check ssh keys and default browser \"$name\"" 1>&2
+				return 1
+			fi
+			echo -e "\e[036mCurrent Profile\e[0m: \"$name\""
+			return 0
+			;;
+		*)
+			echo -e "\e[031mError\e[0m: Unknown profile name \"$name\"" 1>&2
+			return 1
+			;;
+	esac
+	echo -e "\e[036mDefault Browser\e[0m: $(xdg-settings get default-web-browser)"
+	if [ ! -f "$HOME/.ssh/profiles/$name" ]; then
+		echo -e "\e[031mError\e[0m: Could not find ssh profile \"$HOME/.ssh/profiles/$name\"" 1>&2
+		return 1
+	fi
+	pushd ~/.ssh >/dev/null
+	ln -f -s "profiles/$name" profile
+	popd >/dev/null
+	ssh -T git@github.com
+	echo -e "\e[036mgit email\e[0m:   \e[034m$(git config --global --get user.email)\e[0m"
+	echo -e "\e[036mprofile set\e[0m: \e[034m$name\e[0m"
 }

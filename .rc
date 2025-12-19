@@ -106,7 +106,7 @@ alias vi=vim v=vim
 alias pwgen=xkcdpass
 alias brightness-off='echo 0 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias brightness-on='echo /sys/class/backlight/intel_backlight/max_brightness | sudo tee /sys/class/backlight/intel_backlight/brightness'
-alias disassemble='objdump --visualize-jumps=color --disassembler-color=on --inlines --show-all-symbols -d'
+alias disassemble='objdump --visualize-jumps=color --disassembler-color=extended --inlines --show-all-symbols -d'
 alias fetch=fastfetch
 if command -v ncal > /dev/null; then
   alias cal='ncal -b'
@@ -239,12 +239,17 @@ EOF
       shift 1
       selected="$(
         find \
-          ~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools \
+          ~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools ~/work \
           -mindepth 1 \
-          -maxdepth 3 \
+          -maxdepth 4 \
           -type d \
-        | fzf
+        | fzf \
+          --tmux '75%' \
+          --preview 'eza -la {} --git --group-directories-first'
       )"
+      if [ -z "$selected" ]; then
+        return 1
+      fi
       name="$(basename $selected)"
       if [ -z "$name" ]; then
         echo "Invalid input"

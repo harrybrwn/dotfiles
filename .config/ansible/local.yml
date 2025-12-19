@@ -5,6 +5,7 @@
 
   roles:
     - backup
+    - adr-tools
 
   tasks:
     - name: Packages
@@ -15,6 +16,7 @@
           - xclip
           - ffmpeg
           - gnome-shell-extension-manager
+          - postgresql-client
         state: present
 
     - name: Use ping without sudo (setcap cap_net_raw+p)

@@ -1,4 +1,3 @@
-local path = require("core.util.path")
 local tmux = require("core.plugins.tmux_session")
 
 vim.g.mapleader = ","

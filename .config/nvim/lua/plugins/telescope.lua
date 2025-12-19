@@ -30,6 +30,7 @@ return {
     },
     pickers = {
       live_grep = {
+        ---@diagnostic disable-next-line: unused-local
         additional_args = function(opts)
           return { "--hidden" }
         end,

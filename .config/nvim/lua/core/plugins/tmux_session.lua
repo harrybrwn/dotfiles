@@ -13,7 +13,6 @@ function M.term_is_open()
   if pane == nil then
     return false
   end
-  local pane = vim.g.tmux_session_term_pane_id
   local cmd = string.format('tmux has-session -t %s 2>&1', pane)
   local handle = io.popen(cmd, "r")
   if handle == nil then

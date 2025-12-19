@@ -1,27 +1,21 @@
 return {
   -- Language Server
+  -- TODO: Switch to the 0.11 way of configuring LSPs:
+  --  * See https://vonheikemen.github.io/learn-nvim/feature/lsp-setup.html
+  --  * See https://gpanders.com/blog/whats-new-in-neovim-0-11/
+  --  * Remove lsp-zero
   {
     "VonHeikemen/lsp-zero.nvim",
+    enabled = true,
     -- TODO upgrade to "v4.x". Check the repo, there's a migration guide.
     branch = "v4.x",
     lazy = false,
     dependencies = {
-      -- LSP Support
-      { "neovim/nvim-lspconfig" },             -- Required
-      { "williamboman/mason.nvim" },           -- Optional
-      { "williamboman/mason-lspconfig.nvim" }, -- Optional
-      -- Snippets
-      { "L3MON4D3/LuaSnip" },                  -- Required
-      -- Autocompletion
-      { "hrsh7th/nvim-cmp" },                  -- Required
-      { "hrsh7th/cmp-nvim-lsp" },              -- Required
-      { "hrsh7th/cmp-buffer" },
-      { "hrsh7th/cmp-path" },
-      { "saadparwaiz1/cmp_luasnip" },
+      "neovim/nvim-lspconfig",
     },
-
     config = function(_, _)
       require("core.plugins.lsp").setup({
+        -- explicitly enable or disable auto formatting
         auto_format = {
           go = true,
           rust = true,
@@ -38,37 +32,45 @@ return {
           python = false,
           yaml = false,
         },
-        ensure_installed = {
-          -- Languages/Frameworks
-          "pyright",          -- python
-          "gopls",            -- golang
-          "golangci_lint_ls", -- golangci-lint
-          "rust_analyzer",    -- rust
-          "clangd",           -- c/c++
-          "sqlls",            -- sql
-          --"nil_ls",           -- nix
-          "lua_ls",           -- lua
-          "html",             -- html
-          "astro",            -- astro.js
-          "verible",          -- SystemVerilog
-          --"asm_lsp",                        -- GAS/NASM/Go assembly
-          --"tsserver",                        -- typescript
-          "ts_ls",       -- typescrypt
-          "eslint",      -- web stuff
-          "cssls",       -- css
-          "tailwindcss", -- tailwind
-          --"volar",                           -- vue
-          -- Configuration/Tools
-          "ansiblels",                       -- ansible
-          "terraformls",                     -- terraform
-          "dockerls",                        -- docker
-          "docker_compose_language_service", -- docker-compose
-          "yamlls",                          -- yaml
-          "jsonls",                          -- json
-          "helm_ls"
-        },
       })
     end,
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
+    },
+    lazy = false,
+    opts = {
+      automatic_installation = true,
+      ensure_installed = {
+        -- Languages/Frameworks
+        "pyright",          -- python
+        "gopls",            -- golang
+        "golangci_lint_ls", -- golangci-lint
+        "rust_analyzer",    -- rust
+        "clangd",           -- c/c++
+        "sqlls",            -- sql
+        "lua_ls",           -- lua
+        "html",             -- html
+        "astro",            -- astro.js
+        "verible",          -- SystemVerilog
+        --"asm_lsp",                        -- GAS/NASM/Go assembly
+        "ts_ls",            -- typescrypt
+        "eslint",           -- web stuff
+        "cssls",            -- css
+        "tailwindcss",      -- tailwind
+        "bashls",
+        -- Configuration/Tools
+        "ansiblels",                       -- ansible
+        "terraformls",                     -- terraform
+        "dockerls",                        -- docker
+        "docker_compose_language_service", -- docker-compose
+        "yamlls",                          -- yaml
+        "jsonls",                          -- json
+      },
+    },
   },
 
   {
@@ -79,9 +81,11 @@ return {
     end,
     dependencies = {
       "L3MON4D3/LuaSnip",
+      "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-cmdline",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "saadparwaiz1/cmp_luasnip",
     },
   },
 

@@ -4,7 +4,7 @@ local version = vim.version()
 if version.major == 0 and version.minor >= 10 then
   table.insert(plugins, {
     "OXY2DEV/markview.nvim",
-    enabled = false,
+    enabled = true,
     lazy = false,
     ft = { "md", "markdown" },
     dependencies = {
@@ -17,11 +17,18 @@ if version.major == 0 and version.minor >= 10 then
         check_rtp_message = false,
       }
     },
-    -- init = function(plugin)
-    -- end,
-    -- config = function()
-    --   require("markview").setup()
-    -- end,
+    keys = {
+      {
+        "<leader>mt",
+        "<cmd>Markview Toggle<cr>",
+        desc = "Toggle the markview plugin",
+      },
+      {
+        "<leader>ms",
+        "<cmd>Markview splitToggle<cr>",
+        desc = "Toggle the markview split view",
+      }
+    },
   })
 end
 

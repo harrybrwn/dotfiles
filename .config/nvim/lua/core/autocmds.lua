@@ -48,6 +48,7 @@ vim.cmd(
 -- 	vim.print(opts)
 -- end, { nargs = 1 })
 
+---@diagnostic disable-next-line: unused-local
 vim.api.nvim_buf_create_user_command(0, "Clear", function(_opts)
   for _, bufnr in pairs(vim.api.nvim_list_bufs()) do
     print(bufnr, vim.api.nvim_buf_is_loaded(bufnr), vim.api.nvim_buf_get_name(bufnr))
@@ -62,6 +63,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
+---@diagnostic disable-next-line: unused-local
 vim.api.nvim_create_user_command("PubDate", function(_opts)
   local pos = vim.fn.getcurpos()
   local buf = vim.fn.getbufinfo({ buflisted = 1 })[1]

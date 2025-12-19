@@ -119,7 +119,7 @@ return {
           chat = {
             ---Customize how tokens are displayed
             ---@param tokens number
-            ---@param adapter CodeCompanion.Adapter
+            ---@param adapter require('codecompanion').CodeCompanion.Adapter
             ---@return string
             token_count = function(tokens, adapter)
               return string.format(" [%d tokens (%s)]", tokens, adapter.name)

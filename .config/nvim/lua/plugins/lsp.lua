@@ -12,6 +12,7 @@ return {
     lazy = false,
     dependencies = {
       "neovim/nvim-lspconfig",
+      "williamboman/mason.nvim",
     },
     config = function(_, _)
       require("core.plugins.lsp").setup({
@@ -38,6 +39,7 @@ return {
 
   {
     "williamboman/mason-lspconfig.nvim",
+    enabled = true,
     dependencies = {
       "williamboman/mason.nvim",
     },
@@ -56,7 +58,6 @@ return {
         "html",             -- html
         "astro",            -- astro.js
         "verible",          -- SystemVerilog
-        --"asm_lsp",                        -- GAS/NASM/Go assembly
         "ts_ls",            -- typescrypt
         "eslint",           -- web stuff
         "cssls",            -- css
@@ -69,6 +70,7 @@ return {
         "docker_compose_language_service", -- docker-compose
         "yamlls",                          -- yaml
         "jsonls",                          -- json
+        --"asm_lsp",          -- GAS/NASM/Go assembly
       },
     },
   },

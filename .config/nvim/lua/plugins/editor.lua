@@ -37,7 +37,7 @@ return {
   -- Snippets for completion
   {
     "L3MON4D3/LuaSnip",
-    tag = "v2.3.0",
+    tag = "v2.4.1",
     dependencies = {
       {
         "rafamadriz/friendly-snippets",
@@ -52,26 +52,22 @@ return {
     },
   },
 
-  -- Extra tab features
   {
-    "romgrk/barbar.nvim",
-    dependencies = {
-      "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
-      "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+    "DrKJeff16/project.nvim",
+    dependencies = { -- OPTIONAL
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'ibhagwan/fzf-lua',
     },
-    init = function()
-      vim.g.barbar_auto_setup = false
-    end,
-    opts = {
-      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-      -- animation = true,
-      -- insert_at_start = true,
-      -- …etc.
+    lazy = false,
+    opts = {},
+    keys = {
+      {
+        '<leader>pf',
+        function() vim.cmd [[Telescope projects]] end,
+        mode = { 'n' },
+        desc = '[P]roject [F]ind',
+      },
     },
-    --keys = {
-    --  { "<A-,>", "<Cmd>BufferPrevious<CR>", mode = { "n" }, desc = "Prev tab", noremap = true,  silent = true },
-    --  { "<A-.>", "<Cmd>BufferNext<CR>",     mode = { "n" }, desc = "Next tab", noremap = true,  silent = true },
-    --},
-    version = "^1.0.0", -- optional: only update when a new 1.x version is released
   },
 }

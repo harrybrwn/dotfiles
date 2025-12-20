@@ -12,6 +12,8 @@ return {
     enabled = true,
     lazy = false,
     opts = {
+      sync_root_with_cwd = true,
+      respect_buf_cwd = true,
       view = {
         side = "left",
         width = "15%",
@@ -58,6 +60,7 @@ return {
       diagnostics = { enable = true },
       update_focused_file = {
         enable = true, -- move cursor to current open file
+        update_root = true,
         ignore_list = { "node_modules", ".git" },
       },
       filesystem_watchers = {

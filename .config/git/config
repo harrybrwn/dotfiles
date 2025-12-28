@@ -9,9 +9,9 @@
     #pager = less
     pager = delta
 
-[include]
-    # include another file in git config
-    path = aliases
+# [include]
+#     # include another file in git config
+# 		path = aliases
 
 [credential]
     # set a timeout for remembering passwords
@@ -44,6 +44,7 @@
 
 [init]
 	defaultBranch = main
+	templatedir = ~/.config/git/template
 
 [color]
     ui = auto
@@ -93,3 +94,8 @@
         --pretty='tformat:%C(auto)%h%Creset %Cblue(%cd) (%ad)%Creset%C(auto)%d%Creset %s %C(magenta)[%cn]%Creset'
     # List all the authors for this project
     authors = !sh -c 'git --no-pager log --all --oneline --pretty="%cn__%ce" | sort | uniq'
+
+[url "ssh://git@github.com/"]
+    # Forces tools (like go mod) to use ssh when downloading from github. This
+    # is for authentication to private repos.
+	insteadOf = https://github.com/

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# See /usr/share/git-core/templates/hooks/pre-push.sample
+
+set -eu
+
+# TODO: Check if we are in the "work" directory and using an ssh key associated
+# with the incorrect remote account.
+
+#echo "Running pre-push hook..."

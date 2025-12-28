@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# See /usr/share/git-core/templates/hooks/pre-commit.sample
+
+set -eu
+
+#echo 'Running pre-commit hook...'
+
+# TODO: Check if we are in the "work" directory and fail if we are committing
+# with the wrong email.

@@ -1,6 +1,4 @@
 # TODO:
-#   - Download iwlwifi-QuZ-a0-hr-b0-77.ucode from https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/intel/iwlwifi
-#     and place it in /usr/lib/firmware
 #   - add Heroic Games Launcher (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
 
 - name: Setup "cascadia" Laptop
@@ -37,6 +35,7 @@
           - smbclient
           - systemd-timesyncd
           - powertop # power usage tuning
+          - apt-file # find the package file belongs to
 
           # Desktop
           - xorg
@@ -68,6 +67,8 @@
           - vlc-plugin-samba
           - thunar-volman
           - system-config-printer # printer GUI
+          - mpv       # video player
+          - mpv-mpris # mpv plugin for "Media Player Remote Interfacing Specification"
 
           # Dev
           - python3
@@ -75,9 +76,10 @@
           - ansible-lint
           - pkg-config
           - cmake
-          - apt-file # find the package file belongs to
           - awscli
           - linux-perf
+          - ghc           # haskell compiler
+          - haskell-stack # haskell build tool and package manager
 
           # QEMU
           - qemu-system

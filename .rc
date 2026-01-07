@@ -77,7 +77,7 @@ alias tf=terraform
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} --directories=skip'
 alias jsonfmt='python3 -m json.tool'
 alias re='perl -pe'
-alias go-test-cover='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
+alias go-test-cover='echo "" > gocoverage.txt && go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic && go tool cover -func=gocoverage.txt && go tool cover -html=gocoverage.txt && rm gocoverage.txt'
 # My Tool aliases
 alias say=espeak wifi=wavemon
 alias :q=exit q=exit
@@ -382,7 +382,7 @@ goxxd <file> [options]
   done
 
   [ -z "$lines" ] && lines='12'
-  if [ -n "$file" ] && [ -z "$varname"]; then
+  if [ -n "$file" ] && [ -z "$varname" ]; then
     varname="$(basename $file | perl -pe 's/[\.-]/_/g')"
   fi
   echo "var $varname = []byte{"
@@ -441,7 +441,7 @@ note <cmd> [opts...]
 }
 
 py() {
-  python3 -c "print($@)"
+  python3 -c "print($*)"
 }
 
 wallpaper() {
@@ -477,6 +477,14 @@ start-open-webui() {
     --name open-webui \
     --restart always \
     ghcr.io/open-webui/open-webui:main
+}
+
+gotestcover() {
+  echo "" > gocoverage.txt
+  go test ./... -v -cover -coverprofile=gocoverage.txt -covermode=atomic
+  go tool cover -func=gocoverage.txt
+  go tool cover -html=gocoverage.txt
+  rm gocoverage.txt
 }
 
 # vim: ft=bash syntax=bash ts=1 sts=2 sw=2

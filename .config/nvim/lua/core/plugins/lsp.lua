@@ -17,8 +17,8 @@ end
 local M = {}
 
 function M.setup_cmp()
-  local lsp = require("lsp-zero")
-  lsp.extend_cmp()
+  -- local lsp = require("lsp-zero")
+  -- lsp.extend_cmp()
   local cmp = require("cmp")
 
   cmp.setup({
@@ -41,9 +41,21 @@ function M.setup_cmp()
       ["<C-e>"] = cmp.mapping.scroll_docs(1),
     }),
     window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
+      completion = cmp.config.window.bordered({
+        border = "single",
+      }),
+      documentation = cmp.config.window.bordered({
+        border = "single",
+        scrollbar = true,
+      }),
     },
+    snippet = {
+      ---comment
+      ---@param args any
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    }
   })
 
   cmp.setup.filetype("gitignore", {
@@ -75,6 +87,32 @@ function M.setup_cmp()
       },
     }),
   })
+
+  vim.lsp.config("*", { capabilities = require("cmp_nvim_lsp").default_capabilities() })
+  vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+end
+
+---@param bufnr number
+local function apply_lsp_key_mappings(bufnr)
+  ---@param key string
+  ---@param fn string|function
+  ---@param desc string
+  local function kset(key, fn, desc)
+    vim.keymap.set("n", key, fn, { buffer = bufnr, desc = desc })
+  end
+  kset("gr", "<cmd>Telescope lsp_references<cr>", "LSP References")
+  kset("K", function() vim.lsp.buf.hover({ border = "single" }) end, "LSP Hover Info")
+  kset('gs', function() vim.lsp.buf.signature_help({ border = "single" }) end, 'Show function signature')
+  kset('gd', '<cmd>lua vim.lsp.buf.definition()<cr>', 'Go to definition')
+  kset('gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', 'Go to declaration')
+  kset('gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', 'Go to implementation')
+  kset('go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', 'Go to type definition')
+  kset('gr', '<cmd>lua vim.lsp.buf.references()<cr>', 'Go to reference')
+  kset('<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
+  kset('<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format file')
+  kset('<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
+  vim.keymap.set('x', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
+    { desc = 'Format selection', buffer = bufnr })
 end
 
 function M.setup(opts)
@@ -89,9 +127,7 @@ function M.setup(opts)
     --require("core.plugins.custom-editorconfig").lsp_on_attach(client, bufnr)
     --require("lsp-inlayhints").on_attach(client, bufnr)
 
-    lsp.default_keymaps({ buffer = bufnr })
-    vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { buffer = bufnr })
-
+    apply_lsp_key_mappings(bufnr)
     -- Auto formatting
     if client:supports_method("textDocument/formatting", bufnr) and auto_format[vim.bo.filetype] then
       vim.api.nvim_clear_autocmds({

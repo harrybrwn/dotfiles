@@ -6,7 +6,7 @@ return {
     "olimorris/codecompanion.nvim",
     version = "^17.33.0",
     pin = true,
-    enabled = true,
+    enabled = false,
     lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",

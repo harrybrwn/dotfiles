@@ -54,6 +54,7 @@ return {
 
   {
     "harrybrwn/manage-buffers.nvim",
+    enabled = false,
     lazy = false,
     dev = true,
     opts = {},
@@ -66,6 +67,7 @@ return {
       'nvim-telescope/telescope.nvim',
       'ibhagwan/fzf-lua',
     },
+    enabled = false,
     lazy = false,
     opts = {},
     keys = {

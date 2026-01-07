@@ -38,6 +38,7 @@ return {
     end,
   },
 
+  -- Auto install and auto enable my LSPs
   {
     "williamboman/mason-lspconfig.nvim",
     enabled = true,
@@ -93,11 +94,12 @@ return {
     },
   },
 
-  -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", enabled = false,    opts = {}, lazy = false },
-
   -- Function signature pop-up
-  { "ray-x/lsp_signature.nvim",     event = "VeryLazy", opts = {} },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
 
   -- Display temporary LSP messages in the corner.
   {
@@ -111,5 +113,8 @@ return {
     },
   },
 
-  { "towolf/vim-helm", enabled = false, config = false, lazy = false },
+  -- Use LSP for inlay hints.
+  { "lvimuser/lsp-inlayhints.nvim", enabled = false, opts = {},      lazy = false },
+
+  { "towolf/vim-helm",              enabled = false, config = false, lazy = false },
 }

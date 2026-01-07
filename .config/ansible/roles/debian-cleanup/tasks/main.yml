@@ -18,7 +18,6 @@
       - task-brazilian-portuguese
       - task-bulgarian
       - task-catalan
-      - task-spanish
       - task-chinese-s
       - task-chinese-t
       - task-croatian
@@ -84,7 +83,6 @@
       - iportuguese
       - irussian
       - iswiss
-      - ispanish
       - wbrazilian
       - wbulgarian
       - wcatalan
@@ -97,7 +95,6 @@
       - wpolish
       - wportuguese
       - wswedish
-      - wspanish
       - manpages-ja-dev
       - hunspell-hu # should be removed when removing task-hungarian
 
@@ -113,7 +110,6 @@
       - aspell-de
       - aspell-el
       - aspell-eo
-      - aspell-es
       - aspell-et
       - aspell-eu
       - aspell-fa
@@ -147,3 +143,18 @@
   ansible.builtin.apt:
     autoremove: true
     purge: true
+
+- name: Make sure spanish and english localization packages are installed.
+  become: true
+  ansible.builtin.apt:
+    state: present
+    name:
+      - task-spanish
+      - ispanish        # spanish spelling
+      - wspanish        # spanish dictionary (i.e. /usr/share/dict)
+      - aspell-es       # gnu spelling for spanish
+      - task-english
+      - ienglish-common # english spelling
+      - iamerican       # american english spelling
+      - wamerican       # american english dictionary - /usr/share/dict/american-english
+      - aspell-en       # gnu spelling for english

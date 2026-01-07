@@ -1,5 +1,27 @@
-local plugins = {}
+-- Language specific plugins.
+
 local version = vim.version()
+
+local plugins = {
+  -- UV (python) integration.
+  {
+    "benomahony/uv.nvim",
+    -- Optional filetype to lazy load when you open a python file
+    -- ft = { python }
+    -- Optional dependency, but recommended:
+    -- dependencies = {
+    --   "folke/snacks.nvim"
+    -- or
+    --   "nvim-telescope/telescope.nvim"
+    -- },
+    opts = {
+      picker_integration = true,
+    },
+    lazy = false,
+  },
+  -- Syntax highlighting for the Nand2Tetris book exercises. (See https://www.nand2tetris.org/)
+  { "sevko/vim-nand2tetris-syntax", lazy = false },
+}
 
 if version.major == 0 and version.minor >= 10 then
   table.insert(plugins, {
@@ -31,9 +53,5 @@ if version.major == 0 and version.minor >= 10 then
     },
   })
 end
-
-table.insert(plugins, {
-  { "sevko/vim-nand2tetris-syntax", lazy = false },
-})
 
 return plugins

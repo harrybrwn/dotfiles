@@ -10,6 +10,9 @@ local mods = {
         pattern = [[.*<(KEYWORDS)>\s*:]], -- default: [[.*<(KEYWORDS)\s*:]]
       },
     },
+    keys = {
+      { '<leader>sit', "<cmd>TodoTelescope<cr>", mode = { 'n' }, desc = "[S]earch [I]n [T]odo comments" },
+    },
   },
 }
 

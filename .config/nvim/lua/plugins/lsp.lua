@@ -26,6 +26,7 @@ return {
           typescript = true,
           typescriptreact = true,
           terraform = true,
+          ruff = true,
           -- disabled
           json = false,
           jsonc = false,
@@ -48,7 +49,8 @@ return {
       automatic_installation = true,
       ensure_installed = {
         -- Languages/Frameworks
-        "pyright",          -- python
+        "pyright",          -- python (lsp)
+        "ruff",             -- python (linting/formatting)
         "gopls",            -- golang
         "golangci_lint_ls", -- golangci-lint
         "rust_analyzer",    -- rust

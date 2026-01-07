@@ -53,6 +53,13 @@ return {
   },
 
   {
+    "harrybrwn/manage-buffers.nvim",
+    lazy = false,
+    dev = true,
+    opts = {},
+  },
+
+  {
     "DrKJeff16/project.nvim",
     dependencies = { -- OPTIONAL
       'nvim-lua/plenary.nvim',

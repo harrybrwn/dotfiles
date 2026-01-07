@@ -25,8 +25,21 @@ return {
         "--column",
         "--smart-case",
         -- My stuff
-        "--hidden", -- always include hidden files
+        "--hidden",                 -- always include hidden files
       },
+      layout_strategy = 'vertical', -- horizontal|vertical|center|cursor
+      layout_config = {
+        height = 0.95,
+        width = 0.95,
+        vertical = {
+          height = 0.95,
+          width = 0.95,
+          preview_height = 0.50,
+          preview_cutoff = 40,
+          prompt_position = "bottom",
+        }
+      },
+      path_display = "smart",
     },
     pickers = {
       live_grep = {

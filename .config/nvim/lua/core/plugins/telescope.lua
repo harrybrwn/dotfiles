@@ -37,6 +37,9 @@ function M.init()
   set("n", "<leader>sib", builtin.buffers, { desc = "[S]earch [I]n [B]uffers" })
   set("n", "<leader>sigf", builtin.git_files, { desc = "[S]earch [I]n [G]it [F]iles" })
   set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume. Resume the previous search." })
+
+  -- Extensions
+  telescope.load_extension("live_grep_args")
 end
 
 return M

@@ -1,9 +1,10 @@
 return {
   "nvim-telescope/telescope.nvim",
-  tag = "0.1.8",
+  tag = "v0.2.1",
   dependencies = {
     "nvim-lua/plenary.nvim",
     {
+      -- Lets me pass rg flags via the search bar.
       "nvim-telescope/telescope-live-grep-args.nvim",
       version = "^1.1.0",
     },
@@ -27,7 +28,12 @@ return {
         -- My stuff
         "--hidden",                 -- always include hidden files
       },
+      fname_width = 80,             -- view width for the filename
       layout_strategy = 'vertical', -- horizontal|vertical|center|cursor
+      -- path_display = "smart",
+      path_display = {
+        smart = {},
+      },
       layout_config = {
         height = 0.95,
         width = 0.95,
@@ -39,7 +45,6 @@ return {
           prompt_position = "bottom",
         }
       },
-      path_display = "smart",
     },
     pickers = {
       live_grep = {
@@ -47,6 +52,27 @@ return {
         additional_args = function(opts)
           return { "--hidden" }
         end,
+        path_display = {
+          shorten = {
+            -- lua/core/plugins/codecompanion/lualine.lua
+            -- becomes
+            -- lu/co/pl/codecompanion/lualine.lua
+            len = 2,
+            exclude = { -2, -1 },
+          },
+        },
+      },
+      find_files = {
+        path_display = {
+          absolute = {},
+        },
+        layout_config = {
+          vertical = {
+            height = 0.98,
+            width = 0.95,
+            preview_height = 0.65,
+          }
+        }
       },
     },
     extensions = {
@@ -59,7 +85,5 @@ return {
   -- run after lazy calls `require('telescope').setup(opts)`.
   init = function()
     require("core.plugins.telescope").init()
-    local telescope = require("telescope")
-    telescope.load_extension("live_grep_args")
   end,
 }

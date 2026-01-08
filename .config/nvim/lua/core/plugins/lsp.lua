@@ -34,7 +34,6 @@ function M.setup_cmp()
       -- `Tab` key to confirm completion
       ["<Tab>"] = cmp.mapping.confirm({ select = false }),
       -- ['<C-Space>'] = cmp.mapping.complete(),
-
       ["<C-d>"] = cmp.mapping.scroll_docs(-4),
       ["<C-u>"] = cmp.mapping.scroll_docs(4),
       ["<C-y>"] = cmp.mapping.scroll_docs(-1),
@@ -100,14 +99,13 @@ local function apply_lsp_key_mappings(bufnr)
   local function kset(key, fn, desc)
     vim.keymap.set("n", key, fn, { buffer = bufnr, desc = desc })
   end
-  kset("gr", "<cmd>Telescope lsp_references<cr>", "LSP References")
   kset("K", function() vim.lsp.buf.hover({ border = "single" }) end, "LSP Hover Info")
   kset('gs', function() vim.lsp.buf.signature_help({ border = "single" }) end, 'Show function signature')
+  kset("gr", function() vim.cmd [[Telescope lsp_references]] end, "[G]o to LSP [R]eferences")
   kset('gd', '<cmd>lua vim.lsp.buf.definition()<cr>', 'Go to definition')
   kset('gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', 'Go to declaration')
   kset('gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', 'Go to implementation')
   kset('go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', 'Go to type definition')
-  kset('gr', '<cmd>lua vim.lsp.buf.references()<cr>', 'Go to reference')
   kset('<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
   kset('<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format file')
   kset('<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
@@ -119,6 +117,9 @@ function M.setup(opts)
   local lsp = require("lsp-zero")
   local fmtgroup = vim.api.nvim_create_augroup("LspFormatting", {})
   local auto_format = opts.auto_format
+
+  -- See https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md
+  require("mason").setup({})
 
   ---@param client vim.lsp.Client
   ---@param bufnr number
@@ -145,9 +146,6 @@ function M.setup(opts)
       })
     end
   end)
-
-  -- See https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md
-  require("mason").setup({})
 
   if not require("core.plugins.custom-editorconfig").lsp_disabled.copilot_ollama then
     print("copilot_ollama.setup")

@@ -1,6 +1,26 @@
+local path = require("core.util.path")
+
 return {
   -- Use treesitter to autoclose html tags
   { "windwp/nvim-ts-autotag", lazy = false },
+
+  -- Snippets for completion
+  {
+    "L3MON4D3/LuaSnip",
+    tag = "v2.4.1",
+    dependencies = {
+      {
+        "rafamadriz/friendly-snippets",
+        config = function()
+          require("luasnip.loaders.from_vscode").lazy_load()
+        end,
+      },
+    },
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+    },
+  },
 
   -- null-ls auto formatting
   {
@@ -9,7 +29,7 @@ return {
     -- freeze the version once they release a version).
     --
     -- https://github.com/nvimtools/none-ls.nvim
-    enabled = true,
+    enabled = false,
     event = "BufRead",
     opts = function(_, _)
       -- return require("core.plugins.null-ls")
@@ -34,30 +54,24 @@ return {
     dependencies = { "VonHeikemen/lsp-zero.nvim" },
   },
 
-  -- Snippets for completion
-  {
-    "L3MON4D3/LuaSnip",
-    tag = "v2.4.1",
-    dependencies = {
-      {
-        "rafamadriz/friendly-snippets",
-        config = function()
-          require("luasnip.loaders.from_vscode").lazy_load()
-        end,
-      },
-    },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
-  },
-
   {
     "harrybrwn/manage-buffers.nvim",
-    enabled = false,
     lazy = false,
     dev = true,
     opts = {},
+    enabled = function()
+      local p = path.join(
+        vim.fn.stdpath("config"),
+        "dev/manage-buffers.nvim/lua/manage-buffers/init.lua"
+      )
+      local f = io.open(p)
+      if f ~= nil then
+        io.close(f)
+        return true
+      else
+        return false
+      end
+    end,
   },
 
   {

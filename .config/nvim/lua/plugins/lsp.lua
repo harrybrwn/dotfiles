@@ -11,8 +11,10 @@ return {
     branch = "v4.x",
     lazy = false,
     dependencies = {
+      -- core.plugins.lsp requires 'mason' and 'lspconfig' to be loaded before
+      -- this.
       "neovim/nvim-lspconfig",
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
     },
     config = function(_, _)
       require("core.plugins.lsp").setup({
@@ -38,16 +40,21 @@ return {
     end,
   },
 
+  {
+    "mason-org/mason.nvim",
+    opts = {},
+  },
+
   -- Auto install and auto enable my LSPs
   {
-    "williamboman/mason-lspconfig.nvim",
-    enabled = true,
+    "mason-org/mason-lspconfig.nvim",
+    event = "VimEnter",
     dependencies = {
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
+      "neovim/nvim-lspconfig",
     },
-    lazy = false,
     opts = {
-      automatic_installation = true,
+      automatic_enable = true,
       ensure_installed = {
         -- Languages/Frameworks
         "pyright",          -- python (lsp)
@@ -82,6 +89,7 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     config = function()
+      -- TODO: Move this to a separate file.
       require("core.plugins.lsp").setup_cmp()
     end,
     dependencies = {

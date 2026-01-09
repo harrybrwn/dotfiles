@@ -1,6 +1,3 @@
-local path = require("core.util.path")
-local nvm = require("core.util.nvm")
-
 return {
   -- Markdown live previews in a web browser
   {

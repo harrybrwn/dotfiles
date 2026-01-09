@@ -6,6 +6,7 @@ local plugins = {
   -- UV (python) integration.
   {
     "benomahony/uv.nvim",
+    ft = { "python" },
     -- Optional filetype to lazy load when you open a python file
     -- ft = { python }
     -- Optional dependency, but recommended:
@@ -17,10 +18,11 @@ local plugins = {
     opts = {
       picker_integration = true,
     },
-    lazy = false,
+    --lazy = false,
   },
   -- Syntax highlighting for the Nand2Tetris book exercises. (See https://www.nand2tetris.org/)
   { "sevko/vim-nand2tetris-syntax", lazy = false },
+  { "towolf/vim-helm",              enabled = false, config = false, lazy = false },
 }
 
 if version.major == 0 and version.minor >= 10 then

@@ -5,7 +5,7 @@ return {
     dependencies = {
       "nvim-telescope/telescope.nvim",
     },
-    enabled = true,
+    enabled = false,
     lazy = false,
     -- event = { "BufReadPre", "BufNewFile" },
     opts = {

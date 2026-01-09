@@ -1,12 +1,13 @@
 local lazy = require("core.lazy")
+
+vim.g.mapleader = ","
+
 require("core.settings")
 require("core.keymaps")
 require("core.autocmds")
 
 -- Plugins
 lazy.setup({ { import = "plugins" } })
-
-require("core.plugins")
 
 -- Misc
 vim.opt.number = true

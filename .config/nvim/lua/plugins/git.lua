@@ -2,7 +2,8 @@ return {
   -- Git Diff icons in gutter
   {
     "lewis6991/gitsigns.nvim",
-    lazy = false,
+    --event = "UIEnter",
+    event = "VeryLazy",
     opts = {
       signs = {
         add = { text = "┃" },
@@ -50,7 +51,7 @@ return {
       "nvim-telescope/telescope.nvim", -- optional
       --"ibhagwan/fzf-lua", -- optional
     },
-    lazy = false,
+    event = "VeryLazy",
     config = true,
     keys = {
       { "<leader>go", vim.cmd.Neogit, desc = "[G]it [O]pen" },
@@ -60,7 +61,6 @@ return {
   -- Git diffs
   {
     "sindrets/diffview.nvim",
-    lazy = false,
     opts = function()
       local actions = require("diffview.actions")
       return {

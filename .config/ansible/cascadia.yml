@@ -80,6 +80,7 @@
           - linux-perf
           - ghc           # haskell compiler
           - haskell-stack # haskell build tool and package manager
+          - luarocks
 
           # QEMU
           - qemu-system

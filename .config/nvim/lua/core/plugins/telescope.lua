@@ -1,29 +1,28 @@
-local telescope = require("telescope")
-local builtin = require("telescope.builtin")
-local tele_themes = require("telescope.themes")
-
 local function find_files()
+  local builtin = require("telescope.builtin")
   builtin.find_files({
-    hidden = true,
+    no_ignore = true,
   })
 end
 
 local function grep_string()
+  local builtin = require("telescope.builtin")
   builtin.grep_string({
     search = vim.fn.input("grep> "),
   })
 end
 
 local function live_grep()
-  telescope.extensions.live_grep_args.live_grep_args()
+  require("telescope").extensions.live_grep_args.live_grep_args()
 end
 
 local M = {}
 
 function M.init()
+  local builtin = require("telescope.builtin")
   local set = vim.keymap.set
   set("n", "<leader>?", function()
-    builtin.current_buffer_fuzzy_find(tele_themes.get_dropdown({
+    builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
       winblend = 10,
       previewer = false,
     }))
@@ -39,7 +38,7 @@ function M.init()
   set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume. Resume the previous search." })
 
   -- Extensions
-  telescope.load_extension("live_grep_args")
+  require("telescope").load_extension("live_grep_args")
 end
 
 return M

@@ -9,6 +9,7 @@
 
   tasks:
     - name: Packages
+      become: true
       ansible.builtin.package:
         name:
           - apt-file # find the package the owns a file (apt-file search)
@@ -17,6 +18,7 @@
           - ffmpeg
           - gnome-shell-extension-manager
           - postgresql-client
+          - luarocks
         state: present
 
     - name: Use ping without sudo (setcap cap_net_raw+p)

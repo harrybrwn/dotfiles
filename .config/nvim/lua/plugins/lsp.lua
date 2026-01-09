@@ -1,58 +1,42 @@
+local function lspinit()
+  require("core.plugins.lsp").setup({
+    -- explicitly enable or disable auto formatting
+    auto_format = {
+      go = true,
+      rust = true,
+      astro = true,
+      lua = true,
+      tsx = true,
+      typescript = true,
+      typescriptreact = true,
+      terraform = true,
+      ruff = true,
+      -- disabled
+      json = false,
+      jsonc = false,
+      javascript = false,
+      python = false,
+      yaml = false,
+    },
+  })
+end
+
 return {
   -- Language Server
   -- TODO: Switch to the 0.11 way of configuring LSPs:
   --  * See https://vonheikemen.github.io/learn-nvim/feature/lsp-setup.html
   --  * See https://gpanders.com/blog/whats-new-in-neovim-0-11/
-  --  * Remove lsp-zero
-  {
-    "VonHeikemen/lsp-zero.nvim",
-    enabled = true,
-    -- TODO upgrade to "v4.x". Check the repo, there's a migration guide.
-    branch = "v4.x",
-    lazy = false,
-    dependencies = {
-      -- core.plugins.lsp requires 'mason' and 'lspconfig' to be loaded before
-      -- this.
-      "neovim/nvim-lspconfig",
-      "mason-org/mason.nvim",
-    },
-    config = function(_, _)
-      require("core.plugins.lsp").setup({
-        -- explicitly enable or disable auto formatting
-        auto_format = {
-          go = true,
-          rust = true,
-          astro = true,
-          lua = true,
-          tsx = true,
-          typescript = true,
-          typescriptreact = true,
-          terraform = true,
-          ruff = true,
-          -- disabled
-          json = false,
-          jsonc = false,
-          javascript = false,
-          python = false,
-          yaml = false,
-        },
-      })
-    end,
-  },
-
-  {
-    "mason-org/mason.nvim",
-    opts = {},
-  },
 
   -- Auto install and auto enable my LSPs
   {
     "mason-org/mason-lspconfig.nvim",
-    event = "VimEnter",
+    priority = 50,
+    lazy = false,
     dependencies = {
-      "mason-org/mason.nvim",
+      { "mason-org/mason.nvim", opts = {} },
       "neovim/nvim-lspconfig",
     },
+    init = lspinit,
     opts = {
       automatic_enable = true,
       ensure_installed = {
@@ -87,7 +71,10 @@ return {
 
   {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    -- lazy = false,
+    -- event = "InsertEnter",
+    -- event = "UIEnter",
+    event = "VeryLazy",
     config = function()
       -- TODO: Move this to a separate file.
       require("core.plugins.lsp").setup_cmp()
@@ -122,7 +109,5 @@ return {
   },
 
   -- Use LSP for inlay hints.
-  { "lvimuser/lsp-inlayhints.nvim", enabled = false, opts = {},      lazy = false },
-
-  { "towolf/vim-helm",              enabled = false, config = false, lazy = false },
+  { "lvimuser/lsp-inlayhints.nvim", enabled = false, opts = {}, lazy = false },
 }

@@ -2,14 +2,8 @@ return {
   -- Display lsp diagnostics
   {
     "folke/trouble.nvim",
-    tag = (
-      vim.version().minor >= 10
-      --and "v3.4.3"
-      and "v3.7.1"
-      or "v2.10.0"),
     dependencies = { "nvim-tree/nvim-web-devicons" },
     cmd = "Trouble",
-    event = "BufRead",
     opts = {
       height = 5,
       keys = {

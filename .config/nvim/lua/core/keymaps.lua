@@ -1,7 +1,5 @@
 local tmux = require("core.plugins.tmux_session")
 
-vim.g.mapleader = ","
-
 ---@param cmd string
 ---@param action string|function
 ---@param opts table|nil

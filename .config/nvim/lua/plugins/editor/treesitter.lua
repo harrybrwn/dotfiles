@@ -2,19 +2,9 @@ return {
   -- Syntax parsers and highlighting.
   {
     "nvim-treesitter/nvim-treesitter",
-    tag = "v0.9.3",
-    enabled = true,
-    -- build = helpers.with_notify_disabled(function()
-    -- 	-- pcall(require("nvim-treesitter.install").update({ with_sync = true }))
-    -- 	require("nvim-treesitter.install").update({ with_sync = true })()
-    -- end),
-    -- lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
-    --event = { "BufReadPre", "BufNewFile" },
+    tag = "v0.10.0",
     lazy = false,
     build = ":TSUpdate",
-    -- dependencies = {
-    --   { "windwp/nvim-ts-autotag" },
-    -- },
     config = function()
       local configs = require("nvim-treesitter.configs")
       local ts_parsers = require("nvim-treesitter.parsers")

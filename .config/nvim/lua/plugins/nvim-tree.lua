@@ -2,15 +2,17 @@ local custom = require("core.plugins.filetree")
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.keymap.set("n", "g0", vim.cmd.NvimTreeFindFile, { noremap = true })
 
 -- nvim-tree: An alternate file explorer
 return {
   {
     "nvim-tree/nvim-tree.lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    enabled = true,
-    lazy = false,
+    event = "BufEnter",
+    --lazy = true,
+    keys = {
+      { "g0", vim.cmd.NvimTreeFindFile, mode = "n" },
+    },
     opts = {
       sync_root_with_cwd = true,
       respect_buf_cwd = true,

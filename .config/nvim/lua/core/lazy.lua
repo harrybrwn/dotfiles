@@ -24,6 +24,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 -- Use a protected call so we don't error out on first use
@@ -55,7 +56,25 @@ function M.setup(spec)
     profiling = {
       loader = false,
       require = false,
-    }
+    },
+    performance = {
+      cache = {
+        enabled = true,
+        -- disable_events = {},
+      },
+      rtp = {
+        disabled_plugins = {
+          "gzip",
+          "netrwPlugin",
+          "rplugin",
+          "tarPlugin",
+          "tohtml",
+          "tutor",
+          "zipPlugin",
+          "vimballPlugin",
+        },
+      },
+    },
   })
 end
 

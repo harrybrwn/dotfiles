@@ -20,9 +20,9 @@ end)()
 ---@param str string the path string
 function M.dirname(str)
   -- TODO use M.filepath_sep instead of a hardcodded '/'
-  local str = str:gsub("/$", "")
-  if str:match(".-/.-") then
-    local name = string.gsub(str, "^(.*)/(.*)$", "%1")
+  local s = str:gsub("/$", "")
+  if s:match(".-/.-") then
+    local name = string.gsub(s, "^(.*)/(.*)$", "%1")
     return name
   else
     return ""

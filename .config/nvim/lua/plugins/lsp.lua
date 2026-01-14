@@ -1,44 +1,29 @@
-local function lspinit()
-  require("core.plugins.lsp").setup({
-    -- explicitly enable or disable auto formatting
-    auto_format = {
-      go = true,
-      rust = true,
-      astro = true,
-      lua = true,
-      tsx = true,
-      typescript = true,
-      typescriptreact = true,
-      terraform = true,
-      ruff = true,
-      -- disabled
-      json = false,
-      jsonc = false,
-      javascript = false,
-      python = false,
-      yaml = false,
-    },
-  })
-end
-
 return {
-  -- Language Server
-  -- TODO: Switch to the 0.11 way of configuring LSPs:
-  --  * See https://vonheikemen.github.io/learn-nvim/feature/lsp-setup.html
-  --  * See https://gpanders.com/blog/whats-new-in-neovim-0-11/
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+  },
+  {
+    "mason-org/mason.nvim",
+    lazy = false,
+    opts = {},
+    config = function(_, opts)
+      require("mason").setup(opts)
+      require("core.lsp").init()
+    end,
+  },
 
   -- Auto install and auto enable my LSPs
   {
     "mason-org/mason-lspconfig.nvim",
-    priority = 50,
-    lazy = false,
+    event = "VeryLazy",
     dependencies = {
-      { "mason-org/mason.nvim", opts = {} },
+      "mason-org/mason.nvim",
       "neovim/nvim-lspconfig",
     },
-    init = lspinit,
+    -- init = lspinit,
     opts = {
-      automatic_enable = true,
+      automatic_enable = false,
       ensure_installed = {
         -- Languages/Frameworks
         "pyright",          -- python (lsp)
@@ -73,12 +58,13 @@ return {
     "hrsh7th/nvim-cmp",
     -- lazy = false,
     -- event = "InsertEnter",
+    -- event = 'VimEnter',
     -- event = "UIEnter",
     event = "VeryLazy",
     config = function()
-      -- TODO: Move this to a separate file.
       require("core.plugins.lsp").setup_cmp()
     end,
+    -- build = 'make install_jsregexp',
     dependencies = {
       "L3MON4D3/LuaSnip",
       "hrsh7th/cmp-nvim-lsp",

@@ -51,7 +51,9 @@ function M.setup_cmp()
       expand = function(args)
         require('luasnip').lsp_expand(args.body)
       end,
-    }
+    },
+    -- https://github.com/hrsh7th/nvim-cmp/issues/980
+    -- formatting = {}
   })
 
   cmp.setup.filetype("gitignore", {
@@ -130,6 +132,7 @@ local function setup_autoformat(client, bufnr, fmtgroup)
   })
 end
 
+---@deprecated Use conform.nvim instead.
 function M.setup(opts)
   local fmtgroup = vim.api.nvim_create_augroup("LspFormatting", {})
   local auto_format = opts.auto_format

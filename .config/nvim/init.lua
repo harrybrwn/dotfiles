@@ -1,5 +1,6 @@
 local lazy = require("core.lazy")
 
+-- Should be set *before* lazy.setup and other keymap settings.
 vim.g.mapleader = ","
 
 require("core.settings")
@@ -48,26 +49,24 @@ vim.opt.laststatus = 2
 vim.opt.showmode = false
 
 -- Colors
-local theme = vim.cmd.colorscheme
-local guicursor = {
-  "n-v-c-sm:block-Cursor",
-  "i-ci-ve:block-ver25-Cursor",
-  "r-cr-o:hor20",
-}
 local background = "dark"
 vim.opt.syntax = "on"
 vim.opt.background = background
 vim.opt.termguicolors = true
 if background == "dark" then
-  --theme("monokai") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
-  --theme("onedark")
-  theme("terafox")
+  --vim.cmd.colorscheme("monokai") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
+  --vim.cmd.colorscheme("onedark")
+  vim.cmd.colorscheme("terafox")
 else
-  -- theme("forestbones")
-  theme("catppuccin")
+  -- vim.cmd.colorscheme("forestbones")
+  vim.cmd.colorscheme("catppuccin")
   vim.cmd([[hi Cursor guifg=grey guibg=grey blend=20]])
 end
-vim.opt.guicursor = table.concat(guicursor, ",")
+vim.opt.guicursor = table.concat({
+  "n-v-c-sm:block-Cursor",
+  "i-ci-ve:block-ver25-Cursor",
+  "r-cr-o:hor20",
+}, ",")
 
 vim.cmd("highlight SpellBad guifg=NONE guibg=NONE gui=underline")
 -- vim.cmd("highlight FoldColumn guifg=NONE guibg=NONE gui=NONE")
@@ -79,6 +78,11 @@ vim.opt.colorcolumn = "" -- "80"
 -- History and Persistent Data
 vim.opt.history = 1000
 vim.opt.undolevels = 1500
+
+-- Presized signcolumn so that when gitsigns adds an indicator it doesn't shift
+-- he entire view around.
+vim.opt.signcolumn = "yes"
+vim.opt.numberwidth = 1
 
 -- Make sure this is the first item in the rtp.
 vim.opt.runtimepath:prepend(vim.fn.stdpath("config"))

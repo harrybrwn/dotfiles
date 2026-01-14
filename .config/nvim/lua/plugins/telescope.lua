@@ -1,7 +1,8 @@
 return {
   "nvim-telescope/telescope.nvim",
   tag = "v0.2.1",
-  event = "VeryLazy",
+  -- event = 'VimEnter',
+  event = 'VeryLazy', -- always load but asynchronously
   dependencies = {
     "nvim-lua/plenary.nvim",
     {
@@ -9,11 +10,22 @@ return {
       "nvim-telescope/telescope-live-grep-args.nvim",
     },
   },
+
   opts = {
     defaults = {
       mappings = {
-        i = { ["<C-j>"] = "close" },
-        n = { ["<C-j>"] = "close" },
+        i = {
+          ["<C-j>"] = "close",
+          ["<A-p>"] = function(prompt_buffer)
+            require("telescope.actions.layout").toggle_preview(prompt_buffer)
+          end,
+        },
+        n = {
+          ["<C-j>"] = "close",
+          ["<A-p>"] = function(prompt_buffer)
+            require("telescope.actions.layout").toggle_preview(prompt_buffer)
+          end,
+        },
       },
       vimgrep_arguments = {
         -- Defaults
@@ -49,15 +61,17 @@ return {
       live_grep = {
         ---@diagnostic disable-next-line: unused-local
         additional_args = function(opts)
+          -- pass additional flags to rg(1)
           return { "--hidden" }
         end,
+        --additional_args = { "--hidden" },
         path_display = {
           shorten = {
             -- lua/core/plugins/codecompanion/lualine.lua
             -- becomes
             -- lu/co/pl/codecompanion/lualine.lua
             len = 2,
-            exclude = { -2, -1 },
+            exclude = { -3, -2, -1 },
           },
         },
       },
@@ -77,30 +91,41 @@ return {
     extensions = {
       live_grep_args = {
         auto_quoting = true,
+        path_display = {
+          truncate = 1,
+        },
       }
     },
   },
+
   keys = function()
-    local builtin = require("telescope.builtin")
+    -- local builtin = require("telescope.builtin")
     local function find_files()
-      builtin.find_files({
+      local builtin = require("telescope.builtin")
+      local opts = {
         no_ignore = true,
-      })
+      }
+      local themes = require('telescope.themes')
+      builtin.find_files(themes.get_ivy(opts))
     end
     local function live_grep()
       require("telescope").extensions.live_grep_args.live_grep_args()
     end
+    local function keymaps() require("telescope.builtin").keymaps() end
+    local function buffers() require("telescope.builtin").buffers() end
+    local function git_files() require("telescope.builtin").git_files() end
+    local function resume() require("telescope.builtin").resume() end
     return {
-      { "<leader>sf",   find_files,        mode = "n", desc = "[S]earch [F]iles" },
-      { "<leader>sg",   live_grep,         mode = "n", desc = "[S]earch with [G]rep" },
-      { "<leader>sik",  builtin.keymaps,   mode = "n", desc = "[S]earch [I]n [K]eymaps" },
-      { "<leader>sib",  builtin.buffers,   mode = "n", desc = "[S]earch [I]n [B]uffers" },
-      { "<leader>sigf", builtin.git_files, mode = "n", desc = "[S]earch [I]n [G]it [F]iles" },
-      { "<leader>sr",   builtin.resume,    mode = "n", desc = "[S]earch [R]esume. Resume the previous search." },
+      { "<leader>sf",   find_files, mode = "n", desc = "[S]earch [F]iles" },
+      { "<leader>sg",   live_grep,  mode = "n", desc = "[S]earch with [G]rep" },
+      { "<leader>sik",  keymaps,    mode = "n", desc = "[S]earch [I]n [K]eymaps" },
+      { "<leader>sib",  buffers,    mode = "n", desc = "[S]earch [I]n [B]uffers" },
+      { "<leader>sigf", git_files,  mode = "n", desc = "[S]earch [I]n [G]it [F]iles" },
+      { "<leader>sr",   resume,     mode = "n", desc = "[S]earch [R]esume. Resume the previous search." },
       {
         "<leader>?",
         function()
-          builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+          require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
             winblend = 10,
             previewer = false,
           }))
@@ -110,6 +135,7 @@ return {
       }
     }
   end,
+
   -- `spec.init` runs after `spec.config` which means everything in `init` will
   -- run after lazy calls `require('telescope').setup(opts)`.
   --init = function()

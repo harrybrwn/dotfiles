@@ -2,7 +2,6 @@ return {
   -- Git Diff icons in gutter
   {
     "lewis6991/gitsigns.nvim",
-    --event = "UIEnter",
     event = "VeryLazy",
     opts = {
       signs = {
@@ -51,7 +50,7 @@ return {
       "nvim-telescope/telescope.nvim", -- optional
       --"ibhagwan/fzf-lua", -- optional
     },
-    event = "VeryLazy",
+    cmd = "Neogit",
     config = true,
     keys = {
       { "<leader>go", vim.cmd.Neogit, desc = "[G]it [O]pen" },

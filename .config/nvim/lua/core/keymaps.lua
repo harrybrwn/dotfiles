@@ -11,10 +11,10 @@ end
 ---@param size number the size of the new split tmux window
 ---@return function
 local function window_split_fn(size)
-  if not tmux.in_tmux() then
-    return function() end
-  end
   return function()
+    if not tmux.in_tmux() then
+      return
+    end
     if tmux.term_is_open() then
       tmux.select_term()
     else
@@ -24,16 +24,16 @@ local function window_split_fn(size)
 end
 
 -- Paste without yanking (visual mode)
-nset("<leader>f", vim.cmd.NvimTreeFindFileToggle, { desc = "[F]iletree toggle" })
 nset("<leader>t", vim.cmd.tabnew, { desc = "[T]ab create" })
 -- Misc
 nset('<C-w>"', window_split_fn(30), { desc = "Open a tmux window below vim." })
 vim.keymap.set("v", "<Leader>p", '"_dP', { noremap = true, desc = "Paste without yanking the highlighted text" })
 
 -- Faster escape key
-for _, mode in pairs({ "i", "n", "v", "c" }) do
-  vim.keymap.set(mode, "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
-end
+vim.keymap.set("i", "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
+vim.keymap.set("n", "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
+vim.keymap.set("v", "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
+vim.keymap.set("c", "<C-j>", "<Esc>", { noremap = true, desc = "remapped escape" })
 
 -- Window resizing
 nset("<C-w><Up>", "<C-w>-", { noremap = true })

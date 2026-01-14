@@ -8,10 +8,15 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    event = "BufEnter",
-    --lazy = true,
+    event = { "VeryLazy", "BufEnter" },
     keys = {
       { "g0", vim.cmd.NvimTreeFindFile, mode = "n" },
+      {
+        "<leader>f",
+        vim.cmd.NvimTreeFindFileToggle,
+        mode = "n",
+        desc = "[F]iletree toggle",
+      },
     },
     opts = {
       sync_root_with_cwd = true,

@@ -1,5 +1,29 @@
 local helpers = {}
 
+---Pretty print lua table
+function _G.dump(...)
+  local objects = vim.tbl_map(vim.inspect, { ... })
+  print(unpack(objects))
+end
+
+function _G.test_list_bufs()
+  vim.print(helpers.list_buffers())
+  vim.print(vim.api.nvim_list_bufs())
+end
+
+function _G.sleep(n) -- seconds
+  local t0 = os.clock()
+  while os.clock() - t0 <= n do
+    -- busy waiting
+  end
+end
+
+function _G.timeit(fn)
+  local start = vim.loop.hrtime()
+  fn()
+  print('elapsed: ' .. ((vim.loop.hrtime() - start) / 1e6) .. 'ms')
+end
+
 -- This doesn't work for some reason
 --
 ---@param ft string | table
@@ -16,12 +40,6 @@ function helpers.tabsize(ft, tabwidth)
   })
 end
 
----Pretty print lua table
-function _G.dump(...)
-  local objects = vim.tbl_map(vim.inspect, { ... })
-  print(unpack(objects))
-end
-
 ---Don't use this. Use vim.api.nvim_list_bufs
 function helpers.list_buffers()
   local len = 0
@@ -33,11 +51,6 @@ function helpers.list_buffers()
     end
   end
   return buffers
-end
-
-function _G.test_list_bufs()
-  vim.print(helpers.list_buffers())
-  vim.print(vim.api.nvim_list_bufs())
 end
 
 -- Returns a function that wraps fn so it is called with vim.notify disabled

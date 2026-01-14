@@ -1,5 +1,4 @@
-require("core.plugins.custom-editorconfig").setup()
-local table = require("table")
+--require("core.plugins.custom-editorconfig").setup()
 
 -- Folding
 -- zf[motion] Create a fold
@@ -19,11 +18,16 @@ vim.opt.foldopen = table.concat({
   "undo",
 }, ",")
 
-vim.filetype.add({
-  pattern = {
-    [".*/roles/.*/tasks/.*ya?ml"] = "yaml.ansible",
-    [".*/local.ya?ml"] = "yaml.ansible",
-    [".*/playbooks/.*.ya?ml"] = "yaml.ansible",
-    [".*/config/ansible/.*.ya?ml"] = "yaml.ansible",
-  }
-})
+vim.schedule(function()
+  vim.filetype.add({
+    pattern = {
+      [".*/roles/.*/tasks/.*ya?ml"] = "yaml.ansible",
+      [".*/local.ya?ml"] = "yaml.ansible",
+      [".*/playbooks/.*.ya?ml"] = "yaml.ansible",
+      [".*/config/ansible/.*.ya?ml"] = "yaml.ansible",
+    }
+  })
+end)
+
+-- Exclude "curdir" so we don't preserve cwd
+vim.opt.viewoptions = "folds,cursor"

@@ -7,7 +7,7 @@ return {
     version = "^17.33.0",
     pin = true,
     enabled = false,
-    lazy = false,
+    lazy = true,
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",

@@ -48,26 +48,26 @@
           - blueman
           - xss-lock
           - brightnessctl
-          - polybar    # status bar
-          - physlock   # lockscreen (alt. xsecurelock)
+          - polybar # status bar
+          - physlock # lockscreen (alt. xsecurelock)
           #- xtrlock
-          - feh        # image view and wallpaper setter
-          - rofi       # app runner
-          - pamixer    # audio controls
+          - feh # image view and wallpaper setter
+          - rofi # app runner
+          - pamixer # audio controls
           - fonts-noto # fix emojis
           - firefox-esr
           - evince
           - xclip
           - ffmpeg
-          - cava    # dumb audio visualization
-          - eog     # nicer image viewer
+          - cava # dumb audio visualization
+          - eog # nicer image viewer
           - foliate # ebook reader
           - vlc
           - vlc-plugin-pipewire
           - vlc-plugin-samba
           - thunar-volman
           - system-config-printer # printer GUI
-          - mpv       # video player
+          - mpv # video player
           - mpv-mpris # mpv plugin for "Media Player Remote Interfacing Specification"
 
           # Dev
@@ -78,9 +78,10 @@
           - cmake
           - awscli
           - linux-perf
-          - ghc           # haskell compiler
+          - ghc # haskell compiler
           - haskell-stack # haskell build tool and package manager
           - luarocks
+          - tree-sitter-cli
 
           # QEMU
           - qemu-system
@@ -95,18 +96,18 @@
 
           # Dev Build Deps
           - python3-venv
-          - libssl-dev         # for building python
-          - libffi-dev         # for building python
-          - libncurses-dev     # for building python
-          - libgdbm-dev        # for building python
+          - libssl-dev # for building python
+          - libffi-dev # for building python
+          - libncurses-dev # for building python
+          - libgdbm-dev # for building python
           - libgdbm-compat-dev # for building python
-          - liblzma-dev        # for building python
-          - tk-dev             # for building python
-          - uuid-dev           # for building python
-          - libbz2-dev         # for building python
-          - libzstd-dev        # for building python
-          - libreadline-dev    # for building python
-          - libsqlite3-dev     # for building python
+          - liblzma-dev # for building python
+          - tk-dev # for building python
+          - uuid-dev # for building python
+          - libbz2-dev # for building python
+          - libzstd-dev # for building python
+          - libreadline-dev # for building python
+          - libsqlite3-dev # for building python
 
           # build deps (chatterino)
           #- qt6-base-dev
@@ -130,7 +131,7 @@
           - jp2a
           - caca-utils
           - chromium
-          - zathura    # document viewer
+          - zathura # document viewer
           # dev libraries
           #- libxkbcommon-dev   # from alacritty
           #- libfontconfig1-dev # from alacritty
@@ -156,6 +157,5 @@
           - stig[setproctitle,proxy]
           - yt-dlp[default,curl-cffi]
         state: present
-        virtualenv: '~/.local/share/venv'
-
+        virtualenv: "~/.local/share/venv"
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

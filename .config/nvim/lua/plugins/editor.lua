@@ -1,8 +1,9 @@
 local path = require("core.util.path")
 
 return {
-  -- Use treesitter to autoclose html tags
-  { "windwp/nvim-ts-autotag",                        lazy = false },
+  { import = "plugins.editor.treesitter" },
+  { import = "plugins.editor.diagnostics" },
+  { import = "plugins.editor.html-tag-auto-complete" },
 
   -- Snippets for completion
   {
@@ -24,24 +25,26 @@ return {
 
   {
     "stevearc/conform.nvim",
-    event = "InsertEnter",
-    --event = "VeryLazy",
+    enabled = true,
+    event = "VeryLazy", -- Always load but at the end (for LSP formatting)
+    ft = { "go" },      -- always load for go (to use goimports)
     opts = {
       formatters_by_ft = {
         go = { "goimports" },
       },
+      -- format_on_save = nil,
       format_on_save = {
-        lsp_format = true,
+        lsp_format = "fallback",
         async = false,
-        timeout_ms = 1000,
+        quiet = false,
+        timeout_ms = 3000,
       },
     },
   },
 
   {
     "folke/todo-comments.nvim",
-    lazy = false,
-    -- enabled = true,
+    event = "VeryLazy",
     opts = {
       signs = true,
       sign_priority = 1,                  -- don't place icons on top of git signs
@@ -52,57 +55,6 @@ return {
     keys = {
       { '<leader>sit', "<cmd>TodoTelescope<cr>", mode = { 'n' }, desc = "[S]earch [I]n [T]odo comments" },
     },
-  },
-  { import = "plugins.editor.treesitter" },
-  { import = "plugins.editor.diagnostics" },
-  { import = "plugins.editor.html-tag-auto-complete" },
-
-  -- null-ls auto formatting
-  {
-    "nvimtools/none-ls.nvim",
-    -- TODO Check for a tag (they haven't done a release yet but I want to
-    -- freeze the version once they release a version).
-    --
-    -- https://github.com/nvimtools/none-ls.nvim
-    enabled = false,
-    lazy = false,
-    opts = function(_, _)
-      -- return require("core.plugins.null-ls")
-      local null_ls = require("null-ls")
-      local fmt = null_ls.builtins.formatting
-      local diags = null_ls.builtins.diagnostics
-      local augroup = vim.api.nvim_create_augroup("MyLspFormatting", {})
-      return {
-        default_timeout = 50000,
-        sources = {
-          fmt.nixfmt,
-          fmt.goimports,
-          -- fmt.goimports_reviser,
-          diags.actionlint,
-          diags.buf,
-          fmt.prettier.with({
-            filetypes = { "html", "svg" },
-          })
-        },
-        on_attach = function(client, bufnr)
-          if client.supports_method("textDocument/formatting") then
-            vim.api.nvim_clear_autocmds({
-              group = augroup,
-              buffer = bufnr,
-            })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              group = augroup,
-              buffer = bufnr,
-              callback = function()
-                vim.lsp.buf.format({ bufnr = bufnr })
-              end,
-            })
-          end
-        end,
-      }
-    end,
-    -- must load after lsp-zero.setup
-    -- dependencies = { "VonHeikemen/lsp-zero.nvim" },
   },
 
   {

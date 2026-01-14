@@ -2,15 +2,21 @@
 --
 -- Look for more good ones here https://github.com/rockerBOO/awesome-neovim#tree-sitter-supported-colorscheme
 return {
-  { "ntk148v/vim-horizon",      lazy = false, priority = 1000 },
-  { "rebelot/kanagawa.nvim",    lazy = false, priority = 1000 },
-  { "shaunsingh/nord.nvim",     lazy = false, priority = 1000 },
-  { "sainnhe/everforest",       lazy = false, priority = 1000 },
-  { "ellisonleao/gruvbox.nvim", lazy = true,  priority = 1000, config = true },
-  { "shaunsingh/solarized.nvim" },
+  {
+    "EdenEast/nightfox.nvim", -- nightfox nordfox terafox duskfox carbonfox
+    lazy = true,
+    priority = 1000,
+  },
+  "ntk148v/vim-horizon",
+  "rebelot/kanagawa.nvim",
+  "shaunsingh/nord.nvim",
+  "sainnhe/everforest",
+
+  { "ellisonleao/gruvbox.nvim", lazy = true,         priority = 1000, config = true },
+  "shaunsingh/solarized.nvim",
   --"maxmx03/solarized.nvim",
   "sainnhe/sonokai",
-  { "catppuccin/nvim",        name = "catppuccin",                   priority = 1000 },
+  { "catppuccin/nvim",          name = "catppuccin", priority = 1000 },
   "ntk148v/komau.vim",
   "lunarvim/templeos.nvim",
   -- { "yorickpeterse/nvim-grey", lazy = false, priority = 1000 },
@@ -18,13 +24,12 @@ return {
     "navarasu/onedark.nvim",
     opts = { style = "darker" },
   },
-  { "mcchrish/zenbones.nvim", dependencies = { "rktjmp/lush.nvim" }, lazy = false,   priority = 1000 },
-
   {
-    "EdenEast/nightfox.nvim", -- nightfox nordfox terafox duskfox carbonfox
-    lazy = true,
-    priority = 1000,
+    "mcchrish/zenbones.nvim",
+    enabled = true,
+    dependencies = { "rktjmp/lush.nvim" },
   },
+
   {
     "aktersnurra/no-clown-fiesta.nvim",
     opts = {
@@ -53,6 +58,7 @@ return {
   },
   {
     "AlexvZyl/nordic.nvim",
+    enabled = false,
     lazy = false,
     priority = 1000,
     opts = {
@@ -60,6 +66,7 @@ return {
       --   FoldColumn = { fg = "none", bg = "none" },
       --   Visual = { bg = 0x111111 },
       -- },
+      ---@diagnostic disable-next-line: unused-local
       on_highlight = function(highlights, palette)
         highlights.FoldColumn = { fg = "none", bg = "none" }
         highlights.Visual = { bg = 0x111111 }

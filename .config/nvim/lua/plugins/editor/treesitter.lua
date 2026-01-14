@@ -1,14 +1,84 @@
+local langs = {
+  "go", "gomod", "gosum", "gowork",
+  "rust",
+  "python",
+  "lua",
+  "sql",
+  "bash",
+  "sh",
+  "markdown",
+  "nix",
+  "elixir",
+  "haskell",
+  "c",
+  "cpp",
+  "asm", "nasm",
+  "r",
+  "vim",
+
+  -- web
+  "html",
+  "css",
+  "javascript",
+  "typescript",
+  "typescriptreact",
+  "vue",
+  "astro",
+
+  -- tools
+  "make",
+  "proto",
+  "dockerfile",
+  "terraform",
+  "jq",
+  "gitconfig",
+  "gitrebase",
+  "gitcommit",
+  "gitignore",
+  "sshconfig",
+  "nginx",
+  "tmux",
+  "gpg",
+
+  -- data
+  "json",
+  "yaml",
+  "json5",
+  "jsonnet",
+  "toml",
+  "xml",
+
+  -- doc
+  "luadoc",
+  "vimdoc",
+}
+
 return {
   -- Syntax parsers and highlighting.
   {
     "nvim-treesitter/nvim-treesitter",
-    tag = "v0.10.0",
-    lazy = false,
+    -- For a more stable build, use 'tag = "v0.10.0"'
+    branch = "main",
+    -- Explicitly load for these filetypes to prevent the highlight delay that
+    -- looks really ugly.
+    ft = langs,
+    cmd = {
+      "TSUpdate",
+      "TSInstall",
+      "TSUninstall",
+      "TSInstallFromGrammar",
+      "TSLog",
+    },
     build = ":TSUpdate",
-    config = function()
-      local configs = require("nvim-treesitter.configs")
-      local ts_parsers = require("nvim-treesitter.parsers")
-      ts_parsers.get_parser_configs().gotmpl = {
+    opts = {
+      -- highlight = {
+      --   enable = true,
+      --   additional_vim_regex_highlighting = false,
+      -- },
+      -- indent = { enable = true },
+    },
+    config = function(_, opts)
+      require('nvim-treesitter.parsers').gotmpl = {
         install_info = {
           url = "https://github.com/ngalaiko/tree-sitter-go-template",
           branch = "master",
@@ -18,60 +88,30 @@ return {
         filetype = "gotmpl",
         used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" },
       }
-
-      configs.setup({
-        ensure_installed = {
-          "go",
-          "gomod",
-          "gosum",
-          "gowork",
-          "gotmpl", -- added in this file
-          -- web
-          --"html",   -- commented out because it keeps crashing
-          "css",
-          "http", -- https://learn.microsoft.com/en-us/aspnet/core/test/http-files
-          "javascript",
-          "typescript",
-          "tsx",
-          "astro",
-          "vue",
-          -- misc languages
-          "python",
-          "rust",
-          "sql",
-          "lua",
-          "nix",
-          "dockerfile",
-          "make",
-          "c",
-          "cpp",
+      vim.schedule(function()
+        local ts = require("nvim-treesitter")
+        local parsers = {
+          "gotmpl", -- added in this config
           "query",
-          "elixir",
-          "vim",
-          "vimdoc",
-          -- random file formats
-          "json",
-          "yaml",
-          "toml",
-          "git_config",
-          "gitcommit",
-          "gitignore",
-          -- hashicorp's universe
-          "hcl",
-          "terraform",
-          "markdown",
           "markdown_inline",
-        },
-        ignore_install = {
-          "html", -- don't install because it keeps crashing
-        },
-        sync_install = false,
-        auto_install = true,
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = { enable = true },
+        }
+        for _, lang in pairs(langs) do
+          table.insert(parsers, vim.treesitter.language.get_lang(lang))
+        end
+        ts.install(parsers)
+        ts.update(parsers)
+        -- vim.notify(
+        --   "[treesitter] finished installing/updating treesitter parsers",
+        --   vim.log.levels.INFO,
+        --   {}
+        -- )
+      end)
+      require("nvim-treesitter").setup(opts)
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = langs,
+        callback = function()
+          vim.treesitter.start()
+        end,
       })
     end,
   }

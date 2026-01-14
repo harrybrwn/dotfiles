@@ -1,8 +1,5 @@
 -- Language specific plugins.
-
-local version = vim.version()
-
-local plugins = {
+return {
   -- UV (python) integration.
   {
     "benomahony/uv.nvim",
@@ -21,15 +18,15 @@ local plugins = {
     --lazy = false,
   },
   -- Syntax highlighting for the Nand2Tetris book exercises. (See https://www.nand2tetris.org/)
-  { "sevko/vim-nand2tetris-syntax", lazy = false },
+  { "sevko/vim-nand2tetris-syntax", enabled = false, lazy = false },
   { "towolf/vim-helm",              enabled = false, config = false, lazy = false },
-}
 
-if version.major == 0 and version.minor >= 10 then
-  table.insert(plugins, {
+  {
     "OXY2DEV/markview.nvim",
-    enabled = true,
-    lazy = false,
+    enabled = function()
+      local version = vim.version()
+      return version.major == 0 and version.minor >= 10
+    end,
     ft = { "md", "markdown" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -53,7 +50,5 @@ if version.major == 0 and version.minor >= 10 then
         desc = "Toggle the markview split view",
       }
     },
-  })
-end
-
-return plugins
+  }
+}

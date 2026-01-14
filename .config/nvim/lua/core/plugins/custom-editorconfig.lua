@@ -173,7 +173,6 @@ local function gopls_add_analyses(gopls, settings)
 end
 
 -- on_attach function for gopls only
----comment
 ---@param client vim.lsp.Client
 ---@param _ number
 local function gopls_on_attach(client, _)

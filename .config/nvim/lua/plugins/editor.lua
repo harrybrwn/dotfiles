@@ -25,7 +25,6 @@ return {
 
   {
     "stevearc/conform.nvim",
-    enabled = true,
     event = "VeryLazy", -- Always load but at the end (for LSP formatting)
     ft = { "go" },      -- always load for go (to use goimports)
     opts = {

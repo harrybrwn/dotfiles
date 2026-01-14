@@ -46,7 +46,6 @@ function M.setup_cmp()
       }),
     },
     snippet = {
-      ---comment
       ---@param args any
       expand = function(args)
         require('luasnip').lsp_expand(args.body)
@@ -91,25 +90,7 @@ function M.setup_cmp()
 end
 
 ---@param bufnr number
-local function apply_lsp_key_mappings(bufnr)
-  ---@param key string
-  ---@param fn string|function
-  ---@param desc string
-  local function kset(key, fn, desc)
-    vim.keymap.set("n", key, fn, { buffer = bufnr, desc = desc })
-  end
-  kset("K", function() vim.lsp.buf.hover({ border = "single" }) end, "LSP Hover Info")
-  kset('gs', function() vim.lsp.buf.signature_help({ border = "single" }) end, 'Show function signature')
-  kset("gr", function() vim.cmd [[Telescope lsp_references]] end, "[G]o to LSP [R]eferences")
-  kset('gd', '<cmd>lua vim.lsp.buf.definition()<cr>', 'Go to definition')
-  kset('gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', 'Go to declaration')
-  kset('gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', 'Go to implementation')
-  kset('go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', 'Go to type definition')
-  kset('<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
-  kset('<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format file')
-  kset('<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
-  vim.keymap.set('x', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
-    { desc = 'Format selection', buffer = bufnr })
+function M.apply_lsp_key_mappings(bufnr)
 end
 
 ---@param client vim.lsp.Client
@@ -143,7 +124,7 @@ function M.setup(opts)
     group    = lsp_cmds,
     desc     = "common lsp on_attach",
     callback = function(event)
-      apply_lsp_key_mappings(event.buf)
+      M.apply_lsp_key_mappings(event.buf)
       local client_id = vim.tbl_get(event, 'data', 'client_id')
       local client = {}
       if client_id then

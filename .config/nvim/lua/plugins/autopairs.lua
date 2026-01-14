@@ -20,7 +20,6 @@ end
 return {
   "windwp/nvim-autopairs",
   event = "InsertEnter",
-  enabled = true,
   config = function(_, _)
     local opts = {
       disable_filetype = {

@@ -8,8 +8,13 @@ return {
     lazy = false,
     opts = {},
     config = function(_, opts)
+      local lsp = require('core.lsp')
       require("mason").setup(opts)
-      require("core.lsp").init()
+      lsp.enable()
+      vim.api.nvim_create_autocmd("LspAttach", {
+        desc = "common lsp on_attach",
+        callback = lsp.on_attach,
+      })
     end,
   },
 

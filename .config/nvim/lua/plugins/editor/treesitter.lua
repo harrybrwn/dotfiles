@@ -1,5 +1,6 @@
 local langs = {
   "go", "gomod", "gosum", "gowork",
+  "gotmpl", -- added in this config
   "rust",
   "python",
   "lua",
@@ -12,7 +13,8 @@ local langs = {
   "haskell",
   "c",
   "cpp",
-  "asm", "nasm",
+  "asm",
+  "nasm",
   "r",
   "vim",
 
@@ -22,8 +24,10 @@ local langs = {
   "javascript",
   "typescript",
   "typescriptreact",
+  "javascriptreact",
   "vue",
   "astro",
+  "svelte",
 
   -- tools
   "make",
@@ -41,16 +45,12 @@ local langs = {
   "gpg",
 
   -- data
-  "json",
-  "yaml",
-  "json5",
-  "jsonnet",
-  "toml",
-  "xml",
+  "json", "yaml", "json5", "jsonnet", "toml", "xml",
 
   -- doc
-  "luadoc",
   "vimdoc",
+  -- misc
+  "query",
 }
 
 return {
@@ -70,13 +70,7 @@ return {
       "TSLog",
     },
     build = ":TSUpdate",
-    opts = {
-      -- highlight = {
-      --   enable = true,
-      --   additional_vim_regex_highlighting = false,
-      -- },
-      -- indent = { enable = true },
-    },
+    opts = {},
     config = function(_, opts)
       require('nvim-treesitter.parsers').gotmpl = {
         install_info = {
@@ -91,28 +85,28 @@ return {
       vim.schedule(function()
         local ts = require("nvim-treesitter")
         local parsers = {
-          "gotmpl", -- added in this config
-          "query",
           "markdown_inline",
+          "luadoc",
         }
-        for _, lang in pairs(langs) do
-          table.insert(parsers, vim.treesitter.language.get_lang(lang))
+        local parsernames = {}
+        for _, l in pairs(langs) do
+          local lang = vim.treesitter.language.get_lang(l)
+          if not parsernames[lang] and lang ~= nil then
+            parsers[#parsers + 1] = lang
+            parsernames[lang] = true
+          end
         end
         ts.install(parsers)
         ts.update(parsers)
-        -- vim.notify(
-        --   "[treesitter] finished installing/updating treesitter parsers",
-        --   vim.log.levels.INFO,
-        --   {}
-        -- )
       end)
-      require("nvim-treesitter").setup(opts)
       vim.api.nvim_create_autocmd('FileType', {
         pattern = langs,
         callback = function()
           vim.treesitter.start()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
+      require("nvim-treesitter").setup(opts)
     end,
-  }
+  },
 }

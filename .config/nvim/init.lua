@@ -79,8 +79,8 @@ vim.opt.colorcolumn = "" -- "80"
 vim.opt.history = 1000
 vim.opt.undolevels = 1500
 
--- Presized signcolumn so that when gitsigns adds an indicator it doesn't shift
--- he entire view around.
+-- Presized signcolumn so that when gitsigns.nvim adds an indicator it doesn't
+-- shift he entire view around.
 vim.opt.signcolumn = "yes"
 vim.opt.numberwidth = 1
 

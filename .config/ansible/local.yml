@@ -6,6 +6,7 @@
   roles:
     - backup
     - adr-tools
+    - tree-sitter-cli
 
   tasks:
     - name: Packages
@@ -31,7 +32,7 @@
     - name: Python Virtual Env
       ansible.builtin.command:
         cmd: python3 -m venv {{ ansible_facts.user_dir }}/.local/share/venv
-        creates: '{{ ansible_facts.user_dir }}/.local/share/venv/pyvenv.cfg'
+        creates: "{{ ansible_facts.user_dir }}/.local/share/venv/pyvenv.cfg"
     - name: Install Pip Utilities
       ansible.builtin.pip:
         name:
@@ -40,6 +41,5 @@
           - stig[setproctitle,proxy]
           - gallery-dl
         state: present
-        virtualenv: '{{ ansible_facts.user_dir }}/.local/share/venv'
-
+        virtualenv: "{{ ansible_facts.user_dir }}/.local/share/venv"
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook

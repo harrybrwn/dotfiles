@@ -115,6 +115,7 @@ return {
     local function buffers() require("telescope.builtin").buffers() end
     local function git_files() require("telescope.builtin").git_files() end
     local function resume() require("telescope.builtin").resume() end
+    local function help() require("telescope.builtin").help_tags() end
     return {
       { "<leader>sf",   find_files, mode = "n", desc = "[S]earch [F]iles" },
       { "<leader>sg",   live_grep,  mode = "n", desc = "[S]earch with [G]rep" },
@@ -122,6 +123,7 @@ return {
       { "<leader>sib",  buffers,    mode = "n", desc = "[S]earch [I]n [B]uffers" },
       { "<leader>sigf", git_files,  mode = "n", desc = "[S]earch [I]n [G]it [F]iles" },
       { "<leader>sr",   resume,     mode = "n", desc = "[S]earch [R]esume. Resume the previous search." },
+      { "<leader>sh",   help,       mode = "n", desc = "[S]earch in [H]elp tags." },
       {
         "<leader>?",
         function()

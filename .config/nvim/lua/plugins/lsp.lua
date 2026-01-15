@@ -26,7 +26,6 @@ return {
       "mason-org/mason.nvim",
       "neovim/nvim-lspconfig",
     },
-    -- init = lspinit,
     opts = {
       automatic_enable = false,
       ensure_installed = {
@@ -61,10 +60,6 @@ return {
 
   {
     "hrsh7th/nvim-cmp",
-    -- lazy = false,
-    -- event = "InsertEnter",
-    -- event = 'VimEnter',
-    -- event = "UIEnter",
     event = "VeryLazy",
     config = function()
       require("core.plugins.lsp").setup_cmp()
@@ -77,6 +72,10 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
+      -- For a less-good replacement for lsp_signature.nvim use:
+      --  "hrsh7th/cmp-nvim-lsp-signature-help",
+      "hrsh7th/cmp-emoji",
+      "hrsh7th/cmp-calc",
     },
   },
 

@@ -1,5 +1,6 @@
 # TODO:
-#   - add Heroic Games Launcher (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
+#   - add Heroic Games Launcher
+#     (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
 
 - name: Setup "cascadia" Laptop
   hosts: localhost
@@ -81,7 +82,8 @@
           - ghc # haskell compiler
           - haskell-stack # haskell build tool and package manager
           - luarocks
-          - tree-sitter-cli
+          - libclang-dev # libclang.so (needed by tree-sitter)
+          - postgresql-client
 
           # QEMU
           - qemu-system
@@ -109,15 +111,6 @@
           - libreadline-dev # for building python
           - libsqlite3-dev # for building python
 
-          # build deps (chatterino)
-          #- qt6-base-dev
-          #- qt6-5compat-dev
-          #- qt6-svg-dev
-          #- qt6-image-formats-plugins
-          #- libboost1.81-dev
-          #- libnotify-dev
-          #- libssl-dev
-
     - name: Removed Packages
       become: true
       ansible.builtin.package:
@@ -133,11 +126,11 @@
           - chromium
           - zathura # document viewer
           # dev libraries
-          #- libxkbcommon-dev   # from alacritty
-          #- libfontconfig1-dev # from alacritty
-          #- libxcb-xfixes0-dev
-          #- libxcb-xkb-dev
-          #- libxcb1-dev
+          # - libxkbcommon-dev   # from alacritty
+          # - libfontconfig1-dev # from alacritty
+          # - libxcb-xfixes0-dev
+          # - libxcb-xkb-dev
+          # - libxcb1-dev
 
     - name: Remove dependencies that are no longer required
       become: true
@@ -158,4 +151,4 @@
           - yt-dlp[default,curl-cffi]
         state: present
         virtualenv: "~/.local/share/venv"
-# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook
+# vim: ft=yaml.ansible

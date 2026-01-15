@@ -31,7 +31,7 @@ local fileformat = {
 return {
   "nvim-lualine/lualine.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
-  event = "VeryLazy",
+  event = "BufEnter", -- VeryLazy yields too many ui glitches
   opts = {
     -- theme = 'nord',
     extentions = {
@@ -50,7 +50,7 @@ return {
       },
       ignore_focus = {},
       always_divid_middle = true,
-      globalstatus = false,
+      globalstatus = false, -- one single status for all buffers
       refresh = {
         statusline = 1000,
         tabline = 1000,

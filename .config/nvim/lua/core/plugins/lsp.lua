@@ -22,8 +22,6 @@ function M.setup_cmp()
     sources = cmp.config.sources({
       { name = "nvim_lsp" },
       { name = "luasnip" },
-      -- { name = "buffer" },
-      -- { name = "path" },
     }),
     mapping = cmp.mapping.preset.insert({
       -- `Enter` key to confirm completion
@@ -55,13 +53,6 @@ function M.setup_cmp()
     -- formatting = {}
   })
 
-  cmp.setup.filetype("gitignore", {
-    sources = {
-      { name = "path" },
-      { name = "buffer" },
-    },
-  })
-
   -- `/` cmdline setup.
   cmp.setup.cmdline("/", {
     mapping = cmp.mapping.preset.cmdline(),
@@ -83,6 +74,20 @@ function M.setup_cmp()
         },
       },
     }),
+  })
+
+  cmp.setup.filetype("gitignore", {
+    sources = {
+      { name = "path" },
+      { name = "buffer" },
+    },
+  })
+  cmp.setup.filetype("markdown", {
+    source = {
+      { name = "path" },
+      { name = "buffer" },
+      { name = "emoji" },
+    }
   })
 
   vim.lsp.config("*", { capabilities = require("cmp_nvim_lsp").default_capabilities() })

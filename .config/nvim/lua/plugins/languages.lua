@@ -50,5 +50,25 @@ return {
         desc = "Toggle the markview split view",
       }
     },
-  }
+  },
+
+  { -- SQL query runner and connection manager.
+    "kndndrj/nvim-dbee",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    cmd = { "Dbee" },
+    opts = {},
+    config = function(_, opts)
+      vim.env.PGSERVICEFILE = nil
+      vim.env.PGSERVICE = nil
+      require("dbee").setup(opts)
+    end,
+    build = function()
+      -- Install tries to automatically detect the install method.
+      -- if it fails, try calling it with one of these parameters:
+      --    "curl", "wget", "bitsadmin", "go"
+      require("dbee").install()
+    end,
+  },
 }

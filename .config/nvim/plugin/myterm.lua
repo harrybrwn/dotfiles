@@ -91,7 +91,9 @@ local DEFAULT_OPTS = {
 ---@param opts? Options
 function M.setup(opts)
   opts = opts or DEFAULT_OPTS
-  vim.api.nvim_create_user_command("Term", function() toggle_terminal(opts) end, {})
+  vim.api.nvim_create_user_command("Term", function()
+    toggle_terminal(opts)
+  end, {})
 end
 
 -- return M

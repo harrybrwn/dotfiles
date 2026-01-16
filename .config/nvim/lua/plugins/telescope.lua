@@ -8,95 +8,108 @@ return {
     {
       -- Lets me pass rg flags via the search bar.
       "nvim-telescope/telescope-live-grep-args.nvim",
+      -- Better option picker
+      "nvim-telescope/telescope-ui-select.nvim",
     },
   },
 
-  opts = {
-    defaults = {
-      mappings = {
-        i = {
-          ["<C-j>"] = "close",
-          ["<A-p>"] = function(prompt_buffer)
-            require("telescope.actions.layout").toggle_preview(prompt_buffer)
-          end,
-        },
-        n = {
-          ["<C-j>"] = "close",
-          ["<A-p>"] = function(prompt_buffer)
-            require("telescope.actions.layout").toggle_preview(prompt_buffer)
-          end,
-        },
-      },
-      vimgrep_arguments = {
-        -- Defaults
-        "rg",
-        "--color=never",
-        "--no-heading",
-        "--with-filename",
-        "--line-number",
-        "--column",
-        "--smart-case",
-        -- My stuff
-        "--hidden",                 -- always include hidden files
-      },
-      fname_width = 80,             -- view width for the filename
-      layout_strategy = 'vertical', -- horizontal|vertical|center|cursor
-      -- path_display = "smart",
-      path_display = {
-        smart = {},
-      },
-      layout_config = {
-        height = 0.95,
-        width = 0.95,
-        vertical = {
-          height = 0.95,
-          width = 0.95,
-          preview_height = 0.50,
-          preview_cutoff = 40,
-          prompt_position = "bottom",
-        }
-      },
-    },
-    pickers = {
-      live_grep = {
-        ---@diagnostic disable-next-line: unused-local
-        additional_args = function(opts)
-          -- pass additional flags to rg(1)
-          return { "--hidden" }
-        end,
-        --additional_args = { "--hidden" },
-        path_display = {
-          shorten = {
-            -- lua/core/plugins/codecompanion/lualine.lua
-            -- becomes
-            -- lu/co/pl/codecompanion/lualine.lua
-            len = 2,
-            exclude = { -3, -2, -1 },
+  init = function()
+    require("telescope").load_extension("ui-select")
+  end,
+
+  opts = function()
+    return {
+      defaults = {
+        mappings = {
+          i = {
+            ["<C-j>"] = "close",
+            ["<A-p>"] = function(prompt_buffer)
+              require("telescope.actions.layout").toggle_preview(prompt_buffer)
+            end,
+          },
+          n = {
+            ["<C-j>"] = "close",
+            ["<A-p>"] = function(prompt_buffer)
+              require("telescope.actions.layout").toggle_preview(prompt_buffer)
+            end,
           },
         },
-      },
-      find_files = {
+        vimgrep_arguments = {
+          -- Defaults
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          -- My stuff
+          "--hidden",                 -- always include hidden files
+        },
+        fname_width = 80,             -- view width for the filename
+        layout_strategy = 'vertical', -- horizontal|vertical|center|cursor
+        -- path_display = "smart",
         path_display = {
-          absolute = {},
+          smart = {},
         },
         layout_config = {
+          height = 0.95,
+          width = 0.95,
           vertical = {
-            height = 0.98,
+            height = 0.95,
             width = 0.95,
-            preview_height = 0.65,
+            preview_height = 0.50,
+            preview_cutoff = 40,
+            prompt_position = "bottom",
           }
-        }
-      },
-    },
-    extensions = {
-      live_grep_args = {
-        auto_quoting = true,
-        path_display = {
-          truncate = 1,
         },
-      }
-    },
-  },
+      },
+      pickers = {
+        live_grep = {
+          ---@diagnostic disable-next-line: unused-local
+          additional_args = function(opts)
+            -- pass additional flags to rg(1)
+            return { "--hidden" }
+          end,
+          --additional_args = { "--hidden" },
+          path_display = {
+            shorten = {
+              -- lua/core/plugins/codecompanion/lualine.lua
+              -- becomes
+              -- lu/co/pl/codecompanion/lualine.lua
+              len = 2,
+              exclude = { -3, -2, -1 },
+            },
+          },
+        },
+        find_files = {
+          path_display = {
+            absolute = {},
+          },
+          layout_config = {
+            vertical = {
+              height = 0.98,
+              width = 0.95,
+              preview_height = 0.65,
+            }
+          }
+        },
+      },
+      extensions = {
+        live_grep_args = {
+          auto_quoting = true,
+          path_display = {
+            truncate = 1,
+          },
+        },
+        ['ui-select'] = {
+          require('telescope.themes').get_dropdown({
+            previewer = false,
+          })
+        },
+      },
+    }
+  end,
 
   keys = function()
     -- local builtin = require("telescope.builtin")
@@ -137,6 +150,7 @@ return {
       }
     }
   end,
+
 
   -- `spec.init` runs after `spec.config` which means everything in `init` will
   -- run after lazy calls `require('telescope').setup(opts)`.

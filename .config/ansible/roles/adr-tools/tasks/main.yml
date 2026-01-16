@@ -1,0 +1,19 @@
+- name: Set Default Version
+  ansible.builtin.set_fact:
+    version: '3.0.0'
+  when: version is not defined
+
+- name: Check for Installation
+  ansible.builtin.stat:
+    path: '{{ ansible_facts.user_dir }}/.local/share/adr-tools/src/adr'
+  register: entrypoint
+
+- name: Install adr-tools
+  when: not entrypoint.stat.exists
+  block:
+    - name: Clone Repo
+      ansible.builtin.git:
+        repo: git@github.com:npryce/adr-tools.git
+        dest: '{{ ansible_facts.user_dir }}/.local/share/adr-tools/'
+        depth: 1
+        version: '{{ version }}'

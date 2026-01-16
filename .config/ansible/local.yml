@@ -7,6 +7,7 @@
     - backup
     - adr-tools
     - tree-sitter-cli
+    - postman
 
   tasks:
     - name: Packages
@@ -19,7 +20,7 @@
           - ffmpeg
           - gnome-shell-extension-manager
           - postgresql-client
-          - luarocks
+          - luarocks  # needed for lazy.nvim
         state: present
 
     - name: Use ping without sudo (setcap cap_net_raw+p)

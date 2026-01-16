@@ -1,10 +1,6 @@
-- name: Get Home
-  ansible.builtin.set_fact:
-    user_home: 'lookup("env", "HOME")'
-
 - name: Check if tree-sitter-cli is installed
   stat:
-    path: '/home/{{ user_home }}/.config/cargo/bin/tree-sitter'
+    path: '{{ ansible_facts.user_dir }}/.config/cargo/bin/tree-sitter'
   register: tree_sitter_bin
 
 - name: Install
@@ -18,4 +14,4 @@
     - name: Compile
       ansible.builtin.command:
         cmd: cargo install tree-sitter-cli
-        creates: '/home/{{ user_home }}/.config/cargo/bin/tree-sitter'
+        creates: '{{ ansible_facts.user_dir }}/.config/cargo/bin/tree-sitter'

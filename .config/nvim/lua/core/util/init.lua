@@ -60,4 +60,37 @@ function M.machine_id()
   return s
 end
 
+---Create directories.
+---@param path string
+---@param opts? table
+function M.mkdir(path, opts)
+  opts = vim.tbl_deep_extend('keep', opts, {
+    parents = false,
+    mode = nil,
+    verbose = false,
+  })
+  if opts == nil then
+    error("mkdir opts should not be nil")
+    return
+  end
+  local cmd = { "mkdir" }
+  if opts.parents then
+    table.insert(cmd, "--parents")
+  end
+  if opts.mode ~= nil then
+    table.insert(cmd, "--mode=" .. opts.mode)
+  end
+  if opts.verbose then
+    table.insert(cmd, "--verbose")
+  end
+  table.insert(cmd, path)
+  local cmdstr = table.concat(cmd, ' ')
+  local proc = io.popen(cmdstr)
+  if proc == nil then
+    error(string.format('failed to execute "%s"', cmdstr))
+    return
+  end
+  proc:close()
+end
+
 return M

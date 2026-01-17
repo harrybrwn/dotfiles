@@ -18,16 +18,17 @@ vim.opt.foldopen = table.concat({
   "undo",
 }, ",")
 
-vim.schedule(function()
-  vim.filetype.add({
-    pattern = {
-      [".*/roles/.*/tasks/.*ya?ml"] = "yaml.ansible",
-      [".*/local.ya?ml"] = "yaml.ansible",
-      [".*/playbooks/.*.ya?ml"] = "yaml.ansible",
-      [".*/config/ansible/.*.ya?ml"] = "yaml.ansible",
-    }
-  })
-end)
+vim.filetype.add({
+  pattern = {
+    [".*/roles/.*/tasks/.*ya?ml"] = "yaml.ansible",
+    [".*/local.ya?ml"] = "yaml.ansible",
+    [".*/playbooks/.*.ya?ml"] = "yaml.ansible",
+    [".*/config/ansible/.*.ya?ml"] = "yaml.ansible",
+  }
+})
 
 -- Exclude "curdir" so we don't preserve cwd
 vim.opt.viewoptions = "folds,cursor"
+
+vim.opt.spell = true
+vim.opt.spelllang = "en"

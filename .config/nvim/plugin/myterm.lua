@@ -97,4 +97,4 @@ function M.setup(opts)
 end
 
 -- return M
-M.setup()
+-- M.setup()

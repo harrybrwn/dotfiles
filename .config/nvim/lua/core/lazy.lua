@@ -44,6 +44,9 @@ function M.setup(spec)
       version = false, -- always use the latest git commit
       --version = "*", -- try using the latest stable version if semver is supported
     },
+    -- install = {
+    --   colorscheme = "gruvbox",
+    -- },
     checker = { enabled = false }, -- automatically check for plugin updates
     change_detection = {
       -- automatically check for config file changes and reload the ui

@@ -17,8 +17,6 @@ vim.opt.linebreak = true
 vim.opt.backspace = "indent,eol,start"
 vim.opt.mouse = "nv"
 vim.opt.fixendofline = false
-vim.opt.spell = true
-vim.opt.spelllang = "en"
 vim.opt.splitright = true
 vim.opt.scrolloff = 1 -- keep cursor n lines above the bottom
 
@@ -55,12 +53,15 @@ vim.opt.background = background
 vim.opt.termguicolors = true
 if background == "dark" then
   --vim.cmd.colorscheme("monokai") -- tokyonight terafox catppuccin gruvbox kanagawa everforest onedark gray horizon bw nord nordic solarized kanagawa-wave
-  --vim.cmd.colorscheme("onedark")
-  vim.cmd.colorscheme("terafox")
+  -- vim.cmd.colorscheme("onedark")
+  -- vim.cmd.colorscheme("terafox")
+  vim.cmd [[colorscheme terafox]]
 else
   -- vim.cmd.colorscheme("forestbones")
-  vim.cmd.colorscheme("catppuccin")
-  vim.cmd([[hi Cursor guifg=grey guibg=grey blend=20]])
+  vim.cmd([[
+    colorscheme catppuccin
+    hi Cursor guifg=grey guibg=grey blend=20
+  ]])
 end
 vim.opt.guicursor = table.concat({
   "n-v-c-sm:block-Cursor",

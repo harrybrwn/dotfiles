@@ -27,16 +27,16 @@ return {
     "stevearc/conform.nvim",
     event = "VeryLazy", -- Always load but at the end (for LSP formatting)
     ft = { "go" },      -- always load for go (to use goimports)
+    cmd = { 'ConformInfo' },
     opts = {
       formatters_by_ft = {
         go = { "goimports" },
       },
-      -- format_on_save = nil,
-      format_on_save = {
-        lsp_format = "fallback",
-        async = false,
+      format_on_save = nil,
+      format_after_save = { -- see :help conform.format
+        lsp_format = "last",
+        async = true,
         quiet = false,
-        timeout_ms = 3000,
       },
     },
   },
@@ -46,9 +46,9 @@ return {
     event = "VeryLazy",
     opts = {
       signs = true,
-      sign_priority = 1,                  -- don't place icons on top of git signs
+      sign_priority = 1, -- don't place icons on top of git signs
       highlight = {
-        pattern = [[.*<(KEYWORDS)>\s*:]], -- default: [[.*<(KEYWORDS)\s*:]]
+        pattern = [[.*<(KEYWORDS)>\s*:]],
       },
     },
     keys = {
@@ -74,6 +74,23 @@ return {
         return false
       end
     end,
+  },
+
+  {
+    "harrybrwn/floatterm",
+    dev = true,
+    lazy = false,
+    opts = {
+      item = "test",
+      one = 1,
+    },
+    build = function()
+      local dir = vim.fn.stdpath('config') .. '/dev/floatterm'
+      require('floatterm.build').build(dir)
+    end,
+    -- config = function(_, _)
+    --   require("floatterm")
+    -- end,
   },
 
   {

@@ -1,0 +1,12 @@
+---
+# Mapping ansible_architecture to the naming used in zk releases
+arch_mapping:
+  x86_64: "amd64"
+  aarch64: "arm64"
+  armv7l: "arm"
+
+# Resolve the current arch; defaults to the raw architecture if not in map
+zk_arch: "{{ arch_mapping[ansible_architecture] | default(ansible_architecture) }}"
+
+# Construct the download URL dynamically
+zk_url: "https://github.com/zk-org/zk/releases/download/{{ zk_version }}/zk-{{ zk_version }}-linux-{{ zk_arch }}.tar.gz"

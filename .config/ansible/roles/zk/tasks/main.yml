@@ -1,0 +1,39 @@
+---
+- name: Check Variables
+  ansible.builtin.fail:
+    msg: "'zk_version', 'zk_install_dir', and 'zk_download_dir' are required variables"
+  when: >-
+    (zk_version is not defined and
+    zk_install_dir is not defined and
+    zk_download_dir is not defined)
+
+# - name: Ensure temporary download directory exists
+#   ansible.builtin.file:
+#     path: "{{ zk_download_dir }}"
+#     state: directory
+#     mode: '0755'
+
+- name: Download and extract zk binary
+  ansible.builtin.unarchive:
+    src: "{{ zk_url }}"
+    dest: "{{ zk_download_dir }}"
+    remote_src: true
+    # Creates an idempotency check: don't download if the binary is already there
+    creates: "{{ zk_download_dir }}/zk"
+
+- name: Install zk binary to system path
+  ansible.builtin.copy:
+    src: "{{ zk_download_dir }}/zk"
+    dest: "{{ zk_install_dir }}/zk"
+    mode: '0755'
+    remote_src: true
+  become: true
+
+- name: Verify zk installation
+  ansible.builtin.command: "{{ zk_install_dir }}/zk --version"
+  register: zk_verify
+  changed_when: false
+
+- name: Display zk version
+  ansible.builtin.debug:
+    msg: "Installed zk version: {{ zk_verify.stdout }}"

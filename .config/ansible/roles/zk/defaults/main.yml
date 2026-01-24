@@ -1,0 +1,9 @@
+---
+# The version of zk to install
+zk_version: "v0.15.2"
+
+# Where to place the final binary
+zk_install_dir: "/usr/local/bin"
+
+# Temporary directory for downloading/extracting
+zk_download_dir: "/tmp"

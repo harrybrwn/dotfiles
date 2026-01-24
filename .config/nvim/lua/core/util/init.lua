@@ -16,18 +16,25 @@ function M.split(str, sep)
 end
 
 ---List the files in a directory.
----@param dir string
+---@param path string
 ---@return table
-function M.listdir(dir)
-  local file = io.popen("/bin/ls -1A " .. dir, "r")
-  if file == nil then
+function M.listdir(path)
+  local dir = vim.uv.fs_opendir(path)
+  if not dir then
     return {}
   end
   local res = {}
-  for line in file:lines() do
-    table.insert(res, line)
+  local entries
+  while true do
+    entries = dir:readdir()
+    if entries == nil or #entries < 1 then
+      break
+    end
+    for _, e in ipairs(entries) do
+      table.insert(res, e.name)
+    end
   end
-  file:close()
+  dir:closedir()
   return res
 end
 
@@ -64,8 +71,10 @@ end
 ---@param path string
 ---@param opts? table
 function M.mkdir(path, opts)
+  path = vim.fs.normalize(path, { expand_env = true })
   opts = vim.tbl_deep_extend('keep', opts, {
     parents = false,
+    ---@type any
     mode = nil,
     verbose = false,
   })
@@ -73,24 +82,28 @@ function M.mkdir(path, opts)
     error("mkdir opts should not be nil")
     return
   end
-  local cmd = { "mkdir" }
-  if opts.parents then
-    table.insert(cmd, "--parents")
-  end
+  local mode = 420 -- base 10 of 0o644
   if opts.mode ~= nil then
-    table.insert(cmd, "--mode=" .. opts.mode)
+    if type(opts.mode) == 'string' then
+      mode = tonumber(opts.mode, 8) -- convert from octal
+    elseif type(opts.mode) == 'number' then
+      mode = opts.mode
+    end
   end
-  if opts.verbose then
-    table.insert(cmd, "--verbose")
+  if opts.parents then
+    for parent in vim.fs.parents(path) do
+      if vim.uv.fs_stat(parent) then
+        vim.uv.fs_mkdir(parent, mode)
+      else
+        break
+      end
+    end
   end
-  table.insert(cmd, path)
-  local cmdstr = table.concat(cmd, ' ')
-  local proc = io.popen(cmdstr)
-  if proc == nil then
-    error(string.format('failed to execute "%s"', cmdstr))
-    return
+  local ok = vim.uv.fs_mkdir(path, mode)
+  if ok then
+    error('failed to create ' .. path)
   end
-  proc:close()
+  return ok
 end
 
 return M

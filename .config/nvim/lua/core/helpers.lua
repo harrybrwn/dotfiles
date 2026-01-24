@@ -70,9 +70,11 @@ end
 
 --- Function equivalent to basename in POSIX systems
 --@param str the path string
+---@deprecated use vim.fs.basename
 function helpers.basename(str)
-  local name = string.gsub(str, "(.*/)(.*)", "%2")
-  return name
+  -- local name = string.gsub(str, "(.*/)(.*)", "%2")
+  -- return name
+  return vim.fs.basename(str)
 end
 
 return helpers

@@ -81,6 +81,17 @@ return {
       filetype = "gotmpl",
       used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" },
     }
+    vim.filetype.add({
+      extension = {
+        gotmpl = 'gotmpl',
+      },
+      pattern = {
+        [".*/templates/.*%.tpl"] = "helm",
+        [".*/templates/.*%.ya?ml"] = "helm",
+        ["helmfile.*%.ya?ml"] = "helm",
+      },
+    })
+
     vim.schedule(function()
       local ts = require("nvim-treesitter")
       local parsers = {
@@ -98,6 +109,7 @@ return {
       ts.install(parsers)
       ts.update(parsers)
     end)
+
     vim.api.nvim_create_autocmd('FileType', {
       pattern = langs,
       callback = function()

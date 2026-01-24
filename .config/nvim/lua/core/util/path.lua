@@ -18,20 +18,15 @@ end)()
 --- Remove the right-most path element of a filepath.
 --- Equivalent to dirname in POSIX systems
 ---@param str string the path string
+---@deprecated use vim.fs.dirname
 function M.dirname(str)
-  -- TODO use M.filepath_sep instead of a hardcodded '/'
-  local s = str:gsub("/$", "")
-  if s:match(".-/.-") then
-    local name = string.gsub(s, "^(.*)/(.*)$", "%1")
-    return name
-  else
-    return ""
-  end
+  return vim.fs.dirname(str)
 end
 
 --- Join any number of elements into a valid filepath.
 ---@param ... any
 ---@return string
+---@deprecated use vim.fs.joinpath instead
 function M.join(...)
   return table.concat({ ... }, M.filepath_sep)
 end

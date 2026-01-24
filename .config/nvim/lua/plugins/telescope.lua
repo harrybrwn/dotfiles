@@ -122,6 +122,9 @@ return {
     local function git_files() require("telescope.builtin").git_files() end
     local function resume() require("telescope.builtin").resume() end
     local function help() require("telescope.builtin").help_tags() end
+    local function man() require('telescope.builtin').man_pages() end
+    local function colors() require('telescope.builtin').colorscheme() end
+    local function diags() require('telescope.builtin').diagnostics() end
     local function search()
       require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
         winblend = 10,
@@ -137,13 +140,16 @@ return {
       { "<leader>sg",   live_grep,    mode = "n", desc = "[S]earch with [G]rep" },
       { "<leader>sik",  keymaps,      mode = "n", desc = "[S]earch [I]n [K]eymaps" },
       { "<leader>sib",  buffers,      mode = "n", desc = "[S]earch [I]n [B]uffers" },
+      { "<leader>sim",  man,          mode = "n", desc = "[S]earch [I]n [M]an pages" },
+      { "<leader>sic",  colors,       mode = "n", desc = "[S]earch [I]n [C]olorschemes" },
+      { "<leader>sid",  diags,        mode = "n", desc = "[S]earch [I]n [D]iagnostics" },
       { "<leader>sigf", git_files,    mode = "n", desc = "[S]earch [I]n [G]it [F]iles" },
       { "<leader>sr",   resume,       mode = "n", desc = "[S]earch [R]esume. Resume the previous search." },
       { "<leader>sh",   help,         mode = "n", desc = "[S]earch in [H]elp tags." },
+      { "<leader>sih",  history,      mode = "n", desc = "[S]earch [I]n [H]istory" },
+      { "<leader>?",    search,       mode = "n", desc = "[?] Search in the current buffer" },
       { "<leader>sz",   zettelkasten, mode = "n", desc = "[S]earch in [Z]ettelkasten notes." },
       { "<leader>siz",  zettelkasten, mode = "n", desc = "[S]earch [I]n [Z]ettelkasten notes." },
-      { "<leader>sih",  history,      mode = "n", desc = "[S]earch [I]n [H]istory" },
-      { "<leader>?",    search,       mode = "n", desc = "[?] Fuzzy search in the current buffer" }
     }
   end,
 }

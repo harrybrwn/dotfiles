@@ -13,8 +13,12 @@ local function tbl_eq(a, b)
   return true
 end
 
-assert(path.join("a", "b", "c") == "a/b/c")
-assert(path.join("/a/b", "c/") == "/a/b/c/")
+assert(vim.fs.joinpath("a", "b", "c") == "a/b/c")
+assert(vim.fs.joinpath("/a/b", "c/") == "/a/b/c/")
+assert(vim.fs.dirname("/path/to/a/file") == "/path/to/a")
+assert(vim.fs.dirname("/path/to/a/file") == "/path/to/a")
+assert(vim.fs.dirname("") == ".")
+
 assert(tbl_eq(path.split("/a/b/c/d"), { "a", "b", "c", "d" }))
 assert(tbl_eq(path.split("/a/b/c/d/"), { "a", "b", "c", "d" }))
 
@@ -22,10 +26,6 @@ assert(util.endswith("123", "123"))
 assert(util.endswith("123", "23"))
 assert(util.endswith("123", "3"))
 assert(tbl_eq(util.split("a b c", " "), { "a", "b", "c" }))
-
-assert(path.dirname("/path/to/a/file") == "/path/to/a")
-assert(path.dirname("/path/to/a/file/") == "/path/to/a")
-assert(path.dirname("") == "")
 
 local a = { 'one', 'two', 'three' }
 util.extend(a, { 'four', 'five' })

@@ -56,7 +56,7 @@ function M.open_term(size)
   local buf_name = vim.api.nvim_buf_get_name(0)
   local dir
   if buf_name:len() > 0 then
-    dir = path.dirname(buf_name)
+    dir = vim.fs.dirname(buf_name)
   else
     dir = vim.fn.getcwd()
   end

@@ -8,6 +8,17 @@
     - adr-tools
     - tree-sitter-cli
     - postman
+    - role: zk
+      become: true
+      vars:
+        zk_version: "v0.15.2"
+        zk_install_dir: "/usr/local/bin"
+    - role: nerdfont
+      font: Lilex
+      version: 3.4.0
+    - role: nerdfont
+      font: JetBrainsMono
+      version: 3.4.0
 
   tasks:
     - name: Packages

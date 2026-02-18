@@ -77,4 +77,59 @@ function helpers.basename(str)
   return vim.fs.basename(str)
 end
 
+---@param fn? fun(mode: string|string[], lhs: string, rhs: string|function, opts?: vim.keymap.set.Opts): boolean
+function helpers.debug_keymap_set(fn)
+  local km_set = vim.keymap.set
+  -- function keymap.set(mode: string|string[], lhs: string, rhs: string|function, opts?: vim.keymap.set.Opts)
+  ---@param mode string|string[]
+  ---@param lhs string
+  ---@param rhs string|function
+  ---@param opts? vim.keymap.set.Opts
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.keymap.set = function(mode, lhs, rhs, opts)
+    if fn == nil or fn(mode, lhs, rhs, opts) then
+      vim.notify(
+        string.format(
+          "vim.keymap.set(%s, %s, %s, %s)",
+          vim.inspect(mode),
+          vim.inspect(lhs),
+          vim.inspect(rhs),
+          vim.inspect(opts)
+        ),
+        vim.log.levels.INFO
+      )
+    end
+    km_set(mode, lhs, rhs, opts)
+  end
+end
+
+---@param fn? fun(modes: string|string[], lhs: string, opts?: vim.keymap.del.Opts): boolean
+function helpers.debug_keymap_del(fn)
+  local km_del = vim.keymap.del
+  -- function keymap.del(modes: string|string[], lhs: string, opts?: vim.keymap.del.Opts)
+  ---@param modes string|string[]
+  ---@param lhs string
+  ---@param opts? vim.keymap.del.Opts
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.keymap.del = function(modes, lhs, opts)
+    if fn == nil or fn(modes, lhs, opts) then
+      vim.notify(
+        string.format(
+          "vim.keymap.del(%s, %s, %s)",
+          vim.inspect(modes),
+          vim.inspect(lhs),
+          vim.inspect(opts)
+        ),
+        vim.log.levels.INFO
+      )
+    end
+    km_del(modes, lhs, opts)
+  end
+end
+
+function helpers.set_keymap_debug_handlers()
+  helpers.debug_keymap_set()
+  helpers.debug_keymap_del()
+end
+
 return helpers

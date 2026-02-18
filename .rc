@@ -260,7 +260,9 @@ EOF
 
     '')
       if tmux has-session -t 'home' 2>/dev/null; then
-        if [ -n "$TMUX" ]; then
+        local me
+        me="$(who am i | awk '{print $2}')"
+        if [[ -n "$TMUX" && -n "${me:-}" ]]; then
           echo 'Error: already inside the default session' >&2
           return 1
         else

@@ -36,18 +36,56 @@ net() {
 }
 
 show-colors() {
+	local verbose=false
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			-v|-verbose)
+				verbose=true
+				shift
+				;;
+		esac
+	done
   if [ -n "$*" ]; then
     for n in "$@"; do
       printf "\x1b[38;5;${n}mcolor%d\n" "$n"
     done
     return;
   fi
+	echo -e "\e[1;3mTmux Colors\e[0m"
+	printf "\t"
   for i in {0..255}; do
     printf "\x1b[38;5;${i}mcolor%3d " "$i"
+		# local code="x1b[38;5;${i}m"
+		# printf "\\${code}\\\\%s " "${code}"
     if (( i%10==0&&i>0 )); then
-      printf "\n"
+      printf "\n\t"
     fi
   done
+	printf "\n\n"
+	echo -e "\e[1;3mANSI Terminal Escape Codes\e[0m"
+	for i in {30..37}; do
+		# printf "%d\n" "$i"
+		printf "    "
+		printf "basic: \x1b[0;${i}m\\\\e[0;%dm\x1b[0m " "${i}"
+		printf "bold: \x1b[1;${i}m\\\\e[1;%dm\x1b[0m " "${i}"
+		printf "dim: \x1b[2;${i}m\\\\e[2;%dm\x1b[0m " "${i}"
+		printf "invert: \x1b[3;${i}m\\\\e[3;%dm\x1b[0m " "${i}"
+		printf "underline: \x1b[4;${i}m\\\\e[4;%dm\x1b[0m " "${i}"
+		printf "\n"
+	done
+	if $verbose; then
+		printf "\n"
+		echo -e "\e[1;3mBash 256 Colors\e[0m"
+		printf "\t"
+		for i in {0..255}; do
+			local code="x1b[38;5;${i}m"
+			printf "\\${code}\\\\%s " "${code}"
+			if (( i%10==0&&i>0 )); then
+				printf "\n\t"
+			fi
+		done
+		printf "\n"
+	fi
   echo ''
 }
 
@@ -143,30 +181,37 @@ download-site() {
   wget "${flags[@]}" "$host"
 }
 
-profile() {
+function profile() {
 	local flags=()
 	local name=""
 	local verbose=false
 	declare -r NOCOL="\e[0m"
 	declare -r YELLOW="\e[33m"
 	declare -r RED="\e[31m"
-	declare -r BLUE="\e[36m"
+	declare -r BLUE="\e[34m"
+	declare -r CYAN="\e[36m"
+	declare -r GREEN="\e[32m"
+	declare -r BOLD="$(tput bold)"
 
 	log() {
 		local lvl="$1"
 		shift
 		case "$lvl" in 
-			d|dbg|dbug|debug) if $verbose; then echo -e "${YELLOW}[DBUG]${NOCOL} $*"; fi ;;
-			i|inf|info)       echo -e "${BLUE}[INFO]${NOCOL} $*" ;;
-			e|err|erro|error) echo -e "${RED}[ERRR]${NOCOL} $*"  ;;
+			d|dbg|dbug|debug) if $verbose; then echo -e "[ ${BOLD}${YELLOW}DBUG${NOCOL} ] $*"; fi ;;
+			i|inf|info)       echo -e "[ ${BOLD}${CYAN}INFO${NOCOL} ] $*" ;;
+			e|err|erro|error) echo -e "[ ${BOLD}${RED}ERRR${NOCOL} ] $*"  ;;
 		esac
+	}
+
+	error() {
+		echo -e "${BOLD}${RED}Error${NOCOL}: $*" 1>&2
 	}
 
 	declare -r BROWSER_CHROMIUM='chromium_chromium.desktop'
 	declare -r BROWSER_BRAVE='brave-browser.desktop'
 	set-browser() {
-		log debug "Setting browser to \"$1\""
 		xdg-settings set default-web-browser "$1"
+		log debug "Default browser set to \"$1\""
 	}
 	set-git-email() {
 		git config --global user.email "$1"
@@ -209,24 +254,24 @@ EOF
 		esac
 	done
 
-	log debug "Loading profile \"${name}\""
-
 	# positional arguments
 	case "$name" in
 		work)
+			log debug "Checking \$WORK_GIT_EMAIL"
 			if [ -z "$WORK_GIT_EMAIL" ]; then
-				echo -e "\e[031mError\e[0m: \$WORK_GIT_EMAIL is not set" 1>&2
+				error "\$WORK_GIT_EMAIL is not set"
 				return 1
 			fi
 			if [[ -z "$(go env GOPRIVATE)" && -n "${WORK_GO_PRIVATE}" ]]; then
-				log dbug "Setting GOPRIVATE to \"${WORK_GO_PRIVATE}\""
 				go env -w GOPRIVATE="${WORK_GO_PRIVATE}"
+				log dbug "GOPRIVATE set to \"${WORK_GO_PRIVATE}\""
 			fi
 			set-browser "${BROWSER_CHROMIUM}"
 			set-git-email "${WORK_GIT_EMAIL}"
 			;;
 		home)
 			go env -w GOPRIVATE=''
+			log debug 'GOPRIVATE set to ""'
 			set-browser "${BROWSER_BRAVE}"
 			set-git-email 'me@h3y.sh'
 			;;
@@ -240,33 +285,34 @@ EOF
 					name='home'
 					;;
 				*)
-					echo -e "\e[031mError\e[0m: Unknown profile" 1>&2
+					error "Could not deturmine profile"
 					;;
 			esac
 			declare -r github_user="$(ssh -T git@github.com | sed 's/^Hi \([^!]*\)!.*$/\1/')"
 			if [[ "$github_user" == 'harrybrwn' && "$name" == 'work' ]]; then
-				echo -e "\e[031mError\e[0m: Invalid profile state. Check ssh keys and default browser \"$name\"" 1>&2
+				error "Invalid profile state. Check ssh keys and default browser \"$name\""
 				return 1
 			fi
-			echo -e "\e[036mCurrent Profile\e[0m: \"$name\""
+			echo -e "${CYAN}Current Profile${NOCOL}: \"$name\""
 			return 0
 			;;
 		*)
-			echo -e "\e[031mError\e[0m: Unknown profile name \"$name\"" 1>&2
+			error "Unknown profile name \"${name}\""
 			return 1
 			;;
 	esac
-	echo -e "\e[036mDefault Browser\e[0m: $(xdg-settings get default-web-browser)"
 	if [ ! -f "$HOME/.ssh/profiles/$name" ]; then
-		echo -e "\e[031mError\e[0m: Could not find ssh profile \"$HOME/.ssh/profiles/$name\"" 1>&2
+		error "Could not find ssh profile \"$HOME/.ssh/profiles/$name\""
 		return 1
 	fi
 	pushd ~/.ssh >/dev/null || return
 	ln -f -s "profiles/$name" profile
 	popd >/dev/null || true
 	ssh -T git@github.com
-	echo -e "\e[036mgit email\e[0m:   \e[034m$(git config --global --get user.email)\e[0m"
-	echo -e "\e[036mprofile set\e[0m: \e[034m$name\e[0m"
+	echo
+	echo -e "${BOLD}${CYAN}Default Browser${NOCOL}: ${BLUE}$(xdg-settings get default-web-browser)${NOCOL}"
+	echo -e "${BOLD}${CYAN}git email${NOCOL}:       ${BLUE}$(git config --global --get user.email)${NOCOL}"
+	echo -e "${BOLD}${CYAN}profile set${NOCOL}:     ${BLUE}$name${NOCOL}"
 }
 
 # vim: ts=2 sts=2 sw=2 noexpandtab

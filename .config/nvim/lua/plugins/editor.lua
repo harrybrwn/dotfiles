@@ -31,6 +31,7 @@ return {
     opts = {
       formatters_by_ft = {
         go = { "goimports" },
+        python = { 'black', 'isort' },
       },
       format_on_save = nil,
       format_after_save = { -- see :help conform.format

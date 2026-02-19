@@ -7,6 +7,7 @@ return {
       diagnostics = {
         disabled = {
           "unlinked-file",
+          "inactive-code",
         },
       },
       -- auto import settings.

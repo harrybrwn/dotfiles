@@ -157,10 +157,17 @@ DST="/mnt/big-boi-0/backups/${HNAME}-${OS}-${MACHINE_ID}/"
 #  log error "failed to create backup dir ${DST}"
 #fi
 
-log info "starting rsync ${flags[*]} --verbose ${HOME} backup-server:${DST}"
-rsync \
+run_rsync() {
+	log info "starting rsync $*"
+	rsync "$@"
+}
+
+# log info "starting rsync ${flags[*]} --verbose ${HOME} backup-server:${DST}"
+run_rsync \
 	--rsync-path "mkdir -p ${DST} && rsync" \
-  "${flags[@]}" --verbose \
+  "${flags[@]}" \
+	--verbose \
+	--one-file-system \
   --exclude-from <(sed -E "s/^\//${LOGNAME}\//g" "${BASECAMP}/backup.exclude") \
   "$HOME" \
   "backup-server:${DST}" 2>&1 | tee -a "${LOGFILE}"

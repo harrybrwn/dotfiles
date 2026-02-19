@@ -1,6 +1,7 @@
 # TODO:
 #   - add Heroic Games Launcher
 #     (https://heroicgameslauncher.com/downloads) https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v2.18.1/Heroic-2.18.1-linux-amd64.deb
+#   - For better darkmode (especially in nautilus), run gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 - name: Setup "cascadia" Laptop
   hosts: localhost
@@ -37,6 +38,7 @@
           - systemd-timesyncd
           - powertop # power usage tuning
           - apt-file # find the package file belongs to
+          - nfs-common # nfs client
 
           # Desktop
           - xorg
@@ -58,7 +60,7 @@
           - fonts-noto # fix emojis
           - firefox-esr
           - evince
-          - xclip
+          - xclip # clipboard
           - ffmpeg
           - cava # dumb audio visualization
           - eog # nicer image viewer
@@ -67,9 +69,12 @@
           - vlc-plugin-pipewire
           - vlc-plugin-samba
           - thunar-volman
+          - thunar-media-tags-plugin
           - system-config-printer # printer GUI
           - mpv # video player
           - mpv-mpris # mpv plugin for "Media Player Remote Interfacing Specification"
+          - ffmpegthumbnailer # thumbnails for mp4 files
+          - nautilus
 
           # Dev
           - python3
@@ -84,6 +89,8 @@
           - luarocks
           - libclang-dev # libclang.so (needed by tree-sitter)
           - postgresql-client
+          - xxd
+          - gcc-doc # we want 'man gcc'
 
           # QEMU
           - qemu-system
@@ -149,6 +156,16 @@
         name:
           - stig[setproctitle,proxy]
           - yt-dlp[default,curl-cffi]
+          # - PyQt5 # for building python GUIs
+          # - opencv-python-headless
+          # - opencv-python
         state: present
+        virtualenv: "~/.local/share/venv"
+    - name: Remove Python Packages
+      ansible.builtin.pip:
+        name:
+          # - opencv-python-headless
+          - opencv-python
+        state: absent
         virtualenv: "~/.local/share/venv"
 # vim: ft=yaml.ansible

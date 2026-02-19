@@ -79,6 +79,7 @@ return {
 
   {
     "harrybrwn/floatterm",
+    enabled = false,
     dev = true,
     lazy = false,
     opts = {

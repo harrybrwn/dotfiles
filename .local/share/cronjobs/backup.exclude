@@ -53,6 +53,7 @@
 /dev/workbench/docker-build/
 
 /dev/rust/**/target/
+/dev/rust/vendor/
 /dev/finance/clerk/ui/**/.next/
 
 /dev/web/hrry.me/.build/

@@ -6,8 +6,8 @@ wallust() {
 	"$HOME/.config/cargo/bin/wallust" "$@"
 }
 
-THEMES=($(wallust theme list | awk '/^-/ { print $2 }'))
-THEMES+=($(ls -1 ~/.config/wallust/themes | sed 's/.json$//g;'))
+THEMES=("$(wallust theme list | awk '/^-/ { print $2 }')")
+THEMES+=("$(ls -1 "$HOME/.config/wallust/themes" | sed 's/.json$//g;')")
 #echo "${THEMES[@]}"
 # printf '%s\n' "${THEMES[@]}"
 # exit 0

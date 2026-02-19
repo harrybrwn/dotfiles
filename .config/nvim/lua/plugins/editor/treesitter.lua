@@ -114,6 +114,12 @@ return {
       pattern = langs,
       callback = function()
         vim.treesitter.start()
+        -- skip indenting for python
+        -- TODO: This should be done by setting the correct pattern, not adding
+        -- overhead for every other filetype.
+        -- if vim.bo.filetype == 'python' then
+        --   return
+        -- end
         vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       end,
     })

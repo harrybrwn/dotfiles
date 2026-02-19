@@ -57,25 +57,33 @@ esac
 #	wallust pywal -i "$DIR/$WAL"
 #fi
 
-rm -f "$HOME/.cache/wallust/theme"
-wallust run "$WAL"
-if [ $? -ne 0 ]; then
-	notify-send -u normal -a 'i3/wallpaper' \
-		"Failed to run wallust" \
-		"Failed to set wallpaper with 'wallust run $WAL'"
-	exit 1
-fi
+case "$(basename "$WAL")" in
+	'splitface.png')
+		THEME_NAME='Catppuccin-Frappé'
+		wallust theme "$THEME_NAME"
+		echo "${THEME_NAME}" >	"$HOME/.cache/wallust/theme"
+		echo "${THEME_NAME}" >>	"$HOME/.cache/wallust/themes.log"
+		;;
+	*)
+		rm -f "$HOME/.cache/wallust/theme"
+		if ! wallust run "$WAL"; then
+			notify-send -u normal -a 'i3/wallpaper' \
+				"Failed to run wallust" \
+				"Failed to set wallpaper with 'wallust run $WAL'"
+			exit 1
+		fi
+		;;
+esac
 
 polybar-msg cmd restart
 i3-msg reload
-feh "${flags[@]}" "$WAL"
-if [ $? -ne 0 ]; then
+if ! feh "${flags[@]}" "$WAL"; then
 	notify-send \
 		-u normal \
 		-a 'i3/wallpaper' \
 		-t 10000 \
 		"Failed to set wallpaper" \
-		"Failed to set wallpaper with 'feh ${flags[@]} $WAL'"
+		"Failed to set wallpaper with 'feh ${flags[*]} $WAL'"
 fi
 
 notify-send \

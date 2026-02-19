@@ -50,7 +50,27 @@ function M.setup_cmp()
       end,
     },
     -- https://github.com/hrsh7th/nvim-cmp/issues/980
-    -- formatting = {}
+    formatting = {
+      -- format = function(entry, vim_item)
+      --   -- if not printed and vim_item.kind ~= "Snippet" then
+      --   --   vim.print(vim_item)
+      --   --   vim.print(entry)
+      --   --   printed = true
+      --   -- end
+      --   local ELLIPSIS_CHAR = '…'
+      --   local MAX_LABEL_WIDTH = 20
+      --   local MIN_LABEL_WIDTH = 20
+      --   local label = vim_item.abbr
+      --   local truncated_label = vim.fn.strcharpart(label, 0, MAX_LABEL_WIDTH)
+      --   if truncated_label ~= label then
+      --     vim_item.abbr = truncated_label .. ELLIPSIS_CHAR
+      --   elseif string.len(label) < MIN_LABEL_WIDTH then
+      --     local padding = string.rep(' ', MIN_LABEL_WIDTH - string.len(label))
+      --     vim_item.abbr = label .. padding
+      --   end
+      --   return vim_item
+      -- end,
+    },
   })
 
   -- `/` cmdline setup.

@@ -6,8 +6,8 @@ import = [
 ]
 
 [font]
-size = 8
+size = 7.9
 
 [window]
-padding = { x = 5, y = 3 }
-opacity = 0.75
+# padding = { x = 5, y = 3 }
+opacity = 0.77

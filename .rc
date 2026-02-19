@@ -239,9 +239,9 @@ EOF
       shift 1
       selected="$(
         find \
-          ~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools ~/work \
+          ~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools ~/work ~/mounts \
           -mindepth 1 \
-          -maxdepth 4 \
+          -maxdepth 5 \
           -type d \
         | fzf \
           --tmux '75%' \

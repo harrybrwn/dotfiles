@@ -47,7 +47,7 @@ bindsym $mod+q kill
 
 # Applications
 #bindsym $mod+d       exec --no-startup-id ~/.config/rofi/scripts/app-launcher.sh
-bindsym $mod+d       exec --no-startup-id rofi -show drun -show-icons
+bindsym $mod+d       exec --no-startup-id ~/.config/i3/scripts/rofi
 bindsym $mod+e       exec --no-startup-id thunar
 bindsym $mod+b       exec --no-startup-id x-www-browser
 bindsym $mod+Return  exec --no-startup-id $term
@@ -90,6 +90,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
+# mnemonics: s => stacked, w => wide, t => tiling
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+t layout toggle split

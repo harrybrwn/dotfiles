@@ -144,167 +144,6 @@ if [[ -x "$XDG_DATA_HOME/venv/bin/pip" && -x "$XDG_DATA_HOME/venv/bin/python" ]]
   [[ ":${PATH}:" != *":$XDG_DATA_HOME/venv/bin:"* ]] && PATH="$XDG_DATA_HOME/venv/bin:$PATH"
 fi
 
-setup() {
-  t-new() {
-    declare -a tflags=('-A') # attach only if session already exists
-    declare -a args=()
-    if [ -n "$TMUX" ]; then
-      tflags+=('-d') # detach after creating session
-    fi
-    local s=""
-    while [ $# -gt 0 ]; do
-      case "$1" in
-        -s) s="$2";       shift 2 ;;
-        *)  args+=("$1"); shift   ;;
-      esac
-    done
-    tmux new-session "${tflags[@]}" -s "$s" "${args[@]}"
-    [ -n "$TMUX" ] && tmux switch-client -t "$s"
-  }
-
-  case "$1" in
-    help|--help|-h)
-      cat <<-EOF
-setup [alias|command]
-
-Aliases
-  at             atproto project
-  dev            dev folder
-  homelab|lab    homelab
-  clerk          financial data project
-  website|site   personal website
-  interviewing   interview studying
-  remora         web crawler project
-
-Commands
-  help    print this help message
-  find    search dirs and setup session with selected
-
-EOF
-      ;;
-
-    at)
-      if [ ! -d ~/dev/bsky/at ]; then
-        mkdir -p ~/dev/bsky/at
-        pushd ~/dev/bsky/
-        git clone git@github.com:harrybrwn/at.git
-        popd
-      fi
-      t-new -s at -n at -c ~/dev/bsky/at \;\
-        new-window    -t 'at:2' -n at -c ~/dev/bsky/at \;\
-        new-window    -t 'at:3' -n at -c ~/dev/bsky/at \;\
-        new-window    -t 'at:4' -n atproto -c ~/dev/bsky/atproto \;\
-        new-window    -t 'at:5' -n indigo -c ~/dev/bsky/indigo \;\
-        select-window -t 'at:1'
-      ;;
-    dev)
-      t-new -s dev -n dev -c ~/dev
-      ;;
-    homelab|lab)
-      t-new -s homelab -n homelab -c ~/dev/web/hrry.me \;\
-        new-window    -t 'homelab:2' -n homelab -c ~/dev/web/hrry.me \;\
-        new-window    -t 'homelab:3' -n homelab -c ~/dev/web/hrry.me \;\
-        select-window -t 'homelab:1'
-      ;;
-    clerk)
-      t-new -s clerk -n clerk -c ~/dev/finance/clerk \;\
-        new-window -t 'clerk:2' -n 'clerk' -c ~/dev/finance/clerk \;\
-        new-window -t 'clerk:3' -n 'clerk' -c ~/dev/finance/clerk \;\
-        select-window -t 'clerk:1'
-      ;;
-    site|website)
-      t-new -s website -n hrry.me -c ~/dev/web/harrybrwn.github.io \;\
-        select-window -t 'website:1'
-      ;;
-    interviewing|interview|interviews)
-      t-new -s interviewing -n interviewing -c ~/dev/jobs/interviewing \;\
-        select-window -t 'interviewing:1'
-      ;;
-    remora)
-      t-new -s "$1" -n "$1" -c "$HOME/dev/golang/cmd/$1" \;\
-        select-window -t "$1:1"
-      ;;
-
-    dir|tmp)
-      shift 1
-      local dir="$1"
-      if [ -z "$dir" ]; then
-        echo "Error: no directory in first argument" 1>&2
-        exit 1
-      fi
-      t-new -s tmp -n tmp -c "$dir"
-      ;;
-
-    find|f)
-      shift 1
-      selected="$(
-        find \
-          ~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools ~/work ~/mounts \
-          -mindepth 1 \
-          -maxdepth 5 \
-          -type d \
-        | fzf \
-          --tmux '75%' \
-          --preview 'eza -la {} --git --group-directories-first'
-      )"
-      if [ -z "$selected" ]; then
-        return 1
-      fi
-      name="$(basename $selected)"
-      if [ -z "$name" ]; then
-        echo "Invalid input"
-        return 1
-      fi
-      t-new -s "$(echo $name | tr -d .)" -n "$name" -c "$selected"
-      ;;
-
-    '')
-      if tmux has-session -t 'home' 2>/dev/null; then
-        local me
-        me="$(who am i | awk '{print $2}')"
-        if [[ -n "$TMUX" && -n "${me:-}" ]]; then
-          echo 'Error: already inside the default session' >&2
-          return 1
-        else
-          exec tmux attach -t home
-          return 0
-        fi
-      fi
-      tmux \
-        new-session -d -n misc   -s misc -c ~    \;\
-        new-session -d -n 'dev'  -s dev -c ~/dev \;\
-        new-session    -n 'home' -s home -c ~    \;\
-          new-window -t 'home:2' -n 'home' -c ~  \;\
-          new-window -t 'home:3' -n 'home' -c ~  \;\
-          select-window -t 'home:1'              \;\
-        select-window -t 'home:1'
-      ;;
-
-    *)
-      echo "Error: unknown command or alias \"$1\"" >&2
-      return 1
-      ;;
-  esac
-}
-
-# Because i'm scared
-_rm() {
-  for f in "${@@Q}"; do
-    if
-      [ "$f" = $HOME ] ||
-      [ "$f" = '~' ] ||
-      [ "$f" = "/" ] ||
-      [ "$f" = "/home" ]  ||
-      [ "$f" = "/home/" ] ||
-      [ "$f" = "$HOME/dev" ]
-    then
-      echo 'do not remove the home directory!!'
-      return 1
-    fi
-  done
-  /bin/rm $*
-}
-
 search() {
   lynx "https://lite.duckduckgo.com/lite?q=$*"
 }
@@ -314,13 +153,13 @@ open() {
   case $1 in
   *.md)
     # I have a browser extention that renders markdown
-    x-www-browser $*
+    x-www-browser "$*"
     ;;
   *.deb)
-    file-roller $*
+    file-roller "$*"
     ;;
   *)
-    xdg-open $*
+    xdg-open "$*"
     ;;
   esac
 }
@@ -344,12 +183,12 @@ google() {
 }
 
 lines() {
-  find . -name "$1" | xargs wc -l | sort -k 1n
+  find . -name "$1" -print0 | xargs wc -l | sort -k 1n
   # (find . -name "$1" -print '%p ' | xargs -0 cat) | wc -l
 }
 
 whi() {
-  readlink -f $(which $1)
+  readlink -f "$(which "$1")"
 }
 
 goxxd() {
@@ -398,7 +237,8 @@ export NOTES="$HOME/.config/notes"
 note() {
   [ -z "$NOTES" ] && echo 'Error: no $NOTES directory' && return 1
   local d="$NOTES"
-  local file="note-$(date +%m_%d_%y).md"
+  local file
+  file="note-$(date +%m_%d_%y).md"
   while [ $# -gt 0 ]; do
     case $1 in
     -h|--help)
@@ -431,7 +271,7 @@ note <cmd> [opts...]
       return 0
       ;;
     l|list)
-      tree $NOTES
+      tree "$NOTES"
       return 0
       ;;
     *)

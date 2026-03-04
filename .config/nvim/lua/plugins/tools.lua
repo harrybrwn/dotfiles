@@ -1,5 +1,8 @@
 local basic_notes = false
 
+-- For "kristijanhusak/vim-dadbod-ui"
+vim.g.db_ui_use_nerd_fonts = 1
+
 return {
   {
     "wsdjeg/calendar.nvim",
@@ -113,6 +116,7 @@ return {
 
   { -- SQL query runner and connection manager.
     "kndndrj/nvim-dbee",
+    enabled = true,
     dependencies = {
       "MunifTanjim/nui.nvim",
     },
@@ -132,6 +136,24 @@ return {
       --    "curl", "wget", "bitsadmin", "go"
       require("dbee").install()
     end,
+  },
+
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod',                     lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    -- init = function()
+    --   -- Your DBUI configuration
+    --   vim.g.db_ui_use_nerd_fonts = 1
+    -- end,
   },
 
   {

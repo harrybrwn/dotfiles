@@ -71,7 +71,7 @@ return {
         ignore_list = { "node_modules", ".git" },
       },
       filesystem_watchers = {
-        ignore_dirs = { "node_modules", ".git" },
+        ignore_dirs = { "node_modules", ".git", "build" },
       },
       on_attach = custom.on_attach,
     },

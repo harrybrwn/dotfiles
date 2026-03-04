@@ -12,15 +12,15 @@
 \set HISTSIZE 8000
 \set HISTCONTROL ignoredups
 
-\echo 'Admin Queries:'
-\echo '\t:settings\t' 'server settings'
-\echo '\t:locks\t\t'  'server locks info'
-\echo '\t:waits\t\t'  'waiting queries'
-\echo '\t:activity\t' 'current connection activity'
-\echo '\t:queries\t'  'current running queries'
-\echo '\t:tables\t\t' 'show all tables'
-\echo '\t:reload\t\t' 'reload the psql settings file'
-\echo ''
+--\echo 'Admin Queries:'
+--\echo '\t:settings\t' 'server settings'
+--\echo '\t:locks\t\t'  'server locks info'
+--\echo '\t:waits\t\t'  'waiting queries'
+--\echo '\t:activity\t' 'current connection activity'
+--\echo '\t:queries\t'  'current running queries'
+--\echo '\t:tables\t\t' 'show all tables'
+--\echo '\t:reload\t\t' 'reload the psql settings file'
+--\echo ''
 
 \set reload '\\i ~/.config/psql/psqlrc'
 \set settings 'select name, setting,unit,context from pg_settings;'

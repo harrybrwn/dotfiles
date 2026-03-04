@@ -1,7 +1,7 @@
 if [ -n "$BASH_VERSION" ]; then
-	BASEDIR="$(dirname "$BASH_SOURCE")"
+	BASEDIR="$(dirname "${BASH_SOURCE[0]}")"
 else
-	BASEDIR=$(dirname $0)
+	BASEDIR=$(dirname "$0")
 fi
 
 LIBFILES=(
@@ -12,10 +12,12 @@ LIBFILES=(
 	"util.sh"
 	"completions.sh"
 	"binpaths.sh"
+	"tmux.sh"
 )
 for f in "${LIBFILES[@]}"; do
 	if [ -f "$BASEDIR/$f" ]; then
-		source "$BASEDIR/$f"
+		# shellcheck disable=SC1090
+		source "${BASEDIR}/${f}"
 	fi
 done
 unset BASEDIR LIBFILES

@@ -66,3 +66,21 @@ vim.keymap.set("n", "<A-.>", "gt", { desc = "Prev tab", noremap = true, silent =
 vim.keymap.set("n", "<A-,>", "gT", { desc = "Prev tab", noremap = true, silent = true })
 vim.keymap.set("n", "<A->>", "<cmd>tabmove +1<cr>", { desc = "Move tab up", noremap = true, silent = true })
 vim.keymap.set("n", "<A-<>", "<cmd>tabmove -1<cr>", { desc = "Move tab back", noremap = true, silent = true })
+
+-- Terminal (Claude Code Terminal)
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  pattern = "term://*claude*",
+  callback = function(args)
+    vim.keymap.set("t", "<C-j>", "<C-\\><C-n>", {
+      noremap = true,
+      buffer = args.buf,
+      desc = "Exit terminal mode",
+    })
+  end,
+})
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+  pattern = "term://*claude*",
+  callback = function()
+    vim.cmd("stopinsert")
+  end,
+})

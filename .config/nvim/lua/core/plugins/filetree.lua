@@ -4,7 +4,7 @@ function M.on_attach(bufnr)
   -- api.config.mappings.default_on_attach(bufnr)
 
   local api = require("nvim-tree.api")
-  local actions = require("nvim-tree.actions")
+  -- local actions = require("nvim-tree.actions")
 
   local function opts(desc)
     return {
@@ -75,7 +75,7 @@ function M.on_attach(bufnr)
   --vim.keymap.set("n", "<leader>p", api.node.navigate.parent_close, opts("Close current parent folder"))
   vim.keymap.set("n", "<leader>c", api.node.navigate.parent_close, opts("Close current parent folder"))
   vim.keymap.set("n", "<leader>a", function()
-    actions.tree.find_file.fn()
+    require('nvim-tree.actions.tree.find-file').fn()
   end, opts("Find current file"))
 
   vim.keymap.set("n", "<leader>H", function()

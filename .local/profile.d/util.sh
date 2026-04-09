@@ -152,7 +152,7 @@ download-site() {
   while [ $# -gt 0 ]; do
     case "$1" in
       -h|-help|--help|help)
-        echo "download-site [args...] <url>"
+        echo "download-site [-h|--help] [-d] [flags...] <url>"
         return 0
         ;;
       -d)

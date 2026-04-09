@@ -4,7 +4,8 @@ if [ ! -f /usr/local/share/complete_alias/complete_alias ] && [ ! -f /usr/share/
   read -p "Install 'complete-aliases' completion for aliases (y/n): " -n 1 -r
   case "$REPLY" in
     y|Y)
-      git clone git@github.com:cykerway/complete-alias.git /tmp/complete-aliases
+      echo ''
+      git clone https://github.com/cykerway/complete-alias.git /tmp/complete-aliases
 			echo '$ sudo mv /tmp/complete-aliases /usr/local/share/complete_alias'
       sudo mv /tmp/complete-aliases /usr/local/share/complete_alias
       ;;
@@ -42,4 +43,3 @@ _complete_ollama() {
     fi
 }
 complete -F _complete_ollama ollama
-

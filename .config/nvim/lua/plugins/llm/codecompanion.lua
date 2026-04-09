@@ -92,24 +92,6 @@ return {
     adapters = {
       -- TODO: npm install -g @zed-industries/claude-code-acp
       http = {
-        -- anthropic = function()
-        --   -- local file = io.open(vim.fn.expand("~/.claude/.credentials.json"))
-        --   -- if file == nil then
-        --   --   vim.notify("failed to open claude credentials file", vim.log.levels.ERROR)
-        --   --   return nil
-        --   -- end
-        --   -- local output = file:read("*a")
-        --   -- file:close()
-        --   -- local credentials = vim.json.decode(output)
-        --   -- vim.env.ANTHROPIC_API_KEY = credentials.claudeAiOauth.accessToken
-        --   return require("codecompanion.adapters").extend("anthropic", {
-        --     env = {
-        --       -- api_key = "MY_OTHER_ANTHROPIC_KEY",
-        --       -- api_key = credentials.claudeAiOauth.accessToken,
-        --       api_key = "ANTHROPIC_API_KEY",
-        --     },
-        --   })
-        -- end,
         deepseek_r1 = function()
           return require("codecompanion.adapters").extend("ollama", {
             name = "deepseek-r1",

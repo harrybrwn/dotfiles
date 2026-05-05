@@ -217,6 +217,24 @@ function profile() {
 		git config --global user.email "$1"
 		log dbug "Set git email to \"$1\""
 	}
+	link-github-token() {
+		local dst="$HOME/.config/environment.d/03-github-token.conf"
+		if [ -f "$1" ]; then
+			ln -s "$1" "${dst}"
+			log i "linking \"$1\" to \"${dst}\""
+		elif [[ "$1" == "-" && -L "${dst}" ]]; then
+			rm "${dst}"
+			log i "unlinking github token"
+		fi
+	}
+
+	get-github-user() {
+		declare -r github_user="$(ssh -T git@github.com | sed 's/^Hi \([^!]*\)!.*$/\1/')"
+		if [[ "$github_user" == 'harrybrwn' && "$name" == 'work' ]]; then
+			error "Invalid profile state. Check ssh keys and default browser \"$name\""
+			return 1
+		fi
+	}
 
 	# parse flags
 	while [ $# -gt 0 ]; do
@@ -268,12 +286,14 @@ EOF
 			fi
 			set-browser "${BROWSER_CHROMIUM}"
 			set-git-email "${WORK_GIT_EMAIL}"
+			link-github-token "${HOME}/work/ncsa/github-token.conf"
 			;;
 		home)
 			go env -w GOPRIVATE=''
 			log debug 'GOPRIVATE set to ""'
 			set-browser "${BROWSER_BRAVE}"
 			set-git-email 'me@h3y.sh'
+			link-github-token '-'
 			;;
 		'') # No argument
 			declare -r browser="$(xdg-settings get default-web-browser)"
@@ -288,10 +308,8 @@ EOF
 					error "Could not deturmine profile"
 					;;
 			esac
-			declare -r github_user="$(ssh -T git@github.com | sed 's/^Hi \([^!]*\)!.*$/\1/')"
-			if [[ "$github_user" == 'harrybrwn' && "$name" == 'work' ]]; then
-				error "Invalid profile state. Check ssh keys and default browser \"$name\""
-				return 1
+			if ${verbose}; then
+				get-github-user
 			fi
 			echo -e "${CYAN}Current Profile${NOCOL}: \"$name\""
 			return 0

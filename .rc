@@ -360,16 +360,17 @@ gitbranch() {
   fi
 }
 
+ai() {
+  mkdir -p /tmp/claude-sandbox
+  "${HOME}/.local/bin/claude-sandbox" --directory "/tmp/claude-sandbox"
+}
+
 alias gitb=gitbranch gitbr=gitbranch gbr=gitbranch
-
-# if [ -f ~/.claude/.credentials.json ]; then
-#   token="$(jq '.claudeAiOauth.accessToken' ~/.claude/.credentials.json)"
-#   if [ -n "${token}" ]; then
-#     export ANTHROPIC_API_KEY="${token}"
-#   fi
-#   unset token
-# fi
-
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
+
+# Add mason installed LSPs
+if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
+  export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"
+fi
 
 # vim: ft=bash syntax=bash ts=1 sts=2 sw=2

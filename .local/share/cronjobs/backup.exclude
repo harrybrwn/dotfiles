@@ -6,6 +6,8 @@
 /.steam/
 /.rustup/
 /.cargo/
+/.m2/
+/.debug/
 /.steampath
 /.steampid
 

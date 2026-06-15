@@ -82,3 +82,8 @@ vim.api.nvim_create_user_command("PubDate", function(_opts)
     { date_str }
   )
 end, {})
+
+---@diagnostic disable-next-line: unused-local
+require('editorconfig').properties.vim_filetype = function(bufnr, val, opts)
+  vim.bo[bufnr].filetype = val
+end

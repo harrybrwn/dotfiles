@@ -32,3 +32,10 @@ vim.opt.viewoptions = "folds,cursor"
 
 vim.opt.spell = true
 vim.opt.spelllang = "en"
+
+vim.opt.listchars = {
+  tab = '» ', -- Display tabs as » followed by spaces
+  trail = '·', -- Display trailing spaces as dots
+  nbsp = '␣', -- Display non-breaking spaces
+  space = '·', -- Display all spaces as dots (optional)
+}

@@ -36,8 +36,9 @@ return {
       { "<leader>gB",  "<cmd>Gitsigns blame<cr>",                       mode = { "n" }, desc = "[G]it [B]lame" },
       { "<leader>gb",  "<cmd>Gitsigns toggle_current_line_blame<cr>lh", mode = { "n" }, desc = "[G]it [B]lame" },
       { "<leader>gdw", "<cmd>Gitsigns toggle_word_diff<cr>",            mode = { "n" }, desc = "[G]it [D]iff [W]ord" },
-      { "<leader>gs",  "<cmd>Gitsigns stage_hunk<cr>",                  mode = { "v" }, desc = "[G]it [A]dd" },
-      { "<leader>gu",  "<cmd>Gitsigns undo_stage_hunk<cr>",             mode = { "v" }, desc = "[G]it [U]nstage" },
+      { "<leader>gs",  "<cmd>Gitsigns stage_hunk<cr>",                  mode = { "v" }, desc = "[G]it [S]tage visual selection" },
+      { "<leader>ga",  "<cmd>Gitsigns stage_hunk<cr>",                  mode = { "v" }, desc = "[G]it [A]dd visual selection" },
+      { "<leader>gu",  "<cmd>Gitsigns undo_stage_hunk<cr>",             mode = { "v" }, desc = "[G]it [U]nstage visual selection" },
     },
   },
 
@@ -81,5 +82,12 @@ return {
         desc = "Git [D]iff [H]istory",
       },
     },
+  },
+
+  {
+    "akinsho/git-conflict.nvim",
+    -- lazy = false,
+    event = "VeryLazy",
+    opts = {}
   },
 }

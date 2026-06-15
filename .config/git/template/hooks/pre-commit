@@ -4,7 +4,25 @@
 
 set -eu
 
-#echo 'Running pre-commit hook...'
+readonly NOCOL="\e[0m"
+readonly RED="\e[31m"
 
-# TODO: Check if we are in the "work" directory and fail if we are committing
-# with the wrong email.
+readonly personal_email='me@h3y.sh'
+git_email="$(git config --get user.email)"
+cwd="$(pwd)"
+
+case "${cwd}" in
+	"${HOME}/work/"*)
+		echo yes
+		if [ "${git_email}" = "${personal_email}" ]; then
+			echo "${RED}Error${NOCOL}: current git email is incorrect. Switch to work profile."
+			exit 1
+		fi
+		;;
+	*)
+		if [ "${git_email}" != "${personal_email}" ]; then
+			echo "${RED}Error${NOCOL}: current git email is incorrect. Switch to home profile."
+			exit 1
+		fi
+		;;
+esac

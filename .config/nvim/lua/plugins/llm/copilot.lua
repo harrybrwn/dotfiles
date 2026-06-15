@@ -29,15 +29,23 @@ local function make_opts(model)
   }
 end
 
+local function is_enabled()
+  -- return true if the current directory is in ~/work
+  local cwd = vim.fn.getcwd()
+  local home = vim.fn.expand("~")
+  return vim.startswith(cwd, path.join(home, "work"))
+end
+
 local plugin = {
   "zbirenbaum/copilot.lua",
-  enabled = true,
+  enabled = is_enabled,
   lazy = false,
   cmd = "Copilot",
   opts = function() return make_opts("") end,
 }
 
 if settings.local_ollama then
+  plugin.enabled = true
   plugin.init = function()
     -- ollama-copilot must be running
     -- see lua/core/plugins/lsp.lua

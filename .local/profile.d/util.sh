@@ -236,9 +236,35 @@ function profile() {
 		fi
 	}
 
+	show-current-profile() {
+			declare -r browser="$(xdg-settings get default-web-browser)"
+			case "$browser" in
+				chromium_chromium.desktop)
+					name='work'
+					;;
+				brave-browser.desktop|com.brave.Browser.desktop)
+					name='home'
+					;;
+				*)
+					error "Could not deturmine profile"
+					;;
+			esac
+			if ${verbose}; then
+				get-github-user
+			fi
+			echo -e "${CYAN}Current Profile${NOCOL}: \"$name\""
+			return 0
+	}
+
+	local CMD=''
+
 	# parse flags
 	while [ $# -gt 0 ]; do
 		case "$1" in
+			show)
+				CMD=show
+				shift
+				;;
 			-h|-help|--help|help)
 				cat<<EOF
 Usage
@@ -248,7 +274,8 @@ Options
   -h --help   print help message
 
 Commands
-	help    print help message
+  show    print the currently selected profile
+  help    print help message
 
 Profiles
   work
@@ -271,6 +298,19 @@ EOF
 				;;
 		esac
 	done
+
+	case "${CMD}" in
+		show)
+			show-current-profile
+			return 0
+			;;
+		'')
+			# TODO: Show picker to select profile
+			if [ -z "${name}" ]; then
+				name="$(printf "home\nwork\n" | fzf --tmux)"
+			fi
+			;;
+	esac
 
 	# positional arguments
 	case "$name" in
@@ -296,23 +336,8 @@ EOF
 			link-github-token '-'
 			;;
 		'') # No argument
-			declare -r browser="$(xdg-settings get default-web-browser)"
-			case "$browser" in
-				chromium_chromium.desktop)
-					name='work'
-					;;
-				brave-browser.desktop|com.brave.Browser.desktop)
-					name='home'
-					;;
-				*)
-					error "Could not deturmine profile"
-					;;
-			esac
-			if ${verbose}; then
-				get-github-user
-			fi
-			echo -e "${CYAN}Current Profile${NOCOL}: \"$name\""
-			return 0
+			error "Select a valid profile"
+			return 1
 			;;
 		*)
 			error "Unknown profile name \"${name}\""
@@ -331,6 +356,29 @@ EOF
 	echo -e "${BOLD}${CYAN}Default Browser${NOCOL}: ${BLUE}$(xdg-settings get default-web-browser)${NOCOL}"
 	echo -e "${BOLD}${CYAN}git email${NOCOL}:       ${BLUE}$(git config --global --get user.email)${NOCOL}"
 	echo -e "${BOLD}${CYAN}profile set${NOCOL}:     ${BLUE}$name${NOCOL}"
+}
+
+stop-banyan() {
+	sudo -v
+	sudo systemctl stop banyanapp-admin.service bwgs.service
+}
+
+start-banyan() {
+	sudo -v
+	sudo systemctl start banyanapp-admin.service bwgs.service
+}
+
+alias stop-work-vpn=stop-banyan
+alias start-work-vpn=start-banyan
+
+function git-commit-set-date() {
+	if [ -z "$1" ]; then
+		echo "Error: no date passed."
+		return 1
+	fi
+	local d
+	d="$(date -d "$1")"
+	GIT_COMMITTER_DATE="$d" git commit --amend --no-edit --date "$d"
 }
 
 # vim: ts=2 sts=2 sw=2 noexpandtab

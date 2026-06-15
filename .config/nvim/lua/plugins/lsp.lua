@@ -30,22 +30,23 @@ return {
       automatic_enable = false,
       ensure_installed = {
         -- Languages/Frameworks
-        "pyright",          -- python (lsp)
-        "ruff",             -- python (linting/formatting)
-        "gopls",            -- golang
-        "golangci_lint_ls", -- golangci-lint
-        "rust_analyzer",    -- rust
-        "clangd",           -- c/c++
-        "sqlls",            -- sql
-        "lua_ls",           -- lua
-        "html",             -- html
-        "astro",            -- astro.js
-        "verible",          -- SystemVerilog
-        "ts_ls",            -- typescrypt
-        "eslint",           -- web stuff
-        "cssls",            -- css
-        "tailwindcss",      -- tailwind
+        "pyright",                         -- python (lsp)
+        "ruff",                            -- python (linting/formatting)
+        "gopls",                           -- golang
+        "golangci_lint_ls",                -- golangci-lint
+        "rust_analyzer",                   -- rust
+        "clangd",                          -- c/c++
+        "sqlls",                           -- sql
+        "lua_ls",                          -- lua
+        "html",                            -- html
+        "astro",                           -- astro.js
+        "verible",                         -- SystemVerilog
+        "ts_ls",                           -- typescrypt
+        "eslint",                          -- web stuff
+        "cssls",                           -- css
+        "tailwindcss",                     -- tailwind
         "bashls",
+        "postgres_lsp",                    -- postgresql
         -- Configuration/Tools
         "ansiblels",                       -- ansible
         "terraformls",                     -- terraform
@@ -53,6 +54,7 @@ return {
         "docker_compose_language_service", -- docker-compose
         "yamlls",                          -- yaml
         "jsonls",                          -- json
+        "gh_actions_ls",                   -- github actions
         --"asm_lsp",          -- GAS/NASM/Go assembly
       },
     },

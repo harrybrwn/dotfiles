@@ -362,7 +362,9 @@ gitbranch() {
 
 ai() {
   mkdir -p /tmp/claude-sandbox
-  "${HOME}/.local/bin/claude-sandbox" --directory "/tmp/claude-sandbox"
+  local claude="${HOME}/.local/bin/claude-sandbox"
+  CLAUDE_CODE_SIMPLE=1 "${claude}" \
+    --directory "/tmp/claude-sandbox"
 }
 
 alias gitb=gitbranch gitbr=gitbranch gbr=gitbranch

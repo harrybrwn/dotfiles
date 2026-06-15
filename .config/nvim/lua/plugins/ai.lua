@@ -1,7 +1,7 @@
 return {
   { import = "plugins.llm.avante" },
   { import = "plugins.llm.codecompanion" },
-  { import = "plugins.llm.copilot" },
+  -- { import = "plugins.llm.copilot" },
   {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
@@ -26,6 +26,23 @@ return {
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Deny diff for Claude Code" },
       { "<leader>aq", "<C-\\><C-n>q",                  desc = "Quit Claude Code and close all diff windows" }
     },
+  },
+
+  {
+    "greggh/claude-code.nvim",
+    enabled = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- Required for git operations
+    },
+    keys = {
+      {
+        "<leader>ac",
+        "<cmd>ClaudeCode<CR>",
+        mode = "n",
+        desc = "Claude Code",
+      },
+    },
+    opts = {},
   },
 
   {

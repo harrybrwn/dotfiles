@@ -1,2 +1,4 @@
 [core]
     excludesFile = ~/.config/git/gitignore
+[delta]
+    paging = always

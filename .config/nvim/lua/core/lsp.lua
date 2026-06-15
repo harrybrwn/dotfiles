@@ -5,7 +5,7 @@ local function enable()
     "rust_analyzer",
     "clangd",
     "pyright",
-    "sqlls",
+    -- "sqlls",
     "lua_ls",
     -- web
     "ts_ls",
@@ -15,6 +15,7 @@ local function enable()
     -- tools
     "golangci_lint_ls",
     "terraformls",
+    "postgres_lsp",
     -- config and data
     "jsonls",
     "yamlls",

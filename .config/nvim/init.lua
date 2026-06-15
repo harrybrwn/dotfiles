@@ -6,6 +6,7 @@ vim.g.mapleader = ","
 require("core.settings")
 require("core.keymaps")
 require("core.autocmds")
+require("core.filetypes")
 
 -- Plugins
 lazy.setup({ { import = "plugins" } })

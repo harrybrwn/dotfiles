@@ -48,7 +48,7 @@ bindsym $mod+q kill
 # Applications
 #bindsym $mod+d       exec --no-startup-id ~/.config/rofi/scripts/app-launcher.sh
 bindsym $mod+d       exec --no-startup-id ~/.config/i3/scripts/rofi
-bindsym $mod+e       exec --no-startup-id thunar
+bindsym $mod+e       exec --no-startup-id nautilus
 bindsym $mod+b       exec --no-startup-id x-www-browser
 bindsym $mod+Return  exec --no-startup-id $term
 bindsym $mod+Shift+w exec --no-startup-id ~/.config/i3/scripts/wal
@@ -56,6 +56,7 @@ bindsym $mod+Shift+t exec --no-startup-id ~/.config/i3/scripts/theme
 bindsym $mod+z       exec --no-startup-id $locker
 bindsym $mod+p       exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 7
 bindsym $mod+Shift+p exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 2
+bindsym $mod+Shift+s exec --no-startup-id xfce4-settings-manager
 
 # change focus
 bindsym $mod+h focus left

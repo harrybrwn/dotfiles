@@ -6,3 +6,8 @@
 /Slack/*
 /heroic/
 /go/telemetry/
+
+# Temp files...
+/dconf/user.*
+
+# vim: ft=conf

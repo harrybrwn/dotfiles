@@ -23,6 +23,7 @@ return {
     },
   },
 
+  -- Formatting (format on save)
   {
     "stevearc/conform.nvim",
     event = "VeryLazy", -- Always load but at the end (for LSP formatting)

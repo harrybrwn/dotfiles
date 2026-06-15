@@ -87,3 +87,23 @@ end, {})
 require('editorconfig').properties.vim_filetype = function(bufnr, val, opts)
   vim.bo[bufnr].filetype = val
 end
+
+vim.api.nvim_create_user_command("LSPStop", function(opts)
+  local clients
+  -- TODO: Filter by buffer id
+  if opts.args ~= nil and opts.args ~= "" then
+    clients = vim.lsp.get_clients({
+      name = opts.args,
+    })
+  else
+    clients = vim.lsp.get_clients()
+  end
+  vim.notify(string.format("Stopping %d clients", #clients), vim.log.levels.INFO)
+  for _, c in ipairs(clients) do
+    vim.notify("Stopping " .. c.name, vim.log.levels.INFO)
+    -- vim.print("Stopping " .. c.name)
+    c:stop()
+  end
+end, {
+  -- nargs = 1,
+})

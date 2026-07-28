@@ -12,7 +12,7 @@ return {
         nilness = true,
         unusedwrite = true,
       },
-      staticcheck = true,
+      -- staticcheck = true, -- gives duplicates and bad errors when also using golangci-lint
     },
   },
 }

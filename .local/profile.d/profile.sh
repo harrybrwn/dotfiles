@@ -13,6 +13,8 @@ LIBFILES=(
 	"completions.sh"
 	"binpaths.sh"
 	"tmux.sh"
+	"scripts/profile.sh"
+	"scripts/golangci-lint-vm.sh"
 )
 for f in "${LIBFILES[@]}"; do
 	if [ -f "$BASEDIR/$f" ]; then
@@ -21,4 +23,3 @@ for f in "${LIBFILES[@]}"; do
 	fi
 done
 unset BASEDIR LIBFILES
-

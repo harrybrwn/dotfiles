@@ -1,11 +1,12 @@
 function setup() {
-	declare -r NOCOL="\e[0m"
-	declare -r RED="\e[31m"
-	local TMUX_POPUP=true
+	local TMUX_POPUP=false
 
-	log() {
-		echo "[$(date)] $*" >> ~/.cache/tmux-setup.log
-	}
+	declare -r LOGFILE="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-setup.log"
+
+	# shellcheck disable=SC1090
+	source ~/.local/profile.d/lib/logging.sh 
+	export LOG_DATES=true
+	export LOG_LOGFILE="${LOGFILE}"
 
   t-new() {
     declare -a tflags=('-A') # attach only if session already exists
@@ -25,13 +26,13 @@ function setup() {
 		if [ -n "$TMUX" ]; then
 			tmux switch-client -t "$s"
 		else
-			log "setup.t-new: not running switch-client since \$TMUX=\"$TMUX\" is not empty"
+			log i "setup.t-new: not running switch-client since \$TMUX=\"$TMUX\" is not empty"
 		fi
     [ -n "$TMUX" ] && tmux switch-client -t "$s"
   }
 
 	open-find() {
-		log "setup.open-find: starting"
+		log i "setup.open-find: starting"
 		local searchpaths=(~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools)
 		if [ -d ~/work ]; then
 			searchpaths+=(~/work)
@@ -41,8 +42,8 @@ function setup() {
 		fi
 		local selected
 		local fzf_flags=()
-		if ${TMUX_POPUP}; then
-			fzf_flags+=(--tmux '75%')
+		if [[ ${TMUX_POPUP} == 'true' ]]; then
+			fzf_flags+=(--tmux '80%')
 		fi
 
 		selected="$(
@@ -59,12 +60,12 @@ function setup() {
 				--preview 'eza -la {} --git --group-directories-first'
 		)"
 		if [ -z "$selected" ]; then
-			log "setup.open-find: nothing selected \$selected=\"${selected}\""
+			log i "setup.open-find: nothing selected \$selected=\"${selected}\""
 			return 1
 		fi
 		local name
 		name="$(basename "$selected")"
-		log "setup.open-find: creating session name=$name selected=$selected"
+		log i "setup.open-find: creating session name=$name selected=$selected"
 		if [ -z "$name" ]; then
 			echo "Invalid input"
 			return 1
@@ -76,18 +77,19 @@ function setup() {
 		cat <<-EOF
 Usage
   setup [alias|command] [flags...]
-  
+
 Commands
   help    print this help message
   find    search dirs and setup session with selected
   dir     open a session at the given directory
-  
+	logs    view the debug logs for this tool
+
 Aliases
   dev             dev folder
   homelab|lab     homelab
   website|site    personal website
   interviewing    interview studying
-  
+
 Flags
   -h --help    print help message
 EOF
@@ -100,9 +102,12 @@ EOF
 				usage
 				return 0
 				;;
-			--tmux-popup-binding)
+			--tmux-popup-binding|--tmux-popup)
 				# Command is being run as a tmux display-popup command so we wont need
 				# to tell fzf to run a tmux display-popup command.
+				TMUX_POPUP=true
+				;;
+				--no-tmux-popup-binding|--no-tmux-popup)
 				TMUX_POPUP=false
 				;;
 			*)
@@ -111,6 +116,8 @@ EOF
 		esac
 		shift 1
 	done
+
+	log d "setup args='${ARGS[*]}'"
 
 	if [ ${#ARGS[@]} -eq 0 ]; then
 		if tmux has-session -t 'home' 2>/dev/null; then
@@ -150,12 +157,15 @@ EOF
 				fi
 				local name
 				name="$(basename "$dir")"
-				echo "Opening session at \"$dir\" named \"$name\""
+				log i "Opening session at \"$dir\" named \"$name\""
 				t-new -s "$name" -n "$name" -c "$dir"
 				i=$((i + 1))
 				;;
 			find|f)
 				open-find
+				;;
+			logs)
+				less +G "${LOGFILE}"
 				;;
 
 			# aliases

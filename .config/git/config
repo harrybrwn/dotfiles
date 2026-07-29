@@ -1,5 +1,5 @@
 [user]
-	email = me@h3y.sh
+	email = h@hrry.me
     name = Harry Brown
     signingkey = 056BB3A269A76794
 
@@ -62,6 +62,7 @@
 [delta]
     navigate = true
     dark = true
+    side-by-side = true
 [merge]
     conflictstyle = zdiff3
 

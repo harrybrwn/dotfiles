@@ -1,0 +1,328 @@
+#!/usr/bin/env python3
+
+from concurrent.futures import Future, ThreadPoolExecutor
+from pathlib import Path
+import threading
+import time
+from typing import Callable, Iterator, Optional
+import logging
+import os
+import queue
+import shutil
+import argparse
+
+
+def main():
+    start = time.time()
+    parser = argparse.ArgumentParser(
+        description="A sample script demonstrating Python's argparse module."
+    )
+    parser.add_argument(
+        "--threaded", "-T", action="store_true", help="run in multi threaded mode"
+    )
+    parser.add_argument(
+        "--cross-fs",
+        action="store_true",
+        help="read files mounted on different filesystems",
+    )
+    args = parser.parse_args()
+    home = Path.home()
+    ignored_prefixes = [
+        ".cache",
+        ".config",
+        ".zoom",
+        # ".claude",
+        ".yarn",
+        ".m2",
+        ".kube",
+        ".debug",
+        ".vscode",
+        ".copilot",
+        ".minecraft",
+        ".steam",
+        "Videos/ffmpeg",
+        "Games",
+        "Postman",
+        "snap",
+        "mounts",
+        ".ollama",
+        "dev/go",
+        "dev/vendor",
+        "dev/misc/cuda",
+        ".config/cargo",
+        ".config/google-chrome",
+        ".config/google-chrome-for-testing",
+        ".config/BraveSoftware",
+        ".config/Postman",
+        ".local/state",
+        ".local/include",
+        ".local/bin",
+        ".local/share",
+        ".local/share/Steam",
+        ".local/share/MondrinthApp",
+    ]
+    skipped_components = set(
+        [
+            "node_modules",
+            "target",
+            ".venv",
+        ]
+    )
+
+    if args.threaded:
+        walk = threaded_walk
+        installed_to = ThreadSafeTrie("/")
+        ignored = ThreadSafeTrie("/")
+    else:
+        walk = oswalk
+        installed_to = Trie("/")
+        ignored = Trie("/")
+
+    for pat in (home / p for p in ignored_prefixes):
+        ignored.put(str(pat))
+
+    def ignore_fn(path: Path):
+        p = str(path)
+        if ignored.has(p) or installed_to.has(p):
+            return True
+        else:
+            if skipped_components.intersection(set(path.parts)):
+                ignored.put(p)
+                return True
+            return False
+
+    copied = 0
+    src = "template/hooks/pre-commit"
+    for d, _, _ in walk(home, ignore=ignore_fn):
+        if os.path.basename(d) == ".git":
+            shutil.copy(src, d / "hooks/pre-commit")
+            installed_to.put(str(d))
+            copied += 1
+    print(f"installed count: {copied}")
+    print(f"took {round(time.time() - start, 3)}s")
+
+
+type PathOrStr = Path | str
+type IgnoreFn = Callable[[Path], bool]
+type WalkResult = tuple[Path, list[str], list[str]]
+type _WalkResult = tuple[str | None, list[str], list[str]]
+
+
+def oswalk(
+    root: str | Path,
+    follow=False,
+    ignore: IgnoreFn | None = None,
+    onerror: Callable[[OSError], None] | None = None,
+    cross_filesystems=False,
+):
+    dev = None if cross_filesystems else os.stat(root).st_dev
+    stack = [os.fspath(str(root))]
+
+    def subdir(d: str):
+        if follow or not os.path.islink(d):
+            stack.append(d)
+
+    while stack:
+        top = stack.pop()
+        d, dirs, files = _scan(top, follow, ignore, onerror, None, subdir, dev)
+        if d is None:
+            continue
+        yield Path(d), dirs, files
+
+
+def threaded_walk(
+    root: str | Path,
+    followlinks=False,
+    ignore: IgnoreFn | None = None,
+    onerror: Callable[[OSError], None] | None = None,
+    max_workers: int | None = None,
+) -> Iterator[WalkResult]:
+    stop = threading.Event()
+    q: queue.Queue[Future[_WalkResult]] = queue.Queue()
+    pool = ThreadPoolExecutor(max_workers)
+    job: Callable[[str], _WalkResult]
+    job = lambda top: _scan(
+        top,
+        followlinks,
+        ignore,
+        onerror,
+        stop.is_set,
+        lambda p: q.put(pool.submit(job, p)),
+    )
+    try:
+        # Run the root job synchronously so the queue starts non-empty.
+        fut: Future[_WalkResult] = Future()
+        fut.set_result(job(str(root)))
+        q.put(fut)
+        while not q.empty():
+            top, dirs, files = q.get().result()
+            if top is not None:
+                yield Path(top), dirs, files
+    finally:
+        stop.set()
+        pool.shutdown(wait=True)
+
+
+def _scan(
+    top: str,
+    followlinks: bool,
+    ignore: IgnoreFn | None,
+    onerror: Callable[[OSError], None] | None,
+    stopped: Callable[[], bool] | None,
+    subdir: Callable[[str], None],
+    dev: int | None = None,
+) -> _WalkResult:
+    stop: Callable[[], bool] = stopped or (lambda: False)
+    if (ignore and ignore(Path(top))) or stop():
+        return None, [], []
+    dirs, files = list[str](), list[str]()
+    try:
+        if dev:
+            st = os.stat(top)
+            if st.st_dev != dev:
+                return None, [], []
+        with os.scandir(top) as entries:
+            for entry in entries:
+                if stop():
+                    return None, [], []
+                try:
+                    is_dir = entry.is_dir(follow_symlinks=followlinks)
+                except OSError:
+                    # Compatibility with os.walk: Broken symlinks or fifos
+                    # are categorized as files and are not dropped.
+                    is_dir = False
+                if is_dir:
+                    dirs.append(entry.name)
+                    subdir(entry.path)
+                else:
+                    files.append(entry.name)
+    except OSError as e:
+        # Same as os.walk: report via onerror and skip the directory.
+        logging.getLogger(__name__).warning("error scanning %r: %s", top, e)
+        if onerror:
+            onerror(e)
+        return None, [], []
+    return top, dirs, files
+
+
+class Trie:
+    def __init__(self, sep: str | None = None, val: str | None = None):
+        self.children: dict[str, Trie] = dict()
+        self.end = False
+        self.sep = sep
+        self.val = val
+
+    def __repr__(self):
+        keys = set(self.children.keys())
+        name = self.__class__.__qualname__
+        v = self.val or "/"
+        return f"{__name__}.{name}({v!r}, {keys}{', end=true' if self.end else ''})"
+
+    def put(self, word):
+        n = self
+        w = _split(word, self.sep)
+        for c in w:
+            if c not in n.children:
+                n.children[c] = Trie(self.sep, c)
+            n = n.children[c]
+        n.end = True
+
+    def has(self, word: str):
+        n = self.traverse(word)
+        return n.end if n else False
+
+    def get(self, word: str):
+        n = self
+        w = _split(word, self.sep)
+        for c in w:
+            if c not in n.children:
+                return None
+            n = n.children[c]
+        return n
+
+    def traverse(self, word: str):
+        n = self
+        w = _split(word, self.sep)
+        for c in w:
+            if c not in n.children:
+                return n
+            n = n.children[c]
+        return n
+
+    def has_prefix(self, word: str):
+        n = self
+        w = _split(word, self.sep)
+        for c in w:
+            if c not in n.children:
+                return False
+            n = n.children[c]
+        return n is not None
+
+    def remove(self, word: str):
+        n = self
+        prev = []
+        w = _split(word, self.sep)
+        for c in w:
+            if c not in n.children:
+                break
+            prev.append(n)
+            n = n.children[c]
+        n.end = False
+        if not n.children:
+            # pop the stack and delete loners
+            while prev and not prev[-1].end and len(prev[-1].children) == 1:
+                prev.pop().children.clear()
+
+    def remove_prefix(self, word: str):
+        n = self
+        prev = []
+        path = []
+        w = _split(word, self.sep)
+        for c in w:
+            if c not in n.children:
+                raise ValueError(f"{c} not found")
+            prev.append(n)
+            n = n.children[c]
+            path.append(c)
+        if prev:
+            prev[-1].children.pop(path[-1])  # delete the prefix
+            # traverse backwards and cleanup dangling nodes
+            for i in range(len(prev) - 2, -1, -1):
+                if len(prev[i].children) == 1 and prev[i] in prev[i].children:
+                    prev[i].children.pop(path[i])
+                else:
+                    break
+        return n
+
+
+class ThreadSafeTrie(Trie):
+    def __init__(
+        self,
+        sep: str | None = None,
+        val: str | None = None,
+        lock: Optional[threading.Lock] = None,
+    ):
+        super().__init__(sep, val)
+        self.lock = lock or threading.Lock()
+        for n in ("put", "get", "traverse", "has_prefix", "remove", "remove_prefix"):
+            setattr(self, n, self._locked_method(n))
+
+    def _locked_method(self, name: str):
+        parent = super()
+
+        def fn(word: str):
+            method = getattr(parent, name)
+            with self.lock:
+                return method(word)
+
+        return fn
+
+
+def _split(s: str, sep: str | None):
+    if not sep:
+        return s
+    return (c for c in s.split(sep) if c)
+
+
+if __name__ == "__main__":
+    main()

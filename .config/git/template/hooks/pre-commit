@@ -7,17 +7,20 @@ set -eu
 readonly NOCOL="\e[0m"
 readonly RED="\e[31m"
 
-readonly personal_email='me@h3y.sh'
+readonly personal_email='h@hrry.me'
 git_email="$(git config --get user.email)"
 cwd="$(pwd)"
 
 case "${cwd}" in
 	"${HOME}/work/"*)
-		echo yes
-		if [ "${git_email}" = "${personal_email}" ]; then
-			echo "${RED}Error${NOCOL}: current git email is incorrect. Switch to work profile."
-			exit 1
-		fi
+		case "${git_email}" in
+			'me@h3y.sh'|'h@hrry.me')
+				echo "${RED}Error${NOCOL}: current git email is incorrect. Switch to work profile."
+				exit 1
+				;;
+			*)
+				;;
+		esac
 		;;
 	*)
 		if [ "${git_email}" != "${personal_email}" ]; then

@@ -367,6 +367,9 @@ ai() {
     --directory "/tmp/claude-sandbox"
 }
 
+alias claude-unsafe='claude --dangerously-skip-permissions'
+alias claude-fast=claude-unsafe
+
 alias gitb=gitbranch gitbr=gitbranch gbr=gitbranch
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 

@@ -44,14 +44,12 @@ case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
-ID="$(. /etc/os-release && echo $ID)"
-case "$ID" in
+case "$(. /etc/os-release && echo $ID)" in
   arch)
-    # Not automatically sourced in arch
+    # Not automatically sourced in arch-linux
     source /usr/share/git/git-prompt.sh
     ;;
 esac
-unset ID
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
@@ -101,6 +99,7 @@ fi
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 if [ -f ~/.bash_aliases ]; then
+    # shellcheck disable=SC1090
     . ~/.bash_aliases
 fi
 
@@ -116,25 +115,26 @@ if ! shopt -oq posix; then
 fi
 
 # See 'man environment.d' and 'man systemd-environment-d-generator'
+# Note: Use 'SYSTEMD_LOG_LEVEL=debug' to debug.
 if [ -x /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator ]; then
   eval "$(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)"
 fi
-
-PATH="$PATH:$HOME/.local/bin"
 
 #######################
 ####### My shit #######
 #######################
 
-. ~/.rc
+# shellcheck disable=SC1090
+source ~/.rc
 
 # Prompt
 _git_branch() {
-    local __branch="`git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null`"
+    local __branch
+    __branch="$(git symbolic-ref --short -q HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null)"
     if [ -z "$__branch" ]; then
         printf ''
     else
-        printf "($__branch) "
+        printf '(%s) ' "${__branch}"
     fi
 }
 
@@ -166,27 +166,24 @@ if command -v __git_ps1 > /dev/null; then
 fi
 
 if command -v gopass > /dev/null 2>&1; then
-    source <(gopass completion bash)
+	# shellcheck disable=SC1090
+	source <(gopass completion bash)
 fi
 if command -v apizza > /dev/null 2>&1; then
-    source <(apizza completion bash)
+	# shellcheck disable=SC1090
+	source <(apizza completion bash)
 fi
 if command -v edu > /dev/null 2>&1; then
-    source <(edu completion bash)
+	# shellcheck disable=SC1090
+	source <(edu completion bash)
 fi
 if command -v kubectl > /dev/null 2>&1; then
+	# shellcheck disable=SC1090
   source <(kubectl completion bash)
 fi
 if command -v helm > /dev/null 2>&1; then
+	# shellcheck disable=SC1090
   source <(helm completion bash)
 fi
 
 complete -C /usr/bin/mc mc
-
-# pnpm
-export PNPM_HOME="/home/harry/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

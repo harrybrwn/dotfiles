@@ -43,23 +43,23 @@ fi
 #   $1 - percent (numeric)
 _percent_hex_range() {
     local percent=$1
-    if [ $percent -le 10 ]; then
+    if [ "$percent" -le 10 ]; then
         echo '#c80000'
-    elif [ $percent -le 20 ]; then
+    elif [ "$percent" -le 20 ]; then
         echo '#c52f00'
-    elif [ $percent -le 30 ]; then
+    elif [ "$percent" -le 30 ]; then
         echo '#c35f00'
-    elif [ $percent -le 40 ]; then
+    elif [ "$percent" -le 40 ]; then
         echo '#c08e00'
-    elif [ $percent -le 50 ]; then
+    elif [ "$percent" -le 50 ]; then
         echo '#bebe00'
-    elif [ $percent -le 60 ]; then
+    elif [ "$percent" -le 60 ]; then
         echo '#98be00'
-    elif [ $percent -le 70 ]; then
+    elif [ "$percent" -le 70 ]; then
         echo '#72be00'
-    elif [ $percent -le 80 ]; then
+    elif [ "$percent" -le 80 ]; then
         echo '#4cbe00'
-    elif [ $percent -le 90 ]; then
+    elif [ "$percent" -le 90 ]; then
         echo '#26be00'
     else
         echo '#00be00'
@@ -73,23 +73,23 @@ _percent_hex_range() {
 _bat_get_bar() {
     # If the battery bar has been
     # disabled then just return.
-    if [ ! $STATUS_BATTERY_BAR ]; then
+    if [ ! "$STATUS_BATTERY_BAR" ]; then
         return
     fi
     # Get the bar hight from the
     # percentage passed as arg 1.
     local percent=$1
-    if [ $percent -lt 5 ]; then
+    if [ "$percent" -lt 5 ]; then
         local bar=''
-    elif [ $percent -lt 10 ]; then
+    elif [ "$percent" -lt 10 ]; then
         local bar='▁'
-    elif [ $percent -lt 20 ]; then
+    elif [ "$percent" -lt 20 ]; then
         local bar='▂'
-    elif [ $percent -lt 40 ]; then
+    elif [ "$percent" -lt 40 ]; then
         local bar='▃'
-    elif [ $percent -lt 60 ]; then
+    elif [ "$percent" -lt 60 ]; then
         local bar='▄'
-    elif [ $percent -lt 80 ]; then
+    elif [ "$percent" -lt 80 ]; then
         local bar='▅'
     else
         local bar='▇'
@@ -107,13 +107,14 @@ battery() {
     local percent
     local state
 
-    if command -v upower 2>&1 >/dev/null; then
+    if command -v upower >/dev/null 2>&1; then
       # Find the battery name
-      local bat=$(upower -e | grep -E 'battery' | head -n1)
+			local bat
+      bat=$(upower -e | grep -E 'battery' | head -n1)
       # Get the battery's percentage
-      percent=$(upower -i $bat | awk '/percentage:/{print $2}' | tr -d '%')
+      percent=$(upower -i "$bat" | awk '/percentage:/{print $2}' | tr -d '%')
       # Get the battery's chargine state
-      state=$(upower -i $bat | awk '/state:/{print $2}')
+      state=$(upower -i "$bat" | awk '/state:/{print $2}')
     else
       local p=''
       if [ -d /sys/class/power_supply/BAT1 ]; then
@@ -127,15 +128,17 @@ battery() {
         echo "no battery" >> "$XDG_CONFIG_HOME/tmux/log"
         return
       fi
+			local now
+			local full
       if [ -f "$p/energy_now" ] && [ -f "$p/energy_full" ]; then
         # echo 'using energy_now' >> $XDG_CONFIG_HOME/tmux/log
-        local now="$(cat $p/energy_now)"
-        local full="$(cat $p/energy_full)"
+        now="$(cat $p/energy_now)"
+        full="$(cat $p/energy_full)"
         percent="$(echo "scale=0; 100 * ($now / $full)" | bc)"
       elif [ -f "$p/charge_now" ] && [ -f "$p/charge_full" ]; then
         # echo 'using charge_now' >> $XDG_CONFIG_HOME/tmux/log
-        local now="$(cat $p/charge_now)"
-        local full="$(cat $p/charge_full)"
+        now="$(cat $p/charge_now)"
+        full="$(cat $p/charge_full)"
         percent="$(echo "scale=4; 100 * ($now / $full)" | bc)"
       else
         echo 'could not find current charge' >> "$XDG_CONFIG_HOME/tmux/log"
@@ -151,10 +154,11 @@ battery() {
       #echo "bat1 path=${p} $percent% $(cat $p/energy_now) state=$state" >> $XDG_CONFIG_HOME/tmux/log
     fi
 
+		local out
     if $STATUS_BATTERY_COLOR; then
-        local out="#[fg=$(_percent_hex_range $percent)]"
+        out="#[fg=$(_percent_hex_range "$percent")]"
     else
-        local out="#[fg=$IMPORTANT]"
+        out="#[fg=$IMPORTANT]"
     fi
 
     case $state in
@@ -176,7 +180,7 @@ battery() {
         # Check to see if the user has
         # disabled the battery bar or not
         if $STATUS_BATTERY_BAR; then
-            out="$out$(_bat_get_bar $percent) "
+            out="$out$(_bat_get_bar "$percent") "
         fi
         if $STATUS_BATTERY_PERCENT; then
             out="$out$percent%"

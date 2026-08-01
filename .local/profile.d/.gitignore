@@ -6,3 +6,4 @@
 !binpaths.sh
 !tmux.sh
 !chrome.sh
+!lib/*.sh

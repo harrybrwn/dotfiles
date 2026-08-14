@@ -182,4 +182,3 @@ fi
 #    source <(arduino-cli completion zsh)
 #    compdef _arduino-cli arduino-cli
 #fi
-

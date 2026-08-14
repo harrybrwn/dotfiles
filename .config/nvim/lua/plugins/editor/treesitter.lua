@@ -41,7 +41,7 @@ local langs = {
   "gitignore",
   "sshconfig",
   "nginx",
-  "tmux",
+  -- "tmux",
   "gpg",
 
   -- data
@@ -53,6 +53,7 @@ local langs = {
   "query",
 }
 
+---@type LazyPluginSpec
 return {
   -- Syntax parsers and highlighting.
   "nvim-treesitter/nvim-treesitter",

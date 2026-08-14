@@ -1,5 +1,3 @@
-local path = require("core.util.path")
-
 local M = {}
 
 ---Check if nvim is running in tmux

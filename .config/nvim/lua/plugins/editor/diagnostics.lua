@@ -5,54 +5,28 @@ local shortname = {
   [vim.diagnostic.severity.HINT] = 'h',
 }
 
+---@type LazyPluginSpec
 return {
   -- Display lsp diagnostics
   "folke/trouble.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+  },
   cmd = "Trouble",
   init = function()
     vim.diagnostic.config({
-      virtual_text = true,
-      float = true,
+      virtual_text = true, -- a very small inline popup to the right of a diagnostic
       signs = true,
-      -- virtual_text = {
-      --   source = true,
-      --   -- source = "always", -- Or "if_many" to show only if there are multiple clients
-      -- },
-      -- float = {
-      --   source = true,
-      --   -- source = "always", -- Forces the source to show up in the hover popup window
-      -- },
     })
   end,
-  opts = function(_, opts)
-    opts.height = 5
-    opts.keys = {
-      ["<tab>"] = "jump",
-    }
-    local trouble = require("trouble")
-    local symbols = trouble.statusline({
-      mode = "lsp_document_symbols",
-      groups = {},
-      title = false,
-      filter = { range = true },
-      format = "{kind_icon}{symbol.name:Normal}",
-      -- The following line is needed to fix the background color
-      -- Set it to the lualine section you want to use
-      hl_group = "lualine_c_normal",
-    })
-    opts.sections = {
-      lualine_c = {
-        symbols.get,
-        cond = symbols.has,
-      }
-    }
-    -- table.insert(opts, { sections = { lualine_c = {} } })
-    -- table.insert(opts.sections.lualine_c, {
-    --   symbols.get,
-    --   cond = symbols.has,
-    -- })
+
+  ---@diagnostic disable: unused-local
+  opts = function(plugin, options)
+    -- options.keys = {
+    --   ["<tab>"] = "jump",
+    -- }
   end,
+
   keys = {
     {
       "<leader>e",

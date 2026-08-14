@@ -1,5 +1,3 @@
-local path = require("core.util.path")
-
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
@@ -33,10 +31,11 @@ local xdg_config_home = os.getenv("XDG_CONFIG_HOME")
 if xdg_config_home ~= nil then
   table.insert(
     settings.workspace.library,
-    path.join(xdg_config_home, "LuaLS")
+    vim.fs.joinpath(xdg_config_home, "LuaLS")
   )
 end
 
+---@type vim.lsp.Config
 return {
   cmd = { "lua-language-server" },
   filetype = { "lua" },

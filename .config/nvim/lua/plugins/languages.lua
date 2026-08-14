@@ -1,4 +1,5 @@
 -- Language specific plugins.
+---@type LazyPluginSpec[]
 return {
   -- UV (python) integration.
   {
@@ -47,5 +48,20 @@ return {
 
   -- Syntax highlighting for the Nand2Tetris book exercises. (See https://www.nand2tetris.org/)
   { "sevko/vim-nand2tetris-syntax", enabled = false, lazy = false },
-  { "towolf/vim-helm",              enabled = false, config = false, lazy = false },
+  { "towolf/vim-helm",              enabled = false, config = nil, lazy = false },
+
+  -- Dev tools for working with 'lazy.nvim'
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        "lazy.nvim",
+        "codecompanion.nvim",
+      },
+    },
+  },
 }

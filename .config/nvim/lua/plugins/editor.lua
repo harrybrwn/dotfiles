@@ -1,5 +1,6 @@
 local path = require("core.util.path")
 
+---@type LazyPluginSpec[]
 return {
   { import = "plugins.editor.treesitter" },
   { import = "plugins.editor.diagnostics" },
@@ -64,7 +65,7 @@ return {
     dev = true,
     opts = {},
     enabled = function()
-      local p = path.join(
+      local p = vim.fs.joinpath(
         vim.fn.stdpath("config"),
         "dev/manage-buffers.nvim/lua/manage-buffers/init.lua"
       )

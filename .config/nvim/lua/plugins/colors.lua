@@ -1,6 +1,7 @@
 -- Themes
 --
 -- Look for more good ones here https://github.com/rockerBOO/awesome-neovim#tree-sitter-supported-colorscheme
+---@type (string|LazyPluginSpec)[]
 return {
   {
     "EdenEast/nightfox.nvim", -- nightfox nordfox terafox duskfox carbonfox

@@ -1,12 +1,11 @@
-local path = require("core.util.path")
 local ts_parsers = require("nvim-treesitter.parsers")
 
 local cli_installed = true
 local xdg_data_home = os.getenv("XDG_DATA_HOME")
 if xdg_data_home == nil then
-  xdg_data_home = path.join(os.getenv("HOME"), ".cache")
+  xdg_data_home = vim.fs.pathjoin(os.getenv("HOME"), ".cache")
 end
-local parser_dir = path.join(xdg_data_home, "tree-sitter/parsers")
+local parser_dir = vim.fs.pathjoin(xdg_data_home, "tree-sitter/parsers")
 local options = {
   ensure_installed = {
     -- go

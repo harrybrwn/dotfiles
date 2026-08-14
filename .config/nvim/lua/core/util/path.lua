@@ -24,11 +24,11 @@ function M.dirname(str)
 end
 
 --- Join any number of elements into a valid filepath.
----@param ... any
+---@param ... string
 ---@return string
 ---@deprecated use vim.fs.joinpath instead
 function M.join(...)
-  return table.concat({ ... }, M.filepath_sep)
+  return vim.fs.joinpath(...)
 end
 
 ---split a filepath into a table of parts

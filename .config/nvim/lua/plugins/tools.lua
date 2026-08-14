@@ -3,6 +3,7 @@ local basic_notes = false
 -- For "kristijanhusak/vim-dadbod-ui"
 vim.g.db_ui_use_nerd_fonts = 1
 
+---@type LazyPluginSpec[]
 return {
   {
     "wsdjeg/calendar.nvim",
@@ -52,7 +53,7 @@ return {
     enabled = not basic_notes,
     dependencies = {
       'nvim-telescope/telescope.nvim',
-      { 'nvim-telekasten/calendar-vim', config = false },
+      { 'nvim-telekasten/calendar-vim', config = nil },
     },
     opts = function()
       local base

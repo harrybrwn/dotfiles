@@ -1,3 +1,4 @@
+---@type LazyPluginSpec[]
 return {
   { import = "plugins.llm.avante" },
   { import = "plugins.llm.codecompanion" },

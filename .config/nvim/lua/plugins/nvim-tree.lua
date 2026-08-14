@@ -3,7 +3,8 @@ local custom = require("core.plugins.filetree")
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- nvim-tree: An alternate file explorer
+--- nvim-tree: An alternate file explorer
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-tree/nvim-tree.lua",

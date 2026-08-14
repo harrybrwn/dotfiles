@@ -1,6 +1,5 @@
 -- Github Copilot
 local nvm = require("core.util.nvm")
-local path = require("core.util.path")
 
 local settings = {
   local_ollama = false,
@@ -22,7 +21,7 @@ local function make_opts(model)
       enabled = true,
       auto_refresh = true,
     },
-    copilot_node_command = path.join(nvm_dir, "versions/node", nvm.default(nvm_dir), "bin/node"),
+    copilot_node_command = vim.fs.joinpath(nvm_dir, "versions/node", nvm.default(nvm_dir), "bin/node"),
     filetypes = {
       help = false,
     },
@@ -33,9 +32,10 @@ local function is_enabled()
   -- return true if the current directory is in ~/work
   local cwd = vim.fn.getcwd()
   local home = vim.fn.expand("~")
-  return vim.startswith(cwd, path.join(home, "work"))
+  return vim.startswith(cwd, vim.fs.joinpath(home, "work"))
 end
 
+---@type LazyPluginSpec
 local plugin = {
   "zbirenbaum/copilot.lua",
   enabled = is_enabled,

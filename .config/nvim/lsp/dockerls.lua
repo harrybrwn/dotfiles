@@ -1,3 +1,4 @@
+---@type vim.lsp.Config
 return {
   on_attach = function(client, bufnr)
     vim.print("disabling auto format for docker!")

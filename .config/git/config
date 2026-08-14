@@ -75,7 +75,7 @@
     f     = fetch --all --prune --tags
 
     stat         = !git --no-pager diff --stat
-    ignored      = !sh -c 'git check-ignore `find .`'
+    ignored      = !sh -c 'git check-ignore $(find .)'
     commit-count = !sh -c 'git --no-pager log --oneline | wc -l'
 
     graph = log --all --graph --abbrev-commit --decorate --oneline

@@ -3,6 +3,7 @@ local render_markdown_types = {
   -- "markdown",
 }
 
+---@type LazyPluginSpec
 local plugin = {
   "yetone/avante.nvim",
   enabled = false,

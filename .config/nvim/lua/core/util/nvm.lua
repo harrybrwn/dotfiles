@@ -1,5 +1,3 @@
-local path = require("core.util.path")
-
 local M = {}
 
 function M.dir()
@@ -7,7 +5,7 @@ function M.dir()
 end
 
 function M.default(dir)
-  local f = io.open(path.join(dir, "alias/default"), "r")
+  local f = io.open(vim.fs.joinpath(dir, "alias/default"), "r")
   if not f then
     return nil
   end

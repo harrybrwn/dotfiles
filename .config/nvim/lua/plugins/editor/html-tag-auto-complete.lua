@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 return {
   -- Auto-complete HTML Tags
   "windwp/nvim-ts-autotag",

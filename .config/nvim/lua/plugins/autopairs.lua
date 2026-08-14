@@ -17,6 +17,7 @@ local function init()
   })
 end
 
+---@type LazyPluginSpec
 return {
   "windwp/nvim-autopairs",
   event = "InsertEnter",

@@ -1,14 +1,4 @@
 [[keyboard.bindings]]
-action = "Copy"
-key = "C"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-action = "Paste"
-key = "V"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
 action = "DecreaseFontSize"
 key = "Minus"
 mods = "Control"
@@ -26,3 +16,13 @@ mods = "Control"
 [[keyboard.bindings]]
 action = "ToggleFullscreen"
 key = "F11"
+
+# [[keyboard.bindings]]
+# action = "Copy"
+# key = "C"
+# mods = "Control|Shift"
+#
+# [[keyboard.bindings]]
+# action = "Paste"
+# key = "V"
+# mods = "Control|Shift"

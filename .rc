@@ -131,10 +131,10 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_BAKE=true
 
 # Node Version Manager (nvm)
+export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 if [ -d /usr/share/nvm ]; then
-  source /usr/share/nvm/nvm.sh
+  source /usr/share/nvm/init-nvm.sh
 else
-  export NVM_DIR="$XDG_CONFIG_HOME/nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi

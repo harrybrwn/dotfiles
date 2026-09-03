@@ -41,16 +41,19 @@
           - k9s
           - gnu-netcat # nc command
           - eza # ls drop-in
+          - ripgrep-all
+          - aws-cli-v2
 
           # Desktop
           - uwsm        # wayland session manager
           - qt5-wayland
           - qt6-wayland
           - polkit-kde-agent
-          - hyprland
-          - hyprpaper
-          - hyprlock
-          - hypridle
+          - hyprland  # window manager
+          - hyprpaper # wallpapers for hyprland
+          - hyprlock  # lockscreen for hyprland
+          - hypridle  # hyprland idle/power helper
+          - hyprshutdown # graceful logout/shutdown
           - xdg-desktop-portal-hyprland
           - dunst  # notifications
           - grim   # screenshots
@@ -63,17 +66,26 @@
           - eog      # image viewer
           - bluez    # bluetooth
           - discord
-          - gwenview # cropping images
-          - blueman  # bluetooth gui and applet
+          - gwenview          # cropping images
+          - blueman           # bluetooth gui and applet
+          - zathura           # minimal document viewer
+          - zathura-pdf-mupdf # pdf plugin for zathura
+
+    - name: Set Zathura as PDF Viewer
+      become: false
+      ansible.builtin.command:
+        cmd: xdg-mime default org.pwmt.zathura.desktop application/pdf
 
     # TODO install from AUR: python-pywal brave-bin bash-complete-alias
 
-    - name: discord | Add Ozone Flags
-      become: true
-      ansible.builtin.lineinfile:
-        path: /opt/discord/discord.desktop
-        regexp: '^Exec=/usr/bin/discord'
-        line: 'Exec=/usr/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland'
-        #validate: desktop-file-validate %s
-        owner: root
-        group: root
+    # - name: discord | Add Ozone Flags
+    #   become: true
+    #   ansible.builtin.lineinfile:
+    #     path: /opt/discord/discord.desktop
+    #     regexp: '^Exec=/usr/bin/discord'
+    #     line: 'Exec=/usr/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland'
+    #     #validate: desktop-file-validate %s
+    #     owner: root
+    #     group: root
+
+# vim: ft=yaml.ansible

@@ -4,7 +4,7 @@
   register: "paru_check"
 
 - name: Install
-  when: not paru_check.stat.exists and not paru_check.stat.executable
+  when: not paru_check.stat.exists
   block:
     - name: Clone repo
       ansible.builtin.git:

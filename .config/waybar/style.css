@@ -8,3 +8,7 @@
 
 @import "../../.cache/wal/colors-waybar.css";
 @import "./themes/elifouts.css";
+
+#bluetooth.connected {
+    color: #3040d1;
+}

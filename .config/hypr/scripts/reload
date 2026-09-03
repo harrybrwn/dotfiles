@@ -1,19 +1,30 @@
 #!/bin/bash
 
 set -eu
-killall -SIGUSR2 waybar
 
+log() {
+	# echo "[$(date)] $*" >> ~/.cache/wal/pywal.log
+	systemd-cat --identifier=hypr-script-reload "$@"
+}
+
+killall waybar || true
 killall hyprpaper || true
 killall hypridle || true
-hyprpaper &
-hypridle &
+
+hyprctl eval 'hl.exec_cmd("waybar")'
+hyprctl eval 'hl.exec_cmd("hyprpaper")'
+hyprctl eval 'hl.exec_cmd("hypridle")'
+
+hyprctl reload
 
 if [ -f ~/.cache/wal/wal ]; then
 	WAL="$(cat ~/.cache/wal/wal)"
-	echo "$WAL" >> ~/.cache/wal/pywal.log
-	while ! hyprctl hyprpaper preload "$WAL"; do
-		sleep 0.05
-		:
-	done
-	hyprctl hyprpaper wallpaper ",$WAL"
+	if [ -n "${WAL}" ]; then
+		while ! hyprctl hyprpaper wallpaper ",$WAL"; do
+			sleep 0.1
+		done
+		log "set $WAL"
+	else
+		log "no wallpaper found"
+	fi
 fi

@@ -15,7 +15,7 @@ WAL="$(
 	| grep \
 		--extended-regexp \
 		--invert-match \
-		'(ignore|\.gitignore)' \
+		'(ignore|\.gitignore|.+\.sh)' \
 	| xargs -I{} echo "img:$DIR/{}:text:{}" \
 	| wofi --show dmenu --prompt "Select a Wallpaper" --allow-images \
 	| awk -F: '{ print $2 }'
@@ -31,10 +31,12 @@ if [ ! -f "$WAL" ]; then
 fi
 
 set -e
-hyprctl hyprpaper preload "$WAL"
-hyprctl hyprpaper wallpaper ",$WAL"
 
-wal -i "$WAL"
+# Set colors but not wallpaper
+wal -n -i "$WAL"
 # Reload waybar
 killall -SIGUSR2 waybar
-echo "set $WAL as wallpaper" | log --priority=info
+# Set wallpaper
+hyprctl hyprpaper wallpaper ",$WAL,cover"
+
+echo "set wallpaper to \"$WAL\"" | log -p=info

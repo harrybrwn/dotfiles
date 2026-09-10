@@ -202,12 +202,12 @@ alias stop-work-vpn=stop-banyan
 alias start-work-vpn=start-banyan
 
 function git-commit-set-date() {
-	if [ -z "$1" ]; then
+	if [ -z "$*" ]; then
 		echo "Error: no date passed."
 		return 1
 	fi
 	local d
-	d="$(date -d "$1")"
+	d="$(date -d "$@")"
 	GIT_COMMITTER_DATE="$d" git commit --amend --no-edit --date "$d"
 }
 

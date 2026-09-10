@@ -41,6 +41,16 @@ function profile() {
 		fi
 	}
 
+	function source-systemd-env() {
+		local generator=/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator
+		if [ -x "${generator}" ]; then
+			eval "$($generator | grep -i github)"
+			export GITHUB_TOKEN
+		else
+			log w 'systemd environment generator not found'
+		fi
+	}
+
 	function show-current-profile() {
 			declare -r browser="$(xdg-settings get default-web-browser)"
 			case "$browser" in
@@ -144,6 +154,8 @@ EOF
 			set-browser "${BROWSER_CHROME}"
 			set-git-email "${WORK_GIT_EMAIL}"
 			link-github-token "${HOME}/work/ncsa/github-token.conf"
+			source-systemd-env
+			# gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
 			;;
 		home)
 			go env -w GOPRIVATE=''
@@ -151,6 +163,9 @@ EOF
 			set-browser "${BROWSER_BRAVE}"
 			set-git-email 'h@hrry.me'
 			link-github-token '-'
+			source-systemd-env
+			unset GITHUB_TOKEN
+			# gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'suspend'
 			;;
 		'') # No argument
 			error "Select a valid profile"

@@ -12,13 +12,13 @@
     - debian-cleanup
     - backup
     - role: fastfetch
-      version: 2.44.0
+      fastfetch_version: 2.44.0
     - role: nerdfont
-      font: Lilex
-      version: 3.4.0
+      nerdfont_font: Lilex
+      nerdfont_version: 3.4.0
     - role: nerdfont
-      font: JetBrainsMono
-      version: 3.4.0
+      nerdfont_font: JetBrainsMono
+      nerdfont_version: 3.4.0
 
   tasks:
     - name: Packages
@@ -53,7 +53,7 @@
           - brightnessctl
           - polybar # status bar
           - physlock # lockscreen (alt. xsecurelock)
-          #- xtrlock
+          # - xtrlock
           - feh # image view and wallpaper setter
           - rofi # app runner
           - pamixer # audio controls

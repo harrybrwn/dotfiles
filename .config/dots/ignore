@@ -18,13 +18,14 @@
 .config/spotify/
 .config/heroic/
 .config/github-copilot/
-.config/mc/config.json
+.config/mc/config.*
 .config/gallery-dl/config.json
 .config/cava/shaders/
 .config/libreoffice/4/user/
 .config/pulse/*.tdb
 .config/pulse/*-sink
 .config/pulse/*-source
+.config/Code/Cache*/
 
 snap/
 

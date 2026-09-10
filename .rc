@@ -373,6 +373,13 @@ alias claude-fast=claude-unsafe
 alias gitb=gitbranch gitbr=gitbranch gbr=gitbranch
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
+alias auto-sleep="gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'suspend'"
+alias no-auto-sleep="gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'"
+alias no-sleep=no-auto-sleep
+
+alias tts='piper -m ~/.local/state/tts/en_US-mike-medium.onnx'
+alias claude-stop-tts="pkill -x aplay; pkill -f '[e]n_US-danny-low'"
+
 # Add mason installed LSPs
 if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
   export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"

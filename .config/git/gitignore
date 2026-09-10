@@ -29,3 +29,7 @@
 [._]sw[a-p]
 
 **/.claude/settings.local.json
+# agent-context:superpowers@claude-plugins-official
+**/.worktrees/
+# agent-context:superpowers@claude-plugins-official
+**/*worktrees/

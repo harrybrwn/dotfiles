@@ -1,4 +1,5 @@
 local function enable()
+  -- vim.lsp.config("texlab", require("core.lspconfig.texlab"))
   vim.lsp.enable({
     -- real languages
     "gopls",
@@ -25,6 +26,7 @@ local function enable()
     "docker_compose_language_service",
     "gh_actions_ls",
     "templ",
+    "texlab",
   })
 end
 

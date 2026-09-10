@@ -1,0 +1,60 @@
+- name: Setup Laptop
+  hosts: localhost
+  become: false
+  become_method: ansible.builtin.sudo
+
+  roles:
+    - backup
+    - role: go-install
+      go_install_repo: github.com/hashicorp/terraform-ls
+    - role: nerdfont
+      nerdfont_font: Lilex
+      nerdfont_version: 3.4.0
+    - role: nerdfont
+      nerdfont_font: JetBrainsMono
+      nerdfont_version: 3.4.0
+
+  tasks:
+    - name: Install Python Dev Packages
+      become: true
+      ansible.builtin.package:
+        state: present
+        name:
+          # Needed for python package 'curl-cffi'
+          - libstdc++-14-dev
+          - python3-dev
+    - name: Python Virtual Env
+      ansible.builtin.command:
+        cmd: python3 -m venv {{ ansible_facts.user_dir }}/.local/share/venv
+        creates: "{{ ansible_facts.user_dir }}/.local/share/venv/pyvenv.cfg"
+    - name: Symlink python env packages
+      ansible.builtin.file:
+        # link where dest points to src
+        src: "{{ ansible_facts.user_dir }}/.local/share/venv/lib/python3.12/site-packages"
+        dest: "{{ ansible_facts.user_dir }}/.local/share/python/site-packages"
+        state: link
+        force: true
+
+    - name: Setup Text-to-Speach
+      block:
+        - name: Install Piper
+          ansible.builtin.pip:
+            state: present
+            virtualenv: "{{ ansible_facts.user_dir }}/.local/share/venv"
+            name:
+              - piper-tts
+        - name: Install Models
+          ansible.builtin.include_tasks: misc/huggingface-tts.yml
+          loop:
+            - en/en_US/mike/medium/en_US-mike-medium.onnx
+            - en/en_US/ryan/high/en_US-ryan-high.onnx
+            - en/en_US/bryce/medium/en_US-bryce-medium.onnx
+            - en/en_US/joe/medium/en_US-joe-medium.onnx
+            - en/en_US/john/medium/en_US-john-medium.onnx
+            - en/en_US/danny/low/en_US-danny-low.onnx
+            - en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium.onnx
+          loop_control:
+            loop_var: tts_model
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook
+# vim: ft=yaml.ansible

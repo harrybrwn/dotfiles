@@ -136,21 +136,28 @@ return {
       --require('telescope.builtin').search_history()
       error("cannot find a way to list telescope search history")
     end
+    local function d(description)
+      return description .. " (telescope)"
+    end
     return {
-      { "<leader>sf",   find_files,   mode = "n", desc = "[S]earch [F]iles" },
-      { "<leader>sg",   live_grep,    mode = "n", desc = "[S]earch with [G]rep" },
-      { "<leader>sik",  keymaps,      mode = "n", desc = "[S]earch [I]n [K]eymaps" },
-      { "<leader>sib",  buffers,      mode = "n", desc = "[S]earch [I]n [B]uffers" },
-      { "<leader>sim",  man,          mode = "n", desc = "[S]earch [I]n [M]an pages" },
-      { "<leader>sic",  colors,       mode = "n", desc = "[S]earch [I]n [C]olorschemes" },
-      { "<leader>sid",  diags,        mode = "n", desc = "[S]earch [I]n [D]iagnostics" },
-      { "<leader>sigf", git_files,    mode = "n", desc = "[S]earch [I]n [G]it [F]iles" },
-      { "<leader>sr",   resume,       mode = "n", desc = "[S]earch [R]esume. Resume the previous search." },
-      { "<leader>sh",   help,         mode = "n", desc = "[S]earch in [H]elp tags." },
-      { "<leader>sih",  history,      mode = "n", desc = "[S]earch [I]n [H]istory" },
-      { "<leader>?",    search,       mode = "n", desc = "[?] Search in the current buffer" },
-      { "<leader>sz",   zettelkasten, mode = "n", desc = "[S]earch in [Z]ettelkasten notes." },
-      { "<leader>siz",  zettelkasten, mode = "n", desc = "[S]earch [I]n [Z]ettelkasten notes." },
+      { "<leader>sf",   find_files,   mode = "n", desc = d("[S]earch [F]iles") },
+      { "<leader>sg",   live_grep,    mode = "n", desc = d("[S]earch with [G]rep") },
+      { "<leader>sik",  keymaps,      mode = "n", desc = d("[S]earch [I]n [K]eymaps") },
+      -- { "<leader>sib",  buffers,      mode = "n", desc = d("[S]earch [I]n [B]uffers") },
+      { "<leader>sb",   buffers,      mode = "n", desc = d("[S]earch [B]uffers") },
+      { "<leader>sim",  man,          mode = "n", desc = d("[S]earch [I]n [M]an pages") },
+      { "<leader>sic",  colors,       mode = "n", desc = d("[S]earch [I]n [C]olorschemes") },
+      { "<leader>sid",  diags,        mode = "n", desc = d("[S]earch [I]n [D]iagnostics") },
+      { "<leader>sigf", git_files,    mode = "n", desc = d("[S]earch [I]n [G]it [F]iles") },
+      { "<leader>sr",   resume,       mode = "n", desc = d("[S]earch [R]esume. Resume the previous search.") },
+      { "<leader>sh",   help,         mode = "n", desc = d("[S]earch in [H]elp tags.") },
+      { "<leader>sih",  history,      mode = "n", desc = d("[S]earch [I]n [H]istory") },
+      -- { "<leader>?",    search,       mode = "n", desc = d("[?] Search in the current buffer") },
+      { "<leader>s?",   search,       mode = "n", desc = d("[S]earch in the current buffer [?]") },
+      { "<leader>s/",   search,       mode = "n", desc = d("[S]earch in the current buffer [/]") },
+      { "<leader>s.",   search,       mode = "n", desc = d("[S]earch in the current buffer [.]") },
+      { "<leader>sz",   zettelkasten, mode = "n", desc = d("[S]earch in [Z]ettelkasten notes.") },
+      { "<leader>siz",  zettelkasten, mode = "n", desc = d("[S]earch [I]n [Z]ettelkasten notes.") },
     }
   end,
 }

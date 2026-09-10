@@ -33,7 +33,7 @@ function setup() {
 
 	open-find() {
 		log i "setup.open-find: starting"
-		local searchpaths=(~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/tools)
+		local searchpaths=(~/dev ~/.config ~/Videos ~/Pictures ~/Desktop ~/Downloads ~/Documents ~/tools)
 		if [ -d ~/work ]; then
 			searchpaths+=(~/work)
 		fi

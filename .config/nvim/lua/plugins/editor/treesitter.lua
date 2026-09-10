@@ -51,6 +51,7 @@ local langs = {
   "vimdoc",
   -- misc
   "query",
+  "latex",
 }
 
 ---@type LazyPluginSpec

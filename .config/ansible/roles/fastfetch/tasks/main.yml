@@ -6,8 +6,8 @@
 
 - name: Set Default Version
   ansible.builtin.set_fact:
-    version: 2.44.0
-  when: version is not defined
+    fastfetch_version: 2.44.0
+  when: fastfetch_version is not defined
 
 - name: Install Build deps
   become: true
@@ -20,10 +20,10 @@
 - name: Check for Installation
   ansible.builtin.stat:
     path: '{{ ansible_facts.user_dir }}/.local/share/fastfetch/install_manifest.txt'
-  register: manifest
+  register: fastfetch_manifest
 
 - name: Install fastfetch
-  when: not manifest.stat.exists
+  when: not fastfetch_manifest.stat.exists
   block:
     - name: Clone Repo
       become: false
@@ -31,7 +31,7 @@
         repo: git@github.com:fastfetch-cli/fastfetch.git
         dest: /tmp/fastfetch
         depth: 1
-        version: '{{ version }}'
+        version: '{{ fastfetch_version }}'
 
     - name: Create Build Dir
       become: false

@@ -1,0 +1,35 @@
+- name: Check Variables
+  ansible.builtin.debug:
+    msg: "Variable check: role parameter 'go_install_repo' is required"
+  failed_when: go_install_repo is not defined
+
+- name: Set Default Tag
+  ansible.builtin.set_fact:
+    go_install_tag: latest
+  when: go_install_tag is not defined
+
+- name: Set Default Package
+  ansible.builtin.set_fact:
+    go_install_pkg: .
+  when: go_install_pkg is not defined
+
+- name: Set Default Binary Name
+  ansible.builtin.set_fact:
+    go_install_binary: '{{ go_install_repo | basename }}'
+  when: go_install_binary is not defined
+
+- name: Get GOPATH
+  ansible.builtin.set_fact:
+    go_install_gopath: "{{ lookup('ansible.builtin.env', 'GOPATH') }}"
+
+- name: Install
+  ansible.builtin.command:
+    argv:
+      - go
+      - install
+      - -trimpath
+      - ldflags
+      - -s -w
+      - "{{ go_install_repo }}@{{ go_install_tag }}"
+    creates: "{{ go_install_gopath }}/bin/{{ go_install_binary }}"
+  register: go_install_status

@@ -152,18 +152,28 @@ __connectiq_sdk() {
 
 # Just saving my original
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\] `_git_branch`\[\033[00m\]\$ '
-if command -v __git_ps1 > /dev/null; then
-  if [ -n "$SSH_CONNECTION" ]; then
-    __HOSTNAME_HASH="$(hostname | cksum | cut -f1 -d' ')"
-    __HOSTNAME_COLORS=('2' '13' '34' '86' '109' '177' '197' '147' '124') # 256 colors
-    __HOSTNAME_N_COLORS="${#__HOSTNAME_COLORS[@]}"
-    __HOSTNAME_COLOR_INDEX=$(( (__HOSTNAME_HASH % __HOSTNAME_N_COLORS) + 1))
-    __HOSTNAME_COLOR=${__HOSTNAME_COLORS[${__HOSTNAME_COLOR_INDEX}]}
-  else
-    __HOSTNAME_COLOR="${THEME_SECONDARY_COLOR}"
-  fi
-  PS1="\[\033[38;5;\${THEME_SECONDARY_COLOR};1m\]\u@\[\033[38;5;\${__HOSTNAME_COLOR};1m\]\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]\$(__git_ps1)\[\033[00m\] \$ "
-fi
+# if command -v __git_ps1 > /dev/null; then
+#   if [ -n "$SSH_CONNECTION" ]; then
+#     __HOSTNAME_HASH="$(hostname | cksum | cut -f1 -d' ')"
+#     __HOSTNAME_COLORS=('2' '13' '34' '86' '109' '177' '197' '147' '124') # 256 colors
+#     __HOSTNAME_N_COLORS="${#__HOSTNAME_COLORS[@]}"
+#     __HOSTNAME_COLOR_INDEX=$(( (__HOSTNAME_HASH % __HOSTNAME_N_COLORS) + 1))
+#     __HOSTNAME_COLOR=${__HOSTNAME_COLORS[${__HOSTNAME_COLOR_INDEX}]}
+#   else
+#     __HOSTNAME_COLOR="${THEME_SECONDARY_COLOR}"
+#   fi
+#   PS1="\[\033[38;5;\${THEME_SECONDARY_COLOR};1m\]\u@\[\033[38;5;\${__HOSTNAME_COLOR};1m\]\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[01;31m\]\$(__git_ps1)\[\033[00m\] \$ "
+# fi
+
+PS1="\[\033[38;5;109;1m\]\
+\u@\
+\[\033[38;5;109;1m\]\
+\h\[\033[0m\]\
+:\
+\[\033[01;34m\]\
+\w\
+\[\033[01;31m\]\
+\$(__git_ps1)\[\033[00m\] \$ "
 
 if command -v gopass > /dev/null 2>&1; then
 	# shellcheck disable=SC1090

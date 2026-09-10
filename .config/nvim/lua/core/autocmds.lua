@@ -107,3 +107,8 @@ vim.api.nvim_create_user_command("LSPStop", function(opts)
 end, {
   -- nargs = 1,
 })
+
+---@diagnostic disable-next-line: unused-local
+vim.api.nvim_create_user_command("LSPLogs", function(opts)
+  vim.cmd('tabnew ' .. vim.lsp.get_log_path())
+end, {})

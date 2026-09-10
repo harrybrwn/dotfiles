@@ -1,0 +1,5 @@
+- name: Check hostname
+  when: true
+  ansible.builtin.fail:
+    msg: 'Wrong hostname'
+    

@@ -1,0 +1,11 @@
+- name: Install Model '{{ tts_model | basename }}'
+  ansible.builtin.get_url:
+    url: https://huggingface.co/rhasspy/piper-voices/resolve/main/{{ tts_model }}
+    mode: "0664"
+    dest: ~/.local/state/tts/{{ tts_model | basename }}
+- name: Install Model JSON '{{ tts_model | basename }}.json'
+  ansible.builtin.get_url:
+    url: https://huggingface.co/rhasspy/piper-voices/resolve/main/{{ tts_model | dirname }}/{{ tts_model | basename }}.json
+    mode: "0664"
+    dest: ~/.local/state/tts/{{ tts_model | basename }}.json
+# vim: ft=yaml.ansible

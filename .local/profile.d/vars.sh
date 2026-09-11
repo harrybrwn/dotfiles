@@ -150,6 +150,9 @@ export LEIN_HOME="$XDG_DATA_HOME/lein"
 # ollama
 export OLLAMA_MODELS="$XDG_DATA_HOME/ollama/models"
 
+# PI
+export PI_CODING_AGENT_DIR="$XDG_CONFIG_HOME/pi/agent"
+
 # minikube
 export MINIKUBE_HOME="$XDG_DATA_HOME/minikube"
 

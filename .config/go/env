@@ -1,2 +1,2 @@
 GO111MODULE=auto
-GOPRIVATE=github.com/recruiting-tech*
+GOPRIVATE=

@@ -380,6 +380,20 @@ alias no-sleep=no-auto-sleep
 alias tts='piper -m ~/.local/state/tts/en_US-mike-medium.onnx'
 alias claude-stop-tts="pkill -x aplay; pkill -f '[e]n_US-danny-low'"
 
+claude-tts() {
+  _tts_stop() {
+    pkill -x aplay || true
+    pkill -f '[e]n_US-danny-low' || true
+  }
+  case "$1" in
+    on)   if [ -f ~/.claude/hooks/tts.off ]; then rm ~/.claude/hooks/tts.off; fi ;;
+    off)  touch ~/.claude/hooks/tts.off; _tts_stop ;;
+    stop) _tts_stop ;;
+    '')   if [ -f ~/.claude/hooks/tts.off ]; then echo off; else echo on; fi ;;
+    *)    echo "Usage $0 <on|off|stop>" ;;
+  esac
+}
+
 # Add mason installed LSPs
 if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
   export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"

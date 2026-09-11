@@ -8,7 +8,7 @@ vim.g.loaded_netrwPlugin = 1
 return {
   {
     "nvim-tree/nvim-tree.lua",
-    dev = true,
+    -- dev = true,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     event = { "VeryLazy", "BufEnter" },
     keys = {
@@ -75,35 +75,35 @@ return {
       filesystem_watchers = {
         ignore_dirs = { "node_modules", ".git", "build" },
       },
-      git = {
-        work_tree = function(path)
-          local join = vim.fs.joinpath
-          local home = vim.env.HOME
-          if path == home then
-            return home
-          end
-          local xdg_config = os.getenv("XDG_CONFIG_HOME") or join(home, ".config")
-          local profile = join(vim.env.HOME, ".local/profile.d")
-          local res = nil
-          if path:sub(1, #xdg_config) == xdg_config or path:sub(1, #profile) == profile then
-            res = home
-          end
-          -- vim.print(string.format("work_tree(%s) -> %s", path, res))
-          return res
-        end,
-        git_dir = function(path)
-          local join = vim.fs.joinpath
-          local home = vim.env.HOME
-          local xdg_config = os.getenv("XDG_CONFIG_HOME") or join(home, ".config")
-          local profile = join(vim.env.HOME, ".local/profile.d")
-          local res = nil
-          if path == home or path:sub(1, #xdg_config) == xdg_config or path:sub(1, #profile) == profile then
-            res = vim.fs.joinpath(xdg_config, "dots/repo")
-          end
-          -- vim.print(string.format("git_dir(%s) -> %s", path, res))
-          return res
-        end,
-      },
+      -- git = {
+      --   work_tree = function(path)
+      --     local join = vim.fs.joinpath
+      --     local home = vim.env.HOME
+      --     if path == home then
+      --       return home
+      --     end
+      --     local xdg_config = os.getenv("XDG_CONFIG_HOME") or join(home, ".config")
+      --     local profile = join(vim.env.HOME, ".local/profile.d")
+      --     local res = nil
+      --     if path:sub(1, #xdg_config) == xdg_config or path:sub(1, #profile) == profile then
+      --       res = home
+      --     end
+      --     -- vim.print(string.format("work_tree(%s) -> %s", path, res))
+      --     return res
+      --   end,
+      --   git_dir = function(path)
+      --     local join = vim.fs.joinpath
+      --     local home = vim.env.HOME
+      --     local xdg_config = os.getenv("XDG_CONFIG_HOME") or join(home, ".config")
+      --     local profile = join(vim.env.HOME, ".local/profile.d")
+      --     local res = nil
+      --     if path == home or path:sub(1, #xdg_config) == xdg_config or path:sub(1, #profile) == profile then
+      --       res = vim.fs.joinpath(xdg_config, "dots/repo")
+      --     end
+      --     -- vim.print(string.format("git_dir(%s) -> %s", path, res))
+      --     return res
+      --   end,
+      -- },
       on_attach = custom.on_attach,
     },
   },

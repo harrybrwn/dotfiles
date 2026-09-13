@@ -1,0 +1,82 @@
+---
+- name: Check if whisper.cpp binary exists
+  ansible.builtin.stat:
+    path: '{{ ansible_facts.user_dir }}/.local/bin/whisper-cli'
+  register: whisper_bin
+
+- name: Install whisper.cpp
+  when: not whisper_bin.stat.exists
+  block:
+    - name: Dependencies
+      become: true
+      ansible.builtin.package:
+        name:
+          - build-essential
+          - cmake
+          - git
+          - curl
+          - jq
+
+    - name: Get latest release tag
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/ggml-org/whisper.cpp/releases/latest
+        return_content: true
+      register: whisper_release
+
+    - name: Set release version fact
+      ansible.builtin.set_fact:
+        whisper_version: '{{ whisper_release.json.tag_name }}'
+
+    - name: Check if already downloaded
+      ansible.builtin.stat:
+        path: /tmp/whisper.cpp-{{ whisper_version }}
+      register: whisper_src
+
+    - name: Download latest release tarball
+      when: not whisper_src.stat.exists
+      ansible.builtin.get_url:
+        url: https://github.com/ggml-org/whisper.cpp/archive/refs/tags/{{ whisper_version }}.tar.gz
+        dest: /tmp/whisper.cpp-{{ whisper_version }}.tar.gz
+        mode: '0644'
+
+    - name: Extract tarball
+      when: not whisper_src.stat.exists
+      ansible.builtin.unarchive:
+        src: /tmp/whisper.cpp-{{ whisper_version }}.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    # GitHub strips the leading 'v' from auto-generated tarballs, so the
+    # extracted directory is e.g. 'whisper.cpp-1.9.4' for tag 'v1.9.4'.
+    - name: Rename extracted directory to include the 'v' prefix
+      when: not whisper_src.stat.exists
+      ansible.builtin.command:
+        cmd: mv /tmp/whisper.cpp-{{ whisper_version | regex_replace('^v', '') }} /tmp/whisper.cpp-{{ whisper_version }}
+
+    - name: Configure build with CMake
+      ansible.builtin.command:
+        cmd: cmake -B build
+        chdir: /tmp/whisper.cpp-{{ whisper_version }}
+        creates: /tmp/whisper.cpp-{{ whisper_version }}/build/Makefile
+
+    - name: Build
+      ansible.builtin.command:
+        cmd: cmake --build build --config Release -j{{ ansible_facts.processor_vcpus }}
+        chdir: /tmp/whisper.cpp-{{ whisper_version }}
+        creates: /tmp/whisper.cpp-{{ whisper_version }}/build/bin/whisper-cli
+
+    - name: Ensure ~/.local/bin exists
+      ansible.builtin.file:
+        path: '{{ ansible_facts.user_dir }}/.local/bin'
+        state: directory
+        mode: '0755'
+
+    - name: Copy binaries to ~/.local/bin
+      ansible.builtin.copy:
+        src: /tmp/whisper.cpp-{{ whisper_version }}/build/bin/{{ item }}
+        dest: '{{ ansible_facts.user_dir }}/.local/bin/{{ item }}'
+        mode: '0755'
+        remote_src: true
+      loop:
+        - whisper-cli
+        - whisper-server

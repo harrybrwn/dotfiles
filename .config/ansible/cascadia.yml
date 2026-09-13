@@ -19,6 +19,8 @@
     - role: nerdfont
       nerdfont_font: JetBrainsMono
       nerdfont_version: 3.4.0
+    - whisper-cpp
+    - whisper-model
 
   tasks:
     - name: Packages

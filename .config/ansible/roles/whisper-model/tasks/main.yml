@@ -1,0 +1,12 @@
+---
+- name: Ensure ~/.local/share/whisper exists
+  ansible.builtin.file:
+    path: '{{ ansible_facts.user_dir }}/.local/share/whisper'
+    state: directory
+    mode: '0755'
+
+- name: Download ggml-base.en model
+  ansible.builtin.get_url:
+    url: https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin?download=true
+    dest: '{{ ansible_facts.user_dir }}/.local/share/whisper/ggml-base.en.bin'
+    mode: '0644'

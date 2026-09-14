@@ -1,0 +1,210 @@
+.TH PERMISSIONS 7 "2025-09-14" "Local Manual" "Linux Programmer's Manual"
+.SH NAME
+permissions \- Linux file permission cheat sheet
+.SH DESCRIPTION
+Every directory entry has an owner, a group, and a set of permission bits.
+The familiar mode string shown by
+.BR ls (1)
+has this shape:
+.PP
+.EX
+  File Type     User (Owner)         Group            Others (World)
+   [ - ]          [ rwx ]           [ r-x ]              [ r-- ]
+
+     │            ╱  │  ╲           ╱  │  ╲              ╱  │  ╲
+     │           r   w   x         r   -   x            r   -   -
+     │
+     │           │   │   │         │   │   │            │   │   └── No Exec
+     │           │   │   │         │   │   └── Execute  │   └────── No Write
+     │           │   │   │         │   └────── No Write └────────── Read
+     │           │   │   │         └────────── Read
+     │           │   │   └──── Execute
+     │           │   └──────── Write
+     │           └──────────── Read
+     │
+     └───>  - = Regular File      d = Directory      l = Symbolic Link
+            c = Character Device  b = Block Device   p = Named Pipe
+            s = Socket
+.EE
+.PP
+For example, the mode string
+\fB\-rwxr\-xr\-\-\fR means a regular file whose owner may read, write, and execute it; whose
+group may read and execute it; and whose other users may only read it.
+.SH PERMISSION BITS
+.TS
+box tab(|);
+l l l l.
+Bit|Value|File|Directory
+_
+r (read)|4|Read contents|List names
+w (write)|2|Change contents|Create/remove/rename
+x (execute)|1|Run file|Traverse/search
+- (absent)|0|Denied|Denied
+.TE
+.PP
+Directory permissions combine: to access a file by pathname, the user
+normally needs
+.B x
+on every parent directory.  To remove or rename an entry, the relevant
+permission is on its parent directory, not on the entry itself.  A file's
+.B x
+bit does not make it executable if its contents are not a valid program or
+script.
+.SH NUMERIC MODES
+Each three-digit octal number describes owner, group, and others.  Add the
+values of the desired bits:
+.PP
+.EX
+      r = 4       w = 2       x = 1
+
+      7 = rwx      6 = rw-      5 = r-x      4 = r--
+      3 = -wx      2 = -w-      1 = --x      0 = ---
+
+      chmod 754 file        # rwxr-xr--
+            7     5  4
+          owner group other
+.EE
+.PP
+Common modes:
+.TS
+box tab(|);
+l l l.
+Mode|Symbolic|Typical use
+_
+600|rw-------|Private file
+640|rw-r-----|File readable by its group
+644|rw-r--r--|Ordinary non-executable file
+700|rwx------|Private directory or program
+750|rwxr-x---|Directory or program shared with a group
+755|rwxr-xr-x|Publicly traversable directory or executable
+.TE
+.PP
+The mode is not the whole access decision.  The effective user, group
+membership, ACLs, mount options, Linux security modules, and the filesystem
+can impose additional restrictions.
+.SH SYMBOLIC MODES
+.BR chmod (1)
+accepts symbolic changes.  The who part is
+.BR u
+(owner),
+.BR g
+(group),
+.BR o
+(others), or
+.BR a
+(all).  Operators are
+.B +
+(add),
+.B -
+(remove), and
+.B =
+(set exactly):
+.PP
+.EX
+  chmod u+x script       # add execute for owner
+  chmod g-w file         # remove write from group
+  chmod o= file          # remove all permissions from others
+  chmod a+r file         # add read for everyone
+  chmod u=rw,go=r file   # set rw-r--r--
+  chmod -R go-rwx dir    # recursively remove group/other access
+.EE
+.PP
+Use care with
+.BR chmod (1)\ -R:
+its result may be inappropriate when files and directories need different
+modes.
+.SH SPECIAL BITS
+The optional fourth octal digit (or the leading bit in a four-digit mode)
+sets special behavior:
+.PP
+.EX
+       4     set-user-ID (setuid)
+       2     set-group-ID (setgid)
+       1     sticky bit
+
+       chmod 4755 program    # rwsr-xr-x
+       chmod 2755 program    # rwxr-sr-x
+       chmod 1777 directory  # rwxrwxrwt
+.EE
+.TP
+.B setuid (4000)
+For an executable file, run with the file owner's effective UID.  Linux may
+ignore setuid on some filesystems, mounts, or execution contexts.  It is
+usually not meaningful on directories.
+.TP
+.B setgid (2000)
+For an executable file, run with the file group's effective GID.  On a
+directory, newly created entries inherit the directory's group, and new
+subdirectories inherit the setgid bit on Linux filesystems that support it.
+.TP
+.B sticky (1000)
+On a directory, users may remove or rename entries only when they own the
+entry, own the directory, or have appropriate privilege.  The usual example
+is
+.BR /tmp .
+The sticky bit is displayed as
+.B t
+in place of the others' execute bit (or
+.B T
+when execute is absent).
+.PP
+When a special bit replaces an execute bit, lower-case
+.B s
+or
+.B t
+means execute is also set; upper-case
+.B S
+or
+.B T
+means it is not.
+.SH DEFAULT PERMISSIONS AND UMASK
+Programs commonly start with a requested mode and the process umask removes
+permissions:
+.PP
+.EX
+  effective mode = requested mode & ~umask
+
+  umask 022
+  touch file       # commonly 644 (0666 & ~0022)
+  mkdir directory  # commonly 755 (0777 & ~0022)
+.EE
+.PP
+A umask does not grant permissions; it only masks bits requested by a
+program.  View or set it with
+.BR umask (1)
+(or the shell's built-in command).  Exact defaults can vary by program,
+ACLs, and the user's environment.
+.SH INSPECTING ACCESS
+.EX
+  ls -l file                 # mode, owner, and group
+  stat file                  # decimal/octal details and timestamps
+  namei -l /path/to/file     # permissions on every path component
+  getfacl file               # POSIX ACLs, if present
+  id                         # effective identity and groups
+  test -r file && echo yes   # test access as the current process
+.EE
+.PP
+For a symbolic link,
+.BR ls (1)
+normally displays the link's own mode as
+.B lrwxrwxrwx;
+access checks follow the link and use the target's permissions.  Use
+.BR stat (1)\ -L
+or
+.BR readlink (1)
+to examine the target or link as needed.
+.SH SEE ALSO
+.BR chmod (1),
+.BR chown (1),
+.BR chgrp (1),
+.BR ls (1),
+.BR stat (1),
+.BR umask (1),
+.BR acl (5),
+.BR capabilities (7),
+.BR inode (7),
+.BR path_resolution (7)
+.SH NOTES
+This page is a quick reference, not a complete security model.  In
+particular, root privileges, capabilities, ACLs, and security modules can
+change the result of a simple mode-bit analysis.

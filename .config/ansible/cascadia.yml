@@ -145,6 +145,16 @@
           # - libxcb-xkb-dev
           # - libxcb1-dev
 
+    - name: Remove Tmux Build Packages
+      when: tmux_installation_completed | default(false) | bool
+      become: true
+      ansible.builtin.package:
+        state: absent
+        name:
+          # Tmux build deps that I don't want
+          - bison
+          - libevent-dev
+
     - name: Remove dependencies that are no longer required
       become: true
       ansible.builtin.apt:

@@ -395,6 +395,9 @@ claude-tts() {
   esac
 }
 
+# Disable's the tmux warnings...
+alias pi='env -u TMUX pi'
+
 # Add mason installed LSPs
 if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
   export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"

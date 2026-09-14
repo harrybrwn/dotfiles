@@ -47,7 +47,8 @@ snap/
 .local/share/themes/
 .local/share/icons/
 .local/share/sounds/
-.local/share/man/
+.local/share/man/man1/
+.local/share/man/man6/
 .local/share/dam/
 .local/share/com.github.johnfactotum.Foliate/
 .local/share/zig-linux*/

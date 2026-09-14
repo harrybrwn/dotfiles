@@ -26,3 +26,13 @@ key = "F11"
 # action = "Paste"
 # key = "V"
 # mods = "Control|Shift"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001b[13;2u"
+
+[[keyboard.bindings]]
+key = "Enter"
+mods = "Alt"
+chars = "\u001b[13;3u"

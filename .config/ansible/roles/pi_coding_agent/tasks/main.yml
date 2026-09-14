@@ -1,0 +1,24 @@
+---
+- name: Install Node.js and npm
+  become: true
+  ansible.builtin.package:
+    name: "{{ pi_coding_agent_nodejs_packages }}"
+    state: present
+  when: pi_coding_agent_install_nodejs
+
+- name: Check that npm is available
+  ansible.builtin.command:
+    argv:
+      - "{{ pi_coding_agent_npm_executable }}"
+      - --version
+  register: pi_coding_agent_npm_version
+  changed_when: false
+
+- name: Install pi coding agent with npm
+  community.general.npm:
+    name: "{{ pi_coding_agent_package }}"
+    version: "{{ pi_coding_agent_version | default(omit, true) }}"
+    global: true
+    state: present
+    executable: "{{ pi_coding_agent_npm_executable }}"
+  become: "{{ pi_coding_agent_npm_become }}"

@@ -1,0 +1,3 @@
+---
+nvm_dir: /usr/share/nvm
+nvm_install_from_package: true

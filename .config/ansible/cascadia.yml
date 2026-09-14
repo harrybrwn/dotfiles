@@ -21,6 +21,10 @@
       nerdfont_version: 3.4.0
     - whisper-cpp
     - whisper-model
+    - nvm
+    - role: pi_coding_agent
+      pi_coding_agent_npm_become: false
+      pi_coding_agent_install_nodejs: false
 
   tasks:
     - name: Packages

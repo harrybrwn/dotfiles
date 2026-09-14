@@ -1,0 +1,8 @@
+---
+# NVM release to install. Pinning a release keeps the role reproducible.
+nvm_version: "v0.40.7"
+
+# Shell startup files in which NVM should be initialized.
+nvm_profile_files:
+  - "{{ ansible_facts.user_dir }}/.bashrc"
+  - "{{ ansible_facts.user_dir }}/.zshrc"

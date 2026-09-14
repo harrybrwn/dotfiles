@@ -1,0 +1,21 @@
+---
+# npm package containing the pi coding agent.
+pi_coding_agent_package: "@earendil-works/pi-coding-agent"
+
+# Set to a semver version to pin the installation. Leave empty for latest.
+pi_coding_agent_version: ""
+
+# Install Node.js and npm with the host package manager before installing pi.
+# Set this to false when Node.js/npm are managed by nvm or another tool.
+pi_coding_agent_install_nodejs: false
+pi_coding_agent_nodejs_packages:
+  - nodejs
+  - npm
+
+# Override this when npm is not available through the default PATH (for example,
+# when using a Node.js installation managed by nvm).
+pi_coding_agent_npm_executable: npm
+
+# Global npm installs usually target a system prefix. Set false for a user-local
+# npm installation such as one provided by nvm.
+pi_coding_agent_npm_become: false

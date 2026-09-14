@@ -1,0 +1,160 @@
+---
+- name: Load OS-specific variables
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+
+- name: Install NVM via Package Manager
+  become: true
+  ansible.builtin.package:
+    name: nvm
+    state: present
+  when: nvm_install_from_package
+
+- name: Ensure git is installed
+  become: true
+  ansible.builtin.package:
+    name: git
+    state: present
+  when: not nvm_install_from_package
+
+- name: Check whether the NVM directory already exists
+  become: false
+  ansible.builtin.stat:
+    path: "{{ nvm_dir }}"
+  register: nvm_dir_status
+  when: not nvm_install_from_package
+
+- name: Check the installed NVM release
+  become: false
+  ansible.builtin.command:
+    argv:
+      - git
+      - -C
+      - "{{ nvm_dir }}"
+      - describe
+      - --tags
+      - --exact-match
+      - --match
+      - v*
+      - HEAD
+  register: nvm_current_version
+  changed_when: false
+  failed_when: false
+  when:
+    - not nvm_install_from_package
+    - nvm_dir_status.stat.exists
+
+- name: Install or update NVM from GitHub
+  become: false
+  ansible.builtin.git:
+    repo: https://github.com/nvm-sh/nvm.git
+    dest: "{{ nvm_dir }}"
+    version: "{{ nvm_version }}"
+    depth: 1
+    update: true
+  when:
+    - not nvm_install_from_package
+    - >-
+      not nvm_dir_status.stat.exists or
+      nvm_current_version.rc != 0 or
+      (nvm_current_version.stdout | trim | regex_replace('^v', '')) is version(
+        nvm_version | regex_replace('^v', ''), '<'
+      )
+
+- name: Check configured shell profiles
+  become: false
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop: "{{ nvm_profile_files }}"
+  register: nvm_profile_status
+  changed_when: false
+
+- name: Choose the shell representation of NVM_DIR
+  ansible.builtin.set_fact:
+    nvm_profile_dir: >-
+      {{ '$XDG_DATA_HOME/nvm'
+         if (ansible_env.XDG_DATA_HOME | default('')) != ''
+         and nvm_dir == ansible_env.XDG_DATA_HOME + '/nvm'
+         else ('$HOME/.local/share/nvm'
+               if nvm_dir == ansible_facts.user_dir + '/.local/share/nvm'
+               else nvm_dir) }}
+
+- name: Initialize NVM in existing shell profiles
+  become: false
+  ansible.builtin.blockinfile:
+    path: "{{ item.item }}"
+    create: false
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+    block: |
+      export NVM_DIR="{{ nvm_profile_dir }}"
+      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+  loop: "{{ nvm_profile_status.results }}"
+  when: item.stat.exists
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Find the current Node.js version
+  become: false
+  ansible.builtin.shell:
+    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm version-remote node
+    executable: /bin/bash
+  register: nvm_latest_node_version
+  changed_when: false
+  when: nvm_default_node_version is not defined
+
+- name: Fail if we have variable overriding
+  ansible.builtin.fail:
+    msg: "nvm_node_version is an internal only variable"
+  when: nvm_node_version is defined
+
+- name: Select the Node.js version to install
+  ansible.builtin.set_fact:
+    nvm_node_version: "{{ nvm_default_node_version | default(nvm_latest_node_version.stdout) }}"
+
+- name: Debugging nvm_node_version
+  ansible.builtin.debug:
+    msg: "target node version={{ nvm_node_version }}"
+
+- name: Check whether the requested Node.js version is installed
+  become: false
+  ansible.builtin.shell:
+    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm version {{ nvm_node_version | quote }}
+    executable: /bin/bash
+  register: nvm_installed_node_version
+  changed_when: false
+  failed_when: false
+
+- name: Install the requested Node.js version
+  become: false
+  ansible.builtin.shell:
+    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm install {{ nvm_node_version | quote }}
+    executable: /bin/bash
+  when: nvm_installed_node_version.stdout == 'N/A'
+  changed_when: true
+
+- name: Check the current default Node.js alias
+  become: false
+  ansible.builtin.shell:
+    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm version default
+    executable: /bin/bash
+  register: nvm_default_alias
+  changed_when: false
+
+- name: Point the default Node.js alias at the requested version
+  become: false
+  ansible.builtin.shell:
+    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm alias default {{ nvm_node_version | quote }}
+    executable: /bin/bash
+  when: nvm_default_alias.stdout != nvm_installed_node_version.stdout
+  changed_when: true
+
+- name: Use the default
+  become: false
+  ansible.builtin.shell:
+    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm use default
+    executable: /bin/bash
+  when: nvm_default_alias.stdout != nvm_installed_node_version.stdout
+  changed_when: true

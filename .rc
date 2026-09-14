@@ -70,7 +70,7 @@ fi
 
 # Development aliases
 alias g=git m=make mi='make install'
-alias cl=clear
+alias clear='clear -x' cl='clear -x'
 alias dk=docker dkc='docker compose'
 alias k=kubectl ku=kubectl kube=kubectl kns=kubens kcx=kubectx
 alias tf=terraform
@@ -131,10 +131,11 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_BAKE=true
 
 # Node Version Manager (nvm)
-export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 if [ -d /usr/share/nvm ]; then
+  export NVM_DIR="/usr/share/nvm"
   source /usr/share/nvm/init-nvm.sh
 else
+  export NVM_DIR="$XDG_DATA_HOME/nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi

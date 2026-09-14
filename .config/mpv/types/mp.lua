@@ -179,6 +179,11 @@ function mp.get_script_directory() end
 
 ---@class mp.Overlay
 ---@field data string
+---@field res_x integer
+---@field res_y integer
+---@field z integer
+---@field compute_bounds boolean
+---@field hidden boolean
 ---@field update fun(self: mp.Overlay)
 ---@field remove fun(self: mp.Overlay)
 

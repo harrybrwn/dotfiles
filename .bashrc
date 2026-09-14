@@ -127,6 +127,12 @@ fi
 # shellcheck disable=SC1090
 source ~/.rc
 
+# BEGIN nvm setup (managed by ansible)
+export NVM_DIR="$XDG_DATA_HOME/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+# END nvm setup (managed by ansible)
+
 # Prompt
 _git_branch() {
     local __branch

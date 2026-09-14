@@ -86,7 +86,7 @@
   ansible.builtin.blockinfile:
     path: "{{ item.item }}"
     create: false
-    marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+    marker: "# {mark} nvm setup (managed by ansible)"
     block: |
       export NVM_DIR="{{ nvm_profile_dir }}"
       [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"

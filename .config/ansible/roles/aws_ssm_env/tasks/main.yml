@@ -1,0 +1,170 @@
+---
+- name: Validate AWS SSM environment variable inputs
+  ansible.builtin.assert:
+    that:
+      - aws_ssm_env_parameters is sequence
+      - aws_ssm_env_parameters is not string
+      - item.name is string
+      - item.name | length > 0
+      - item.env is string
+      - item.env is match('^[A-Za-z_][A-Za-z0-9_]*$')
+    fail_msg: >-
+      Each aws_ssm_env_parameters item must contain a non-empty name and a
+      valid shell environment variable name in env.
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.name | default('invalid parameter') }}"
+
+- name: Validate that at least one parameter is configured
+  ansible.builtin.assert:
+    that:
+      - aws_ssm_env_parameters | length > 0
+    fail_msg: "aws_ssm_env_parameters must contain at least one parameter."
+
+- name: Validate that environment variable names are unique
+  ansible.builtin.assert:
+    that:
+      - (aws_ssm_env_parameters | map(attribute='env') | list | unique | length)
+        == (aws_ssm_env_parameters | length)
+    fail_msg: "Each aws_ssm_env_parameters item must use a unique env name."
+
+- name: Expand the home directory in the .env path
+  ansible.builtin.set_fact:
+    aws_ssm_env_file_path: >-
+      {{ ansible_facts.user_dir + aws_ssm_env_file[1:]
+         if aws_ssm_env_file.startswith('~/') or aws_ssm_env_file == '~'
+         else aws_ssm_env_file }}
+
+- name: Install Python dependencies for the AWS lookup
+  become: true
+  ansible.builtin.package:
+    name:
+      - python3-boto3
+    state: present
+
+- name: Check whether the .env file exists
+  ansible.builtin.stat:
+    path: "{{ aws_ssm_env_file_path }}"
+  register: aws_ssm_env_file_status
+  changed_when: false
+
+- name: Read the existing .env file
+  ansible.builtin.slurp:
+    src: "{{ aws_ssm_env_file_path }}"
+  register: aws_ssm_env_file_contents
+  when:
+    - aws_ssm_env_file_status.stat.exists
+    - aws_ssm_env_file_status.stat.isreg | default(false)
+  no_log: true
+
+- name: Initialize parameter state
+  ansible.builtin.set_fact:
+    aws_ssm_env_parameter_present: {}
+    aws_ssm_env_parameter_exported: {}
+    aws_ssm_env_parameter_values: {}
+  no_log: true
+
+- name: Determine which environment variables are already configured
+  ansible.builtin.set_fact:
+    aws_ssm_env_parameter_present: >-
+      {{ aws_ssm_env_parameter_present | combine({item.env:
+         (((aws_ssm_env_file_contents.content | default('') | b64decode)
+           | regex_search('(?m)^(?:export[\t ]+)?'
+             ~ (item.env | regex_escape) ~ '[\t ]*=')) is not none)}) }}
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.env }}"
+  no_log: true
+
+- name: Determine which environment variables have the export prefix
+  ansible.builtin.set_fact:
+    aws_ssm_env_parameter_exported: >-
+      {{ aws_ssm_env_parameter_exported | combine({item.env:
+         (((aws_ssm_env_file_contents.content | default('') | b64decode)
+           | regex_search('(?m)^export[\t ]+'
+             ~ (item.env | regex_escape) ~ '[\t ]*=')) is not none)}) }}
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.env }}"
+  no_log: true
+
+- name: Fetch missing parameters from AWS Systems Manager Parameter Store
+  ansible.builtin.set_fact:
+    aws_ssm_env_parameter_values: >-
+      {{ aws_ssm_env_parameter_values | combine({item.env:
+         lookup('amazon.aws.aws_ssm', item.name,
+                decrypt=aws_ssm_env_decrypt,
+                profile=aws_ssm_env_profile)}) }}
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: not aws_ssm_env_parameter_present[item.env]
+  no_log: true
+
+- name: Initialize formatted parameter lines
+  ansible.builtin.set_fact:
+    aws_ssm_env_parameter_lines: {}
+  no_log: true
+
+- name: Format missing parameters for the .env file
+  ansible.builtin.set_fact:
+    aws_ssm_env_parameter_lines: >-
+      {{ aws_ssm_env_parameter_lines | combine({item.env:
+         (('export ' if (item.export | default(false) | bool) else '')
+          ~ item.env ~ '=' ~
+          (("'" ~ aws_ssm_env_parameter_values[item.env] ~ "'")
+           if (' ' in aws_ssm_env_parameter_values[item.env]
+               or ';' in aws_ssm_env_parameter_values[item.env]
+               or '"' in aws_ssm_env_parameter_values[item.env]
+               or '$' in aws_ssm_env_parameter_values[item.env]
+               or '=' in aws_ssm_env_parameter_values[item.env])
+           else aws_ssm_env_parameter_values[item.env]))}) }}
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.env }}"
+  when: not aws_ssm_env_parameter_present[item.env]
+  no_log: true
+
+- name: Add export to existing environment variables that require it
+  ansible.builtin.lineinfile:
+    path: "{{ aws_ssm_env_file_path }}"
+    regexp: '^({{ item.env | regex_escape }}[\t ]*=.*)$'
+    line: 'export \1'
+    backrefs: true
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.env }}"
+  when:
+    - aws_ssm_env_parameter_present[item.env]
+    - item.export | default(false) | bool
+    - not aws_ssm_env_parameter_exported[item.env]
+  no_log: true
+
+- name: Remove export from existing environment variables that do not require it
+  ansible.builtin.lineinfile:
+    path: "{{ aws_ssm_env_file_path }}"
+    regexp: '^export[\t ]+({{ item.env | regex_escape }}[\t ]*=.*)$'
+    line: '\1'
+    backrefs: true
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.env }}"
+  when:
+    - aws_ssm_env_parameter_present[item.env]
+    - not (item.export | default(false) | bool)
+    - aws_ssm_env_parameter_exported[item.env]
+  no_log: true
+
+- name: Write missing parameters to the .env file
+  ansible.builtin.lineinfile:
+    path: "{{ aws_ssm_env_file_path }}"
+    regexp: '^(?:export[\t ]+)?{{ item.env | regex_escape }}[\t ]*='
+    line: "{{ aws_ssm_env_parameter_lines[item.env] }}"
+    create: true
+    mode: "{{ aws_ssm_env_file_mode }}"
+    insertafter: EOF
+  loop: "{{ aws_ssm_env_parameters }}"
+  loop_control:
+    label: "{{ item.env }}"
+  when: not aws_ssm_env_parameter_present[item.env]
+  no_log: true

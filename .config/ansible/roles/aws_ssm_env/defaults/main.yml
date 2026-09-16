@@ -1,0 +1,17 @@
+---
+# AWS Systems Manager Parameter Store parameters to retrieve.
+# Each item must contain a name and an env key.
+aws_ssm_env_parameters: []
+
+# File to which the environment variable is appended.
+aws_ssm_env_file: "{{ ansible_facts.user_dir }}/.env"
+
+# Retrieve SecureString parameters in decrypted form.
+aws_ssm_env_decrypt: true
+
+# Optional boto3 profile. An empty string deliberately disables AWS_PROFILE
+# for this lookup, allowing explicit AWS credential environment variables.
+aws_ssm_env_profile: ""
+
+# Permissions used only when aws_ssm_env_file has to be created.
+aws_ssm_env_file_mode: "0600"

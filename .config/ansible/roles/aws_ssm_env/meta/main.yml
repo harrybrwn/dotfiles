@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: local
+  description: Fetch AWS SSM parameters into a .env file
+  license: MIT
+  min_ansible_version: '2.14'
+
+collections:
+  - amazon.aws

@@ -7,3 +7,4 @@
 !tmux.sh
 !chrome.sh
 !lib/*.sh
+!scripts/golangci-lint-vm.sh

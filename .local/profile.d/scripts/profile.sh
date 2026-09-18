@@ -147,8 +147,11 @@ EOF
 				error "\$WORK_GIT_EMAIL is not set"
 				return 1
 			fi
-			if [[ -z "$(go env GOPRIVATE)" && -n "${WORK_GO_PRIVATE}" ]]; then
-				go env -w GOPRIVATE="${WORK_GO_PRIVATE}"
+			if [[ -n "${WORK_GO_PRIVATE}" ]]; then
+				local old
+				old="$(go env GOPRIVATE)"
+				go env -w GOPRIVATE="${old},${WORK_GO_PRIVATE}"
+				export GOPRIVATE="${WORK_GO_PRIVATE}"
 				log dbug "GOPRIVATE set to \"${WORK_GO_PRIVATE}\""
 			fi
 			set-browser "${BROWSER_CHROME}"
@@ -158,7 +161,8 @@ EOF
 			# gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
 			;;
 		home)
-			go env -w GOPRIVATE=''
+			go env -w GOPRIVATE='github.com/harrybrwn/*'
+			export GOPRIVATE='github.com/harrybrwn/*'
 			log debug 'GOPRIVATE set to ""'
 			set-browser "${BROWSER_BRAVE}"
 			set-git-email 'h@hrry.me'

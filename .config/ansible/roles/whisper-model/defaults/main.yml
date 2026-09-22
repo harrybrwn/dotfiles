@@ -1,0 +1,8 @@
+---
+# whisper.cpp model to download from
+# https://huggingface.co/ggerganov/whisper.cpp.
+#
+# Accepts either a short name (e.g. "medium.en", "medium-q8_0") or a full
+# GGML filename (e.g. "ggml-medium.en.bin"). The "ggml-" prefix and ".bin"
+# suffix are added automatically when missing.
+whisper_model: ggml-base.en.bin

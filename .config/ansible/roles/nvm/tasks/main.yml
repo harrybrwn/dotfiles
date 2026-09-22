@@ -127,14 +127,6 @@
   changed_when: false
   failed_when: false
 
-- name: Install the requested Node.js version
-  become: false
-  ansible.builtin.shell:
-    cmd: . "{{ nvm_dir }}/nvm.sh" && nvm install {{ nvm_node_version | quote }}
-    executable: /bin/bash
-  when: nvm_installed_node_version.stdout == 'N/A'
-  changed_when: true
-
 - name: Check the current default Node.js alias
   become: false
   ansible.builtin.shell:
@@ -142,6 +134,19 @@
     executable: /bin/bash
   register: nvm_default_alias
   changed_when: false
+
+- name: Install the requested Node.js version
+  become: false
+  ansible.builtin.shell:
+    cmd: >-
+      . "{{ nvm_dir }}/nvm.sh" && nvm install {{ nvm_node_version | quote }}
+      {% if nvm_default_node_version is not defined
+             and nvm_default_alias.stdout not in ['N/A', nvm_node_version] %}
+      --reinstall-packages-from={{ nvm_default_alias.stdout }}
+      {%- endif %}
+    executable: /bin/bash
+  when: nvm_installed_node_version.stdout == 'N/A'
+  changed_when: true
 
 - name: Point the default Node.js alias at the requested version
   become: false

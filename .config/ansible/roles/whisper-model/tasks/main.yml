@@ -5,14 +5,22 @@
     state: directory
     mode: '0755'
 
+# Normalize the requested model into a GGML filename, so users can pass
+# either a short name ("medium.en") or a full filename ("ggml-medium.en.bin").
+- name: Derive model filename
+  ansible.builtin.set_fact:
+    whisper_model_filename: >-
+      {%- set name = whisper_model if whisper_model.startswith('ggml-') else 'ggml-' ~ whisper_model -%}
+      {{ name if name.endswith('.bin') else name ~ '.bin' }}
+
 - name: Check if the model already exists
   ansible.builtin.stat:
-    path: '{{ ansible_facts.user_dir }}/.local/share/whisper/ggml-base.en.bin'
-  register: whisper_model_model_exists
+    path: '{{ ansible_facts.user_dir }}/.local/share/whisper/{{ whisper_model_filename }}'
+  register: whisper_model_file
 
-- name: Download ggml-base.en model
-  when: whisper_model_model_exists.stat.exists
+- name: Download {{ whisper_model_filename }}
+  when: not whisper_model_file.stat.exists
   ansible.builtin.get_url:
-    url: https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin?download=true
-    dest: '{{ ansible_facts.user_dir }}/.local/share/whisper/ggml-base.en.bin'
+    url: 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/{{ whisper_model_filename }}'
+    dest: '{{ ansible_facts.user_dir }}/.local/share/whisper/{{ whisper_model_filename }}'
     mode: '0644'

@@ -1,3 +1,5 @@
 __pycache__/
 tmp/
 password.txt
+collections/ansible_collections/
+galaxy_token

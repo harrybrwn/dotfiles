@@ -19,8 +19,6 @@
     - role: nerdfont
       nerdfont_font: JetBrainsMono
       nerdfont_version: 3.4.0
-    - whisper-cpp
-    - whisper-model
     - nvm
     - role: pi_coding_agent
       pi_coding_agent_npm_become: false
@@ -34,6 +32,12 @@
             env: VASTAI_API_KEY
           - name: /homelab/machine/cascadia/env/kimi-api-key
             env: KIMI_API_KEY
+          - name: /homelab/env/deepseek-api-key
+            env: DEEPSEEK_API_KEY
+          - name: /homelab/env/typesafeai-api-key
+            env: TYPESAFEAI_API_KEY
+          - name: /homelab/env/exa-api-key
+            env: EXA_API_KEY
         aws_ssm_env_file: ~/.config/environment.d/09-ai-api-keys.conf
 
   tasks:
@@ -185,8 +189,9 @@
           # - PyQt5 # for building python GUIs
           # - opencv-python-headless
           # - opencv-python
+          - huggingface_hub[cli] # huggingface-cli
         state: present
-        virtualenv: "~/.local/share/venv"
+        virtualenv: "{{ ansible_facts.user_dir }}/.local/share/venv"
     - name: Remove Python Packages
       ansible.builtin.pip:
         name:

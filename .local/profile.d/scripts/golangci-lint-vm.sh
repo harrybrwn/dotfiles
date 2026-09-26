@@ -10,6 +10,7 @@ function golangci-lint-vm() {
 		echo
 		echo "Commands"
 		echo "  list (ls)      list installed versions"
+		echo "  ls-remote      list versions available in the GitHub repository"
 		echo "  use            switch the current version"
 		echo "  download (dl)  download a new version"
 		echo "  remove (rm)    remove an installed version"
@@ -36,7 +37,7 @@ function golangci-lint-vm() {
 	}
 
 	function list-installed() {
-			find "${d}/" \
+			find "${DOWNLOAD_DIR}/" \
 				-maxdepth 1 \
 				-type d \
 				-regextype 'posix-extended' \
@@ -45,8 +46,9 @@ function golangci-lint-vm() {
 	}
 
 	local dl_base='https://github.com/golangci/golangci-lint/releases/download'
-	local d="$HOME/.local/share/golangci-lint-vm"
-	mkdir -p "${d}"
+	local repo='https://github.com/golangci/golangci-lint.git'
+	local DOWNLOAD_DIR="$HOME/.local/share/golangci-lint-vm"
+	mkdir -p "${DOWNLOAD_DIR}"
 
 	local cmd
 	while [ $# -gt 0 ]; do
@@ -84,7 +86,7 @@ function golangci-lint-vm() {
 			elif ! v="$(version_arg)"; then
 				return 1
 			fi
-			local dst="${d}/${v}"
+			local dst="${DOWNLOAD_DIR}/${v}"
 			local target="$HOME/.local/bin/golangci-lint"
 			local bin
 			if ! bin="$(find "${dst}" -executable -name 'golangci-lint')"; then
@@ -105,7 +107,7 @@ function golangci-lint-vm() {
 			if ! v="$(version_arg)"; then
 				return 1
 			fi
-			local dst="${d}/${v}"
+			local dst="${DOWNLOAD_DIR}/${v}"
 			local bin
 			if bin="$(find "${dst}" -executable -name 'golangci-lint' 2> /dev/null)"; then
 				if [[ -d "${dst}" && -x "${bin}" ]]; then
@@ -117,10 +119,23 @@ function golangci-lint-vm() {
 			local tarball=/tmp/golangci-lint-${v}.tar.gz
 			# rm -f "${tarball}"
 			if [ ! -f "${tarball}" ]; then
-				curl -SsLf -o "${tarball}" "${dl_base}/v${v}/golangci-lint-${v}-linux-amd64.tar.gz"
+				if ! curl -SsLf -o "${tarball}" "${dl_base}/v${v}/golangci-lint-${v}-linux-amd64.tar.gz" ; then
+					return 1
+				fi
 			fi
 			mkdir -p "${dst}"
 			tar -C "${dst}" -xzf "${tarball}"
+			;;
+
+		ls-remote)
+			local remote_tags
+			if ! remote_tags="$(git ls-remote --tags --refs "${repo}")"; then
+				error "could not fetch versions from ${repo}"
+				return 1
+			fi
+			printf '%s\n' "${remote_tags}" \
+				| awk -F/ '$NF ~ /^v[0-9]/ { sub(/^v/, "", $NF); print $NF }' \
+				| sort -V
 			;;
 
 		ls|list)
@@ -144,7 +159,7 @@ function golangci-lint-vm() {
 			if ! v="$(version_arg)"; then
 				return 1
 			fi
-			local dst="${d}/${v}"
+			local dst="${DOWNLOAD_DIR}/${v}"
 			rm -rf "${dst}"
 			;;
 

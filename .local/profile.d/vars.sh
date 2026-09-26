@@ -136,7 +136,9 @@ esac
 
 # bun
 export BUN_INSTALL="$XDG_CONFIG_HOME/bun"
-export PATH="$PATH:$BUN_INSTALL/bin"
+if [[ -d "$BUN_INSTALL/bin" && ":${PATH}:" != *":${BUN_INSTALL}/bin:"* ]]; then
+	export PATH="$PATH:$BUN_INSTALL/bin"
+fi
 
 # Grossness :(
 #export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
@@ -168,5 +170,7 @@ export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
 #if [ -d /usr/local/cuda/bin ]; then
 #  export PATH="$PATH:/usr/local/cuda/bin"
 #fi
+
+export IMAGE_SEARCH_BASE_URL='http://10.0.0.200:8000'
 
 # vim: syntax=bash

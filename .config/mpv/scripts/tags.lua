@@ -187,6 +187,7 @@ mp.register_event("start-file", function(event)
       print(string.format("status=%d", res.status))
     end
   )
+  mp.osd_message("server is ready", 3)
   mp.msg.info(string.format("%s, in_dam_dir=%s", dump(event), tostring(in_dam_dir)))
   local raw = get_tags()
   if raw == nil then
@@ -290,4 +291,4 @@ end
 mp.add_key_binding("alt+t", "add-tags", kb.add_dam_tags)
 mp.add_key_binding("ctrl+t", "get-dam-file-tags", kb.get_dam_tags)
 mp.add_key_binding("alt+p", "show-path", kb.show_path)
-mp.add_key_binding("alt+d", "remote-tag", kb.remove_tag)
+mp.add_key_binding("alt+r", "remote-tag", kb.remove_tag)

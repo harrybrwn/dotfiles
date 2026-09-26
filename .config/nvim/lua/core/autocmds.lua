@@ -44,6 +44,20 @@ vim.cmd(
   [[autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None]]
 )
 
+-- Enable wrapping for markdown instruction files.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function(args)
+    local path = vim.api.nvim_buf_get_name(args.buf)
+    local filename = vim.fs.basename(path)
+    local is_pi_prompt = path:match("^/tmp/pi%-editor%-[^/]+/prompt%.md$") ~= nil
+
+    if is_pi_prompt or vim.tbl_contains({ "SKILL.md", "AGENTS.md", "CLAUDE.md" }, filename) then
+      vim.cmd("setlocal wrap")
+    end
+  end,
+})
+
 ---@diagnostic disable-next-line: unused-local
 vim.api.nvim_buf_create_user_command(0, "Clear", function(_opts)
   for _, bufnr in pairs(vim.api.nvim_list_bufs()) do

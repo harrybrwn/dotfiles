@@ -31,7 +31,7 @@
           - name: /homelab/machine/cascadia/env/vastai-api-key
             env: VASTAI_API_KEY
           - name: /homelab/machine/cascadia/env/kimi-api-key
-            env: KIMI_API_KEY
+            env: MOONSHOT_API_KEY
           - name: /homelab/env/deepseek-api-key
             env: DEEPSEEK_API_KEY
           - name: /homelab/env/typesafeai-api-key

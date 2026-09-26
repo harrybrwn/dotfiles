@@ -230,9 +230,11 @@ function M.setup(opts)
   vim.tbl_extend("keep", opts, defaultOpts)
   -- editorconfig.properties.custom_property = function(bufnr, val, opts) end
 
+  -- Comma separated list of build tags to add to gopls.
   editorconfig.properties.go_build_tags = function(_, val, _)
     add_tags(val)
   end
+
   editorconfig.properties.go_build_flags = function(_, val, _)
     add_flags(val)
   end

@@ -54,6 +54,7 @@ function M.setup(spec)
       notify = false, -- get a notification when changes are found
     },
     dev = {
+      -- Directory to find in-development plugins
       path = "~/.config/nvim/dev",
     },
     profiling = {

@@ -117,7 +117,7 @@ fi
 # See 'man environment.d' and 'man systemd-environment-d-generator'
 # Note: Use 'SYSTEMD_LOG_LEVEL=debug' to debug.
 if [ -x /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator ]; then
-  eval "$(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)"
+  eval "$(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator | sed -r 's/^/export /')"
 fi
 
 #######################

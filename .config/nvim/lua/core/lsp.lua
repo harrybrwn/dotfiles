@@ -48,7 +48,7 @@ local function keys(bufnr)
   kset('<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
   kset('<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format file')
   kset('<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
-  kset("<Tab>", function() vim.lsp.buf.format({ async = true }) end, 'LSP Format')
+  kset("<leader>lf", function() vim.lsp.buf.format({ async = true }) end, '[L]SP [F]ormat')
   vim.keymap.set('x', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
     { desc = 'Format selection', buffer = bufnr })
 end

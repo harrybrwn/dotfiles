@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+# Toggle a systemd sleep inhibitor so the machine stays awake with the
+# display off and while the lid is closed.
+
+set -u
+
+readonly STATE_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+readonly PID_FILE="$STATE_DIR/keep-awake.pid"
+readonly LOG_FILE="$STATE_DIR/keep-awake.log"
+
+usage() {
+    cat <<'EOF'
+Usage: keep-awake [on|off|toggle|status]
+
+  on       Prevent idle sleep, suspend, and lid-close sleep.
+  off      Release the inhibitor.
+  toggle   Switch between on and off (the default).
+  status   Show the current state.
+EOF
+}
+
+running_pid() {
+    [[ -r "$PID_FILE" ]] || return 1
+    local pid
+    pid=$(<"$PID_FILE")
+    [[ "$pid" =~ ^[0-9]+$ ]] || return 1
+    kill -0 "$pid" 2>/dev/null || return 1
+
+    # Only accept our own inhibitor process; do not kill an unrelated PID
+    # if the runtime directory was reused after a crash or reboot.
+    [[ -r "/proc/$pid/cmdline" ]] || return 1
+    tr '\0' ' ' <"/proc/$pid/cmdline" | grep -Fq -- 'systemd-inhibit'
+}
+
+clear_stale_pid() {
+    if [[ -e "$PID_FILE" ]] && ! running_pid; then
+        rm -f -- "$PID_FILE"
+    fi
+}
+
+turn_on() {
+    clear_stale_pid
+    if running_pid; then
+        echo "Keep-awake is already on (PID $(<"$PID_FILE"))."
+        return 0
+    fi
+
+    command -v systemd-inhibit >/dev/null 2>&1 || {
+        echo "Error: systemd-inhibit is not installed or not in PATH." >&2
+        return 1
+    }
+
+    # handle-lid-switch prevents logind from acting on a closed lid. The
+    # sleep/idle inhibitors cover explicit suspend and display-idle sleep.
+    nohup systemd-inhibit \
+        --what=idle:sleep:handle-lid-switch \
+        --mode=block \
+        --why="keep-awake toggle enabled" \
+        sleep infinity \
+        >>"$LOG_FILE" 2>&1 &
+    local pid=$!
+    printf '%s\n' "$pid" >"$PID_FILE"
+
+    # Give systemd-inhibit a moment to fail (for example, outside a systemd
+    # user/session environment) rather than reporting a false success.
+    sleep 0.1
+    if ! running_pid; then
+        rm -f -- "$PID_FILE"
+        echo "Error: could not start the sleep inhibitor." >&2
+        return 1
+    fi
+
+    echo "Keep-awake is on (lid close and sleep are inhibited)."
+}
+
+turn_off() {
+    clear_stale_pid
+    if ! running_pid; then
+        rm -f -- "$PID_FILE"
+        echo "Keep-awake is already off."
+        return 0
+    fi
+
+    local pid
+    pid=$(<"$PID_FILE")
+    kill "$pid" 2>/dev/null || true
+    rm -f -- "$PID_FILE"
+    echo "Keep-awake is off."
+}
+
+status() {
+    clear_stale_pid
+    if running_pid; then
+        echo "on (PID $(<"$PID_FILE"))"
+    else
+        echo "off"
+    fi
+}
+
+case "${1:-toggle}" in
+    on)     turn_on ;;
+    off)    turn_off ;;
+    toggle) if running_pid; then turn_off; else turn_on; fi ;;
+    status) status ;;
+    -h|--help) usage ;;
+    *) usage >&2; exit 2 ;;
+esac

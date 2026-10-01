@@ -20,6 +20,7 @@ vim.opt.mouse = "nv"
 vim.opt.fixendofline = false
 vim.opt.splitright = true
 vim.opt.scrolloff = 1 -- keep cursor n lines above the bottom
+vim.opt.exrc = true   -- enable project config in .nvim.lua
 
 -- Tabs
 local indent = 4

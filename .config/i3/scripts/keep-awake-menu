@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#
+# Rofi menu for the keep-awake sleep inhibitor.
+#
+# Bound to $mod+m in the i3 config. Entries map directly onto the
+# subcommands of ~/.local/bin/keep-awake.
+
+set -u
+
+KEEP_AWAKE="${HOME}/.local/bin/keep-awake"
+
+if [[ ! -x "$KEEP_AWAKE" ]]; then
+    rofi -e "keep-awake not found or not executable at:
+$KEEP_AWAKE"
+    exit 1
+fi
+
+selection=$(printf 'on\noff\nstatus\n' | rofi -dmenu -i -lines 3 -p "keep-awake")
+
+[[ -n "${selection:-}" ]] || exit 0
+
+case "$selection" in
+    on | off)
+        output=$("$KEEP_AWAKE" "$selection" 2>&1)
+        notify-send \
+					--urgency=normal \
+					--app-name=keep-awake \
+					"keep-awake" "$output"
+        ;;
+    status)
+        output=$("$KEEP_AWAKE" status 2>&1)
+        rofi -e "Keep Awake Status: $output
+
+press <enter> to dismiss"
+        ;;
+    *)
+        exit 2
+        ;;
+esac

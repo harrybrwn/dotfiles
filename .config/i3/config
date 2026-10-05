@@ -57,6 +57,7 @@ bindsym $mod+z       exec --no-startup-id $locker
 bindsym $mod+p       exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 7
 bindsym $mod+Shift+p exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh 2
 bindsym $mod+Shift+s exec --no-startup-id xfce4-settings-manager
+bindsym $mod+m       exec --no-startup-id ~/.config/i3/scripts/keep-awake-menu
 
 # change focus
 bindsym $mod+h focus left
@@ -195,10 +196,22 @@ bindsym $mod+Alt+l     resize grow   width  2 px or 2 ppt
 #     status_command SCRIPTS=~/.config/i3/scripts i3blocks -c ~/.config/i3/blocks.toml
 # }
 
-gaps inner 10
-gaps outer 2
+set $gaps_inner 10
+set $gaps_outer 2
+gaps inner $gaps_inner
+gaps outer $gaps_outer
 smart_gaps off
 #default_border pixel 1
+
+set $mode_gaps Toggle gaps: (1) on (2) off:
+bindsym $mod+Shift+f mode "$mode_gaps"
+mode "$mode_gaps" {
+	# TODO: Figure out how to use "smart_gaps"
+    bindsym 1 mode "default", gaps inner all set $gaps_inner, gaps outer all set $gaps_outer
+    bindsym 2 mode "default", gaps inner all set 0, gaps outer all set 0
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 # Disable boarders for brave
 for_window [class="Brave-browser" instance="brave-browser"] border pixel 1
